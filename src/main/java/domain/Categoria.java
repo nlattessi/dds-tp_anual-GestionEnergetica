@@ -1,6 +1,7 @@
+package domain;
 
 public class Categoria {
-	
+
 	private int idCategoria;
 	private String nombre;
 	private float cargoFijo;
@@ -8,9 +9,8 @@ public class Categoria {
 	private int limiteInferiorConsumo;
 	private int limiteSuperiorConsumo;
 	private float consumoEficiente;
-	
-	public Categoria(int idCategoria, String nombre, float cargoFijo,
-			float cargoVariable, int limiteInferiorConsumo,
+
+	public Categoria(int idCategoria, String nombre, float cargoFijo, float cargoVariable, int limiteInferiorConsumo,
 			int limiteSuperiorConsumo, float consumoEficiente) {
 		super();
 		this.idCategoria = idCategoria;
@@ -77,7 +77,5 @@ public class Categoria {
 	public void setConsumoEficiente(float consumoEficiente) {
 		this.consumoEficiente = consumoEficiente;
 	}
-	
-	
 
 }

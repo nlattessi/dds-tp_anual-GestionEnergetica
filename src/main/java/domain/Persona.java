@@ -1,14 +1,13 @@
+package domain;
 
 public class Persona {
-	
 
 	protected String nombreYApellido;
 	protected Domicilio domicilio;
 	protected Documento documento;
 	protected Usuario usuario;
-	
-	public Persona(String nombreYApellido, Domicilio domicilio,
-			Documento documento, Usuario usuario) {
+
+	public Persona(String nombreYApellido, Domicilio domicilio, Documento documento, Usuario usuario) {
 		super();
 		this.nombreYApellido = nombreYApellido;
 		this.domicilio = domicilio;

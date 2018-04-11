@@ -1,10 +1,11 @@
+package domain;
 
 public class Documento {
-	
+
 	private int idDocumento;
 	private String tipo;
 	private int numero;
-		
+
 	public Documento(int idDocumento, String tipo, int numero) {
 		super();
 		this.idDocumento = idDocumento;
@@ -35,6 +36,5 @@ public class Documento {
 	public void setNumero(int numero) {
 		this.numero = numero;
 	}
-
 
 }

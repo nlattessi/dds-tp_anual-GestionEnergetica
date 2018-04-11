@@ -1,17 +1,16 @@
+package domain;
+
 import java.util.*;
 
-public class Cliente extends Persona{
+public class Cliente extends Persona {
 
 	private int idCliente;
 	private String fechaAltaServicio;
 	private Categoria categoria;
-	private ArrayList <Dispositivo> dispositivos= new ArrayList();
-	
-	
-	public Cliente(String nombreYApellido, Domicilio domicilio,
-			Documento documento, Usuario usuario, int idCliente,
-			String fechaAltaServicio, Categoria categoria,
-			ArrayList<Dispositivo> dispositivos) {
+	private ArrayList<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
+
+	public Cliente(String nombreYApellido, Domicilio domicilio, Documento documento, Usuario usuario, int idCliente,
+			String fechaAltaServicio, Categoria categoria, ArrayList<Dispositivo> dispositivos) {
 		super(nombreYApellido, domicilio, documento, usuario);
 		this.idCliente = idCliente;
 		this.fechaAltaServicio = fechaAltaServicio;
@@ -43,7 +42,6 @@ public class Cliente extends Persona{
 		this.categoria = categoria;
 	}
 
-	
 	public ArrayList<Dispositivo> getDispositivos() {
 		return dispositivos;
 	}
@@ -52,29 +50,28 @@ public class Cliente extends Persona{
 		this.dispositivos = dispositivos;
 	}
 
-	public void conocerSiDispositivoEstaEncendido(Dispositivo dispositivo){
-		
-	}
-	
-	public void cantidadDispositivosEncendidos(){
-		
-	}
-	
-	public void cantidadDispositivosApagados(){
-		
-	}
-	
-	public void cantidadTotalDispositivos(){
-		
-	}
-	
-	public void consumoAcumuladoMes(){
-		
-	}
-	
-	public void facturacionEstimativa(){
-		
+	public void conocerSiDispositivoEstaEncendido(Dispositivo dispositivo) {
+
 	}
 
+	public void cantidadDispositivosEncendidos() {
+
+	}
+
+	public void cantidadDispositivosApagados() {
+
+	}
+
+	public void cantidadTotalDispositivos() {
+
+	}
+
+	public void consumoAcumuladoMes() {
+
+	}
+
+	public void facturacionEstimativa() {
+
+	}
 
 }
