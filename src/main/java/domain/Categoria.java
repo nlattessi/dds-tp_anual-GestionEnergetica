@@ -2,32 +2,30 @@ package domain;
 
 public class Categoria {
 
-	private int idCategoria;
+	private int id;
 	private String nombre;
 	private float cargoFijo;
 	private float cargoVariable;
 	private int limiteInferiorConsumo;
 	private int limiteSuperiorConsumo;
-	private float consumoEficiente;
 
-	public Categoria(int idCategoria, String nombre, float cargoFijo, float cargoVariable, int limiteInferiorConsumo,
-			int limiteSuperiorConsumo, float consumoEficiente) {
+	public Categoria(int id, String nombre, float cargoFijo, float cargoVariable, int limiteInferiorConsumo,
+			int limiteSuperiorConsumo) {
 		super();
-		this.idCategoria = idCategoria;
+		this.id = id;
 		this.nombre = nombre;
 		this.cargoFijo = cargoFijo;
 		this.cargoVariable = cargoVariable;
 		this.limiteInferiorConsumo = limiteInferiorConsumo;
 		this.limiteSuperiorConsumo = limiteSuperiorConsumo;
-		this.consumoEficiente = consumoEficiente;
 	}
 
-	public int getIdCategoria() {
-		return idCategoria;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdCategoria(int idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setIdCategoria(int id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -68,14 +66,6 @@ public class Categoria {
 
 	public void setLimiteSuperiorConsumo(int limiteSuperiorConsumo) {
 		this.limiteSuperiorConsumo = limiteSuperiorConsumo;
-	}
-
-	public float getConsumoEficiente() {
-		return consumoEficiente;
-	}
-
-	public void setConsumoEficiente(float consumoEficiente) {
-		this.consumoEficiente = consumoEficiente;
 	}
 
 }

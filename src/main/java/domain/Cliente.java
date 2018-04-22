@@ -2,30 +2,29 @@ package domain;
 
 import java.util.*;
 
-public class Cliente extends Persona {
+public class Cliente extends Usuario {
 
-	private int idCliente;
+	private String telefonoContacto;
 	private String fechaAltaServicio;
 	private Categoria categoria;
-	private ArrayList<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
+	private List<Dispositivo> dispositivos;
 
-	public Cliente(String nombreYApellido, Domicilio domicilio, Documento documento, Usuario usuario, int idCliente,
+	public Cliente(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento, Usuario usuario, int idCliente,
 			String fechaAltaServicio, Categoria categoria, ArrayList<Dispositivo> dispositivos) {
-		super(nombreYApellido, domicilio, documento, usuario);
-		this.idCliente = idCliente;
+		super(id, nombreUsuario, contrasenia, nombreYApellido, domicilio, documento, usuario);
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
 		this.dispositivos = dispositivos;
 	}
-
-	public int getIdCliente() {
-		return idCliente;
+	
+	public String getTelefonoContacto() {
+		return this.telefonoContacto;
 	}
 
-	public void setIdCliente(int idCliente) {
-		this.idCliente = idCliente;
+	public void setTelefonoContacto(String telefonoContacto) {
+		this.telefonoContacto = telefonoContacto;
 	}
-
+	
 	public String getFechaAltaServicio() {
 		return fechaAltaServicio;
 	}
@@ -42,36 +41,31 @@ public class Cliente extends Persona {
 		this.categoria = categoria;
 	}
 
-	public ArrayList<Dispositivo> getDispositivos() {
+	public List<Dispositivo> getDispositivos() {
 		return dispositivos;
 	}
 
-	public void setDispositivos(ArrayList<Dispositivo> dispositivos) {
+	public void setDispositivos(List<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
 	}
 
-	public void conocerSiDispositivoEstaEncendido(Dispositivo dispositivo) {
-
+	public boolean algunDispositivoEncendido() {
+		long cantDispositivosEncendidos = this.dispositivos.stream().filter(x -> x.getEstado() == true).count();
+		if (cantDispositivosEncendidos >= 1) { return true; }
+		else { return false; }
 	}
 
-	public void cantidadDispositivosEncendidos() {
-
+	public long cantidadDispositivosEncendidos() {
+		return this.dispositivos.stream().filter(x -> x.getEstado() == true).count();
 	}
 
-	public void cantidadDispositivosApagados() {
-
+	public long cantidadDispositivosApagados() {
+		return this.dispositivos.stream().filter(x -> x.getEstado() == false).count();
 	}
 
-	public void cantidadTotalDispositivos() {
-
+	public long cantidadTotalDispositivos() {
+		return this.dispositivos.stream().count();
 	}
-
-	public void consumoAcumuladoMes() {
-
-	}
-
-	public void facturacionEstimativa() {
-
-	}
-
+	
+	
 }

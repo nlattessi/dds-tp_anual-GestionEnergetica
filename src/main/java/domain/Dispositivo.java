@@ -1,28 +1,26 @@
 package domain;
 
-public class Dispositivo {// Hay q ver como se va a calcular el consumo
+public class Dispositivo {
 
-	private int idDispositivo;
+	private int id;
 	private String nombre;
-	private int consumoXHora;// duda de interpretacion con el enunciado
-	private boolean prendido_Apagado;
-	private Cliente cliente;
+	private int consumoXHora;
+	private boolean estado;
 
-	public Dispositivo(int dispositivo, String nombre, int consumoXHora, boolean prendido_Apagado, Cliente cliente) {
+	public Dispositivo(int dispositivo, String nombre, int consumoXHora, boolean estado) {
 		super();
-		this.idDispositivo = dispositivo;
+		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
-		this.prendido_Apagado = prendido_Apagado;
-		this.cliente = cliente;
+		this.estado = estado;
 	}
 
 	public int getIdDispositivo() {
-		return idDispositivo;
+		return id;
 	}
 
-	public void setDispositivo(int idDispositivo) {
-		this.idDispositivo = idDispositivo;
+	public void setDispositivo(int id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -41,23 +39,11 @@ public class Dispositivo {// Hay q ver como se va a calcular el consumo
 		this.consumoXHora = consumoXHora;
 	}
 
-	public boolean isPrendido_Apagado() {
-		return prendido_Apagado;
+	public boolean getEstado() {
+		return estado;
 	}
 
-	public void setPrendido_Apagado(boolean prendido_Apagado) {
-		this.prendido_Apagado = prendido_Apagado;
-	}
-
-	public Cliente getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
-	}
-
-	public void calcularConsumo() {
-
+	public void setEstado(boolean estado) {
+		this.estado = estado;
 	}
 }

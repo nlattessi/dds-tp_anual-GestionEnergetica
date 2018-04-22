@@ -2,30 +2,30 @@ package domain;
 
 public class Documento {
 
-	private int idDocumento;
-	private String tipo;
+	private int id;
+	private TipoDocumento tipo;
 	private int numero;
 
-	public Documento(int idDocumento, String tipo, int numero) {
+	public Documento(int id, TipoDocumento tipo, int numero) {
 		super();
-		this.idDocumento = idDocumento;
+		this.id = id;
 		this.tipo = tipo;
 		this.numero = numero;
 	}
 
-	public int getIdDocumento() {
-		return idDocumento;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdDocumento(int idDocumento) {
-		this.idDocumento = idDocumento;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public String getTipo() {
+	public TipoDocumento getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(String tipo) {
+	public void setTipo(TipoDocumento tipo) {
 		this.tipo = tipo;
 	}
 

@@ -2,39 +2,70 @@ package domain;
 
 public class Usuario {
 
-	private int idUsuario;
-	private String nombre;
-	private String contrasena;
+	protected int id;
+	protected String nombreUsuario;
+	protected String contrasenia;
+	protected String nombreYApellido;
+	protected Domicilio domicilio;
+	protected Documento documento;
 
-	public Usuario(int idUsuario, String nombre, String contrasena) {
+	public Usuario(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento, Usuario usuario) {
 		super();
-		this.idUsuario = idUsuario;
-		this.nombre = nombre;
-		this.contrasena = contrasena;
+		this.id = id;
+		this.nombreUsuario = nombreUsuario;
+		this.contrasenia = contrasenia;
+		this.nombreYApellido = nombreYApellido;
+		this.domicilio = domicilio;
+		this.documento = documento;
+
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getNombreUsuario() {
+		return this.nombreUsuario;
+	}
+	
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+	
+	public String getContrasenia() {
+		return this.contrasenia;
+	}
+	
+	public void setContrasenia(String contrasenia) {
+		this.contrasenia = contrasenia;
+	}
+	
+	public String getNombreYApellido() {
+		return nombreYApellido;
 	}
 
-	public int getIdUsuario() {
-		return idUsuario;
+	public void setNombreYApellido(String nombreYApellido) {
+		this.nombreYApellido = nombreYApellido;
 	}
 
-	public void setIdUsuario(int idUsuario) {
-		this.idUsuario = idUsuario;
+	public Domicilio getDomicilio() {
+		return domicilio;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public void setDomicilio(Domicilio domicilio) {
+		this.domicilio = domicilio;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public Documento getDocumento() {
+		return documento;
 	}
 
-	public String getContrasena() {
-		return contrasena;
-	}
-
-	public void setContrasena(String contrasena) {
-		this.contrasena = contrasena;
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
 	}
 
 }
