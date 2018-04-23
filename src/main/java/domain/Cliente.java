@@ -5,13 +5,13 @@ import java.util.*;
 public class Cliente extends Usuario {
 
 	private String telefonoContacto;
-	private String fechaAltaServicio;
+	private Date fechaAltaServicio;
 	private Categoria categoria;
 	private List<Dispositivo> dispositivos;
 
-	public Cliente(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento, Usuario usuario, int idCliente,
-			String fechaAltaServicio, Categoria categoria, ArrayList<Dispositivo> dispositivos) {
-		super(id, nombreUsuario, contrasenia, nombreYApellido, domicilio, documento, usuario);
+	public Cliente(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento,
+			Date fechaAltaServicio, Categoria categoria, List<Dispositivo> dispositivos) {
+		super(id, nombreUsuario, contrasenia, nombreYApellido, domicilio, documento);
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
 		this.dispositivos = dispositivos;
@@ -25,11 +25,11 @@ public class Cliente extends Usuario {
 		this.telefonoContacto = telefonoContacto;
 	}
 	
-	public String getFechaAltaServicio() {
+	public Date getFechaAltaServicio() {
 		return fechaAltaServicio;
 	}
 
-	public void setFechaAltaServicio(String fechaAltaServicio) {
+	public void setFechaAltaServicio(Date fechaAltaServicio) {
 		this.fechaAltaServicio = fechaAltaServicio;
 	}
 

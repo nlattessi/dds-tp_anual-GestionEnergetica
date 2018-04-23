@@ -9,7 +9,7 @@ public class Usuario {
 	protected Domicilio domicilio;
 	protected Documento documento;
 
-	public Usuario(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento, Usuario usuario) {
+	public Usuario(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento) {
 		super();
 		this.id = id;
 		this.nombreUsuario = nombreUsuario;

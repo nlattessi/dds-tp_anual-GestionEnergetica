@@ -4,11 +4,11 @@ public class Domicilio {
 
 	private String calle;
 	private int numero;
-	private String codigoPostal;
+	private int codigoPostal;
 	private String ciudad;
 	private String provincia;
 
-	public Domicilio(String calle, int numero, String codigoPostal, String ciudad, String provincia) {
+	public Domicilio(String calle, int numero, int codigoPostal, String ciudad, String provincia) {
 		super();
 		this.calle = calle;
 		this.numero = numero;
@@ -33,11 +33,11 @@ public class Domicilio {
 		this.numero = numero;
 	}
 
-	public String getCodigoPosta() {
+	public int getCodigoPosta() {
 		return codigoPostal;
 	}
 
-	public void setCodigoPostal(String codigoPosta) {
+	public void setCodigoPostal(int codigoPosta) {
 		this.codigoPostal= codigoPosta;
 	}
 
