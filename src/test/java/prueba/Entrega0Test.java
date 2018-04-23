@@ -3,12 +3,16 @@ package prueba;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import domain.*;
 
-import java.util.List;
+import domain.Administrador;
+import domain.Categoria;
+import domain.Cliente;
+import domain.Dispositivo;
+import domain.Documento;
+import domain.Domicilio;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Entrega0Test {
@@ -20,14 +24,14 @@ public class Entrega0Test {
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
 		String nombreYApellido = "Juan Perez";
-		TipoDocumento tipoDoc = new TipoDocumento(1, "Documento Nacional de Identidad");
-		Documento documentoCliente = new Documento(1, tipoDoc, 36123894);
+		Documento documentoCliente = new Documento(Documento.Tipo.DNI, 36123894);
+		String telefonoContacto = "5555-5555";
 		Domicilio domicilio = new Domicilio("Av. Rivadavia", 1111, 1414, "CABA", "Buenos Aires");
-		Categoria categoria = new Categoria(1, "R1", 18.75, 0.644, 0, 150);
+		Categoria categoria = Categoria.crearR1();
 		Date fechaAltaCliente = new Date();
 
 		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, documentoCliente,
-				fechaAltaCliente, categoria);
+				telefonoContacto, fechaAltaCliente, categoria);
 
 		Dispositivo heladera = new Dispositivo(1, "heladera", 2, true);
 		Dispositivo tele = new Dispositivo(2, "tele", 3, false);

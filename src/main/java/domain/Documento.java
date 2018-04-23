@@ -1,30 +1,24 @@
 package domain;
 
 public class Documento {
+	
+	public enum Tipo {
+		DNI, CI, LE, LC
+	}
 
-	private int id;
-	private TipoDocumento tipo;
+	private Tipo tipo;
 	private int numero;
 
-	public Documento(int id, TipoDocumento tipo, int numero) {
-		this.id = id;
+	public Documento(Tipo tipo, int numero) {
 		this.tipo = tipo;
 		this.numero = numero;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public TipoDocumento getTipo() {
+	public Tipo getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(TipoDocumento tipo) {
+	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
 

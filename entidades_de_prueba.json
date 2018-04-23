@@ -1,0 +1,70 @@
+{
+	"categorias": [
+		{
+			"id": 1,
+			"nombre": "R1",
+			"cargo_fijo": 18.75,
+			"cargo_variable": 0.644,
+			"limite_inferior_consumo": 0,
+			"limite_superior_consumo": 150
+		}
+	],
+	"clientes": [
+		{
+			"id": 1,
+			"nombre_y_apellido": "Juan Perez",
+			"nombre_de_usuario": "JuanPerez",
+			"contraseña": "asd123",
+			"documento": {
+				"tipo": "DNI",
+				"numero": 36123894
+			},
+			"telefono": "5555-5555",
+			"domicilio": {
+				"calle": "Av. Rivadavia",
+				"numero": 1111,
+				"codigo_postal": 1414,
+				"ciudad": "CABA",
+				"provincia": "Buenos Aires"
+			},
+			"fecha_alta_servicio": "01/01/2018",
+			"categoria": "R1"
+		}
+	],
+	"administradores": [
+		{
+			"id": 1,
+			"nombre_y_apellido": "Juan Perez",
+			"nombre_de_usuario": "JuanPerez",
+			"contraseña": "asd123",
+			"domicilio": {
+				"calle": "Av. Rivadavia",
+				"numero": 1111,
+				"codigo_postal": 1414,
+				"ciudad": "CABA",
+				"provincia": "Buenos Aires"
+			},
+			"fecha_de_alta": "01/01/2018"
+		}
+	],
+	"dispositivos": [
+		{
+			"id": 1,
+			"nombre": "heladera",
+			"consumo_por_hora": 2,
+			"encendido": true
+		},
+		{
+			"id": 2,
+			"nombre": "tele",
+			"consumo_por_hora": 3,
+			"encendido": true
+		},
+		{
+			"id": 3,
+			"nombre": "radio",
+			"consumo_por_hora": 1,
+			"encendido": false
+		}
+	]
+}

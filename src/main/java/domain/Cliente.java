@@ -11,9 +11,10 @@ public class Cliente extends Usuario {
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 
 	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, Domicilio domicilio,
-			Documento documento, Date fechaAltaServicio, Categoria categoria) {
+			Documento documento, String telefonoContacto, Date fechaAltaServicio, Categoria categoria) {
 		super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
 		this.documento = documento;
+		this.telefonoContacto = telefonoContacto;
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
 	}
