@@ -7,7 +7,6 @@ public class Documento {
 	private int numero;
 
 	public Documento(int id, TipoDocumento tipo, int numero) {
-		super();
 		this.id = id;
 		this.tipo = tipo;
 		this.numero = numero;

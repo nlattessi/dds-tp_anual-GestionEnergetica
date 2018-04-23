@@ -6,39 +6,66 @@ import org.junit.Test;
 import domain.*;
 
 import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Entrega0Test {
 	private Cliente cliente;
-	
+	private Administrador administrador;
+
 	@Before
 	public void inicio() {
+		String nombreUsuario = "JuanPerez";
+		String contraseña = "asd123";
+		String nombreYApellido = "Juan Perez";
 		TipoDocumento tipoDoc = new TipoDocumento(1, "Documento Nacional de Identidad");
 		Documento documentoCliente = new Documento(1, tipoDoc, 36123894);
-		Domicilio domicilioCliente = new Domicilio("Av. Rivadavia", 1111, 1414, "CABA", "Buenos Aires");
+		Domicilio domicilio = new Domicilio("Av. Rivadavia", 1111, 1414, "CABA", "Buenos Aires");
 		Categoria categoria = new Categoria(1, "R1", 18.75, 0.644, 0, 150);
+		Date fechaAltaCliente = new Date();
+
+		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, documentoCliente,
+				fechaAltaCliente, categoria);
+
 		Dispositivo heladera = new Dispositivo(1, "heladera", 2, true);
 		Dispositivo tele = new Dispositivo(2, "tele", 3, false);
 		Dispositivo radio = new Dispositivo(3, "radio", 1, true);
-		Date fechaAltaCliente = new Date();
-		List<Dispositivo> dispositivos = new ArrayList<>();
-		dispositivos.add(tele);
-		dispositivos.add(heladera);
-		dispositivos.add(radio);
-		
-		this.cliente = new Cliente(1, "JuanPerez", "asd123", "Juan Perez", domicilioCliente,
-							documentoCliente, fechaAltaCliente, categoria, dispositivos);
+		this.cliente.agregarDispositivo(tele);
+		this.cliente.agregarDispositivo(heladera);
+		this.cliente.agregarDispositivo(radio);
+
+		this.administrador = new Administrador(1, nombreUsuario, contraseña, nombreYApellido, domicilio,
+				fechaAltaCliente);
 	}
-	
+
 	@Test
 	public void clienteConDosDispositivoEncendido() {
 		Assert.assertEquals(2, this.cliente.cantidadDispositivosEncendidos());
 	}
-	
+
+	@Test
+	public void clienteConUnDispositivoApagdo() {
+		Assert.assertEquals(1, this.cliente.cantidadDispositivosApagados());
+	}
+
 	@Test
 	public void clienteConAlgunDispositivoEncendido() {
 		Assert.assertTrue(this.cliente.algunDispositivoEncendido());
 	}
-	
+
+	@Test
+	public void administradorLleva3MesesComoAdminsitrador() throws ParseException {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date fechaDeAltaEnElSistema = sdf.parse("01/01/2018");
+		Date fechaActual = sdf.parse("01/04/2018");
+
+		this.administrador.setFechaAltaSistema(fechaDeAltaEnElSistema);
+		int cantidadMesesComoAdministrador = this.administrador.cantidadMesesComoAdministrador(fechaActual);
+
+		Assert.assertEquals(3, cantidadMesesComoAdministrador);
+	}
+
 }

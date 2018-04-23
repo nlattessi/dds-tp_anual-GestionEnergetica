@@ -1,49 +1,45 @@
 package domain;
 
-public class Usuario {
+public abstract class Usuario {
 
 	protected int id;
 	protected String nombreUsuario;
-	protected String contrasenia;
+	protected String contraseña;
 	protected String nombreYApellido;
 	protected Domicilio domicilio;
-	protected Documento documento;
 
-	public Usuario(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento) {
-		super();
+	public Usuario(int id, String nombreUsuario, String contraseña, String nombreYApellido, Domicilio domicilio) {
 		this.id = id;
 		this.nombreUsuario = nombreUsuario;
-		this.contrasenia = contrasenia;
+		this.contraseña = contraseña;
 		this.nombreYApellido = nombreYApellido;
 		this.domicilio = domicilio;
-		this.documento = documento;
-
 	}
-	
+
 	public int getId() {
 		return this.id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public String getNombreUsuario() {
 		return this.nombreUsuario;
 	}
-	
+
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
 	}
-	
-	public String getContrasenia() {
-		return this.contrasenia;
+
+	public String getContraseña() {
+		return this.contraseña;
 	}
-	
-	public void setContrasenia(String contrasenia) {
-		this.contrasenia = contrasenia;
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
 	}
-	
+
 	public String getNombreYApellido() {
 		return nombreYApellido;
 	}
@@ -59,13 +55,4 @@ public class Usuario {
 	public void setDomicilio(Domicilio domicilio) {
 		this.domicilio = domicilio;
 	}
-
-	public Documento getDocumento() {
-		return documento;
-	}
-
-	public void setDocumento(Documento documento) {
-		this.documento = documento;
-	}
-
 }

@@ -4,19 +4,20 @@ import java.util.*;
 
 public class Cliente extends Usuario {
 
+	protected Documento documento;
 	private String telefonoContacto;
 	private Date fechaAltaServicio;
 	private Categoria categoria;
-	private List<Dispositivo> dispositivos;
+	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 
-	public Cliente(int id, String nombreUsuario, String contrasenia, String nombreYApellido, Domicilio domicilio, Documento documento,
-			Date fechaAltaServicio, Categoria categoria, List<Dispositivo> dispositivos) {
-		super(id, nombreUsuario, contrasenia, nombreYApellido, domicilio, documento);
+	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, Domicilio domicilio,
+			Documento documento, Date fechaAltaServicio, Categoria categoria) {
+		super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
+		this.documento = documento;
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
-		this.dispositivos = dispositivos;
 	}
-	
+
 	public String getTelefonoContacto() {
 		return this.telefonoContacto;
 	}
@@ -24,7 +25,7 @@ public class Cliente extends Usuario {
 	public void setTelefonoContacto(String telefonoContacto) {
 		this.telefonoContacto = telefonoContacto;
 	}
-	
+
 	public Date getFechaAltaServicio() {
 		return fechaAltaServicio;
 	}
@@ -49,23 +50,28 @@ public class Cliente extends Usuario {
 		this.dispositivos = dispositivos;
 	}
 
+	public void agregarDispositivo(Dispositivo dispositivo) {
+		this.dispositivos.add(dispositivo);
+	}
+
+	public void removerDispositivo(Dispositivo dispositivo) {
+		this.dispositivos.remove(dispositivo);
+	}
+
 	public boolean algunDispositivoEncendido() {
-		long cantDispositivosEncendidos = this.dispositivos.stream().filter(x -> x.getEstado() == true).count();
-		if (cantDispositivosEncendidos >= 1) { return true; }
-		else { return false; }
+		return this.dispositivos.stream().anyMatch(x -> x.getEncendido() == true);
 	}
 
 	public long cantidadDispositivosEncendidos() {
-		return this.dispositivos.stream().filter(x -> x.getEstado() == true).count();
+		return this.dispositivos.stream().filter(x -> x.getEncendido() == true).count();
 	}
 
 	public long cantidadDispositivosApagados() {
-		return this.dispositivos.stream().filter(x -> x.getEstado() == false).count();
+		return this.dispositivos.stream().filter(x -> x.getEncendido() == false).count();
 	}
 
-	public long cantidadTotalDispositivos() {
-		return this.dispositivos.stream().count();
+	public int cantidadTotalDispositivos() {
+		return this.dispositivos.size();
 	}
-	
-	
+
 }

@@ -5,21 +5,20 @@ public class Dispositivo {
 	private int id;
 	private String nombre;
 	private int consumoXHora;
-	private boolean estado;
+	private boolean encendido;
 
-	public Dispositivo(int dispositivo, String nombre, int consumoXHora, boolean estado) {
-		super();
+	public Dispositivo(int dispositivo, String nombre, int consumoXHora, boolean encendido) {
 		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
-		this.estado = estado;
+		this.encendido = encendido;
 	}
 
-	public int getIdDispositivo() {
+	public int getId() {
 		return id;
 	}
 
-	public void setDispositivo(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -39,11 +38,11 @@ public class Dispositivo {
 		this.consumoXHora = consumoXHora;
 	}
 
-	public boolean getEstado() {
-		return estado;
+	public boolean getEncendido() {
+		return encendido;
 	}
 
-	public void setEstado(boolean estado) {
-		this.estado = estado;
+	public void setEncendido(boolean encendido) {
+		this.encendido = encendido;
 	}
 }

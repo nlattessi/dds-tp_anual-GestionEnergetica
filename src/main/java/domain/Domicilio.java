@@ -9,7 +9,6 @@ public class Domicilio {
 	private String provincia;
 
 	public Domicilio(String calle, int numero, int codigoPostal, String ciudad, String provincia) {
-		super();
 		this.calle = calle;
 		this.numero = numero;
 		this.codigoPostal = codigoPostal;
@@ -38,7 +37,7 @@ public class Domicilio {
 	}
 
 	public void setCodigoPostal(int codigoPosta) {
-		this.codigoPostal= codigoPosta;
+		this.codigoPostal = codigoPosta;
 	}
 
 	public String getCiudad() {

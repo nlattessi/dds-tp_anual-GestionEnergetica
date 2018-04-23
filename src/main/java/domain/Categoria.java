@@ -11,7 +11,6 @@ public class Categoria {
 
 	public Categoria(int id, String nombre, double cargoFijo, double cargoVariable, int limiteInferiorConsumo,
 			int limiteSuperiorConsumo) {
-		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.cargoFijo = cargoFijo;
@@ -24,7 +23,7 @@ public class Categoria {
 		return id;
 	}
 
-	public void setIdCategoria(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
