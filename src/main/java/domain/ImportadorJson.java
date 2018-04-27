@@ -1,6 +1,7 @@
 package domain;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,23 +16,34 @@ import org.json.simple.parser.JSONParser;
 public class ImportadorJson {
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	private JSONObject entidades;
+	private JSONArray entidades;
 
-	public ImportadorJson(JSONObject entidades) {
+	public ImportadorJson(JSONArray entidades) {
 		this.entidades = entidades;
 	}
 
 	public static ImportadorJson desdeArchivo(String archivo) {
-		JSONParser parser = new JSONParser();
-
-		JSONObject entidades = null;
+		FileReader fr = null;
 
 		try {
-			Object obj = parser.parse(new FileReader(archivo));
-			entidades = (JSONObject) obj;
+			fr = new FileReader(archivo);
 
+		} catch (IOException e) {
+			System.out.println("Error leyendo el archivo: " + archivo);
+			// e.printStackTrace();
+			System.exit(1);
+		}
+
+		JSONParser parser = new JSONParser();
+		JSONArray entidades = null;
+
+		try {
+			Object obj = parser.parse(fr);
+			entidades = (JSONArray) obj;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error parseando el archivo json: " + archivo);
+			// e.printStackTrace();
+			System.exit(1);
 		}
 
 		ImportadorJson importador = new ImportadorJson(entidades);
@@ -39,105 +51,41 @@ public class ImportadorJson {
 		return importador;
 	}
 
-	public List<Categoria> importarCategorias() {
-		List<Categoria> categorias = new ArrayList<Categoria>();
-
-		JSONArray categoriasJson = (JSONArray) this.entidades.get("categorias");
-
-		Iterator<JSONObject> iterator = categoriasJson.iterator();
-		while (iterator.hasNext()) {
-			JSONObject categoriaJson = iterator.next();
-
-			int id = (int) (long) categoriaJson.get("id");
-			String nombre = (String) categoriaJson.get("nombre");
-			Double cargoFijo = (Double) categoriaJson.get("cargo_fijo");
-			Double cargoVariable = (Double) categoriaJson.get("cargo_variable");
-			int limiteInferiorConsumo = (int) (long) categoriaJson.get("limite_inferior_consumo");
-			int limiteSuperiorConsumo = (int) (long) categoriaJson.get("limite_superior_consumo");
-
-			Categoria categoria = new Categoria(id, nombre, cargoFijo, cargoVariable, limiteInferiorConsumo,
-					limiteSuperiorConsumo);
-
-			categorias.add(categoria);
-		}
-
-		return categorias;
-	}
-
 	public List<Cliente> importarClientes() {
 		List<Cliente> clientes = new ArrayList<Cliente>();
 
-		JSONArray clientesJson = (JSONArray) this.entidades.get("clientes");
+		try {
+			Iterator<JSONObject> iterator = this.entidades.iterator();
+			while (iterator.hasNext()) {
+				JSONObject clienteJson = iterator.next();
 
-		Iterator<JSONObject> iterator = clientesJson.iterator();
-		while (iterator.hasNext()) {
-			JSONObject clienteJson = iterator.next();
+				int id = (int) (long) clienteJson.get("id");
+				String nombreYApellido = (String) clienteJson.get("nombre_y_apellido");
+				String nombreDeUsuario = (String) clienteJson.get("nombre_de_usuario");
+				String contraseña = (String) clienteJson.get("contraseña");
+				TipoDocumento tipoDeDocumento = TipoDocumento.valueOf((String) clienteJson.get("tipo_documento"));
+				int numeroDeDocumento = (int) (long) clienteJson.get("numero_documento");
+				String telefonoDeContacto = (String) clienteJson.get("telefono");
+				String domicilioDelServicio = (String) clienteJson.get("domicilio");
+				String fechaDeAltaDelServicioString = (String) clienteJson.get("fecha_alta_servicio");
+				Date fechaDeAltaDelServicio = null;
+				try {
+					fechaDeAltaDelServicio = sdf.parse(fechaDeAltaDelServicioString);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				Categoria categoria = Categoria.valueOf((String) clienteJson.get("categoria"));
 
-			int id = (int) (long) clienteJson.get("id");
-			String nombreYApellido = (String) clienteJson.get("nombre_y_apellido");
-			String nombreDeUsuario = (String) clienteJson.get("nombre_de_usuario");
-			String contraseña = (String) clienteJson.get("contraseña");
+				Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
+						tipoDeDocumento, numeroDeDocumento, telefonoDeContacto, fechaDeAltaDelServicio, categoria);
 
-			JSONObject documentoJson = (JSONObject) clienteJson.get("documento");
-			String tipoDeDocumentoString = (String) documentoJson.get("tipo");
-			Documento.Tipo tipoDeDocumento = Documento.Tipo.valueOf(tipoDeDocumentoString);
-			int numeroDeDocumento = (int) (long) documentoJson.get("numero");
-			Documento documento = new Documento(tipoDeDocumento, numeroDeDocumento);
-
-			String telefonoDeContacto = (String) clienteJson.get("telefono");
-
-			JSONObject domicilioJson = (JSONObject) clienteJson.get("domicilio");
-			String calle = (String) domicilioJson.get("calle");
-			int numero = (int) (long) domicilioJson.get("numero");
-			int codigoPostal = (int) (long) domicilioJson.get("codigo_postal");
-			String ciudad = (String) domicilioJson.get("ciudad");
-			String provincia = (String) domicilioJson.get("provincia");
-			Domicilio domicilioDelServicio = new Domicilio(calle, numero, codigoPostal, ciudad, provincia);
-
-			String fechaDeAltaDelServicioString = (String) clienteJson.get("fecha_alta_servicio");
-			Date fechaDeAltaDelServicio = null;
-			try {
-				fechaDeAltaDelServicio = sdf.parse(fechaDeAltaDelServicioString);
-			} catch (ParseException e) {
-				e.printStackTrace();
+				clientes.add(cliente);
 			}
 
-			String categoriaString = (String) clienteJson.get("categoria");
-			Categoria categoria = null;
-			switch (categoriaString) {
-			case "R1":
-				categoria = Categoria.crearR1();
-				break;
-			case "R2":
-				categoria = Categoria.crearR2();
-				break;
-			case "R3":
-				categoria = Categoria.crearR3();
-				break;
-			case "R4":
-				categoria = Categoria.crearR4();
-				break;
-			case "R5":
-				categoria = Categoria.crearR5();
-				break;
-			case "R6":
-				categoria = Categoria.crearR6();
-				break;
-			case "R7":
-				categoria = Categoria.crearR7();
-				break;
-			case "R8":
-				categoria = Categoria.crearR8();
-				break;
-			case "R9":
-				categoria = Categoria.crearR9();
-				break;
-			}
-
-			Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
-					documento, telefonoDeContacto, fechaDeAltaDelServicio, categoria);
-
-			clientes.add(cliente);
+		} catch (Exception e) {
+			System.out.println("Error parseando el archivo json");
+			// e.printStackTrace();
+			System.exit(1);
 		}
 
 		return clientes;
@@ -146,38 +94,34 @@ public class ImportadorJson {
 	public List<Administrador> importarAdministradores() {
 		List<Administrador> administradores = new ArrayList<Administrador>();
 
-		JSONArray administradoresJson = (JSONArray) this.entidades.get("administradores");
+		try {
+			Iterator<JSONObject> iterator = this.entidades.iterator();
+			while (iterator.hasNext()) {
+				JSONObject administradorJson = iterator.next();
 
-		Iterator<JSONObject> iterator = administradoresJson.iterator();
-		while (iterator.hasNext()) {
-			JSONObject administradorJson = iterator.next();
+				int id = (int) (long) administradorJson.get("id");
+				String nombreYApellido = (String) administradorJson.get("nombre_y_apellido");
+				String nombreDeUsuario = (String) administradorJson.get("nombre_de_usuario");
+				String contraseña = (String) administradorJson.get("contraseña");
+				String domicilio = (String) administradorJson.get("domicilio");
+				String fechaDeAltaString = (String) administradorJson.get("fecha_de_alta");
+				Date fechaDeAlta = null;
+				try {
+					fechaDeAlta = sdf.parse(fechaDeAltaString);
+				} catch (ParseException e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
 
-			int id = (int) (long) administradorJson.get("id");
-			String nombreYApellido = (String) administradorJson.get("nombre_y_apellido");
-			String nombreDeUsuario = (String) administradorJson.get("nombre_de_usuario");
-			String contraseña = (String) administradorJson.get("contraseña");
+				Administrador administrador = new Administrador(id, nombreDeUsuario, contraseña, nombreYApellido,
+						domicilio, fechaDeAlta);
 
-			JSONObject domicilioJson = (JSONObject) administradorJson.get("domicilio");
-			String calle = (String) domicilioJson.get("calle");
-			int numero = (int) (long) domicilioJson.get("numero");
-			int codigoPostal = (int) (long) domicilioJson.get("codigo_postal");
-			String ciudad = (String) domicilioJson.get("ciudad");
-			String provincia = (String) domicilioJson.get("provincia");
-			Domicilio domicilio = new Domicilio(calle, numero, codigoPostal, ciudad, provincia);
-
-			String fechaDeAltaString = (String) administradorJson.get("fecha_de_alta");
-			Date fechaDeAlta = null;
-			try {
-				fechaDeAlta = sdf.parse(fechaDeAltaString);
-			} catch (ParseException e) {
-				e.printStackTrace();
+				administradores.add(administrador);
 			}
 
-			Administrador administrador = new Administrador(id, nombreYApellido, nombreDeUsuario, contraseña, domicilio,
-					fechaDeAlta);
-
-			administradores.add(administrador);
-
+		} catch (Exception e) {
+			System.out.println("Error parseando el archivo json");
+			// e.printStackTrace();
 		}
 
 		return administradores;
@@ -186,20 +130,24 @@ public class ImportadorJson {
 	public List<Dispositivo> importarDispositivos() {
 		List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 
-		JSONArray dispositivosJson = (JSONArray) this.entidades.get("dispositivos");
+		try {
+			Iterator<JSONObject> iterator = this.entidades.iterator();
+			while (iterator.hasNext()) {
+				JSONObject dispositivoJson = iterator.next();
 
-		Iterator<JSONObject> iterator = dispositivosJson.iterator();
-		while (iterator.hasNext()) {
-			JSONObject dispositivoJson = iterator.next();
+				int id = (int) (long) dispositivoJson.get("id");
+				String nombre = (String) dispositivoJson.get("nombre");
+				int consumoPorHora = (int) (long) dispositivoJson.get("consumo_por_hora");
+				Boolean encendido = (Boolean) dispositivoJson.get("encendido");
 
-			int id = (int) (long) dispositivoJson.get("id");
-			String nombre = (String) dispositivoJson.get("nombre");
-			int consumoPorHora = (int) (long) dispositivoJson.get("consumo_por_hora");
-			Boolean encendido = (Boolean) dispositivoJson.get("encendido");
+				Dispositivo dispositivo = new Dispositivo(id, nombre, consumoPorHora, encendido);
 
-			Dispositivo dispositivo = new Dispositivo(id, nombre, consumoPorHora, encendido);
-
-			dispositivos.add(dispositivo);
+				dispositivos.add(dispositivo);
+			}
+		} catch (Exception e) {
+			System.out.println("Error parseando el archivo json");
+			// e.printStackTrace();
+			System.exit(1);
 		}
 
 		return dispositivos;

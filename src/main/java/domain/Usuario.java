@@ -6,9 +6,9 @@ public abstract class Usuario {
 	protected String nombreUsuario;
 	protected String contraseña;
 	protected String nombreYApellido;
-	protected Domicilio domicilio;
+	protected String domicilio;
 
-	public Usuario(int id, String nombreUsuario, String contraseña, String nombreYApellido, Domicilio domicilio) {
+	public Usuario(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio) {
 		this.id = id;
 		this.nombreUsuario = nombreUsuario;
 		this.contraseña = contraseña;
@@ -48,11 +48,11 @@ public abstract class Usuario {
 		this.nombreYApellido = nombreYApellido;
 	}
 
-	public Domicilio getDomicilio() {
+	public String getDomicilio() {
 		return domicilio;
 	}
 
-	public void setDomicilio(Domicilio domicilio) {
+	public void setDomicilio(String domicilio) {
 		this.domicilio = domicilio;
 	}
 }

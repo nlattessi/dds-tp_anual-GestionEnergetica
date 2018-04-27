@@ -1,0 +1,8 @@
+[{
+	"id": 1,
+	"nombre_y_apellido": "Juan Perez",
+	"nombre_de_usuario": "JuanPerez",
+    "contraseña": "asd123",
+    "domicilio": "Av. Rivadavia 1111, CABA, Buenos Aires",
+	"fecha_de_alta": "01/01/2018"
+}]

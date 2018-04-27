@@ -8,8 +8,7 @@ import domain.Administrador;
 import domain.Categoria;
 import domain.Cliente;
 import domain.Dispositivo;
-import domain.Documento;
-import domain.Domicilio;
+import domain.TipoDocumento;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,14 +23,15 @@ public class Entrega0Test {
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
 		String nombreYApellido = "Juan Perez";
-		Documento documentoCliente = new Documento(Documento.Tipo.DNI, 36123894);
+		TipoDocumento tipoDocumento = TipoDocumento.DNI;
+		int numeroDocumento = 36123894;
 		String telefonoContacto = "5555-5555";
-		Domicilio domicilio = new Domicilio("Av. Rivadavia", 1111, 1414, "CABA", "Buenos Aires");
-		Categoria categoria = Categoria.crearR1();
+		String domicilio = "Av. Rivadavia 1111, CABA, Buenos Aires";
+		Categoria categoria = Categoria.R1;
 		Date fechaAltaCliente = new Date();
 
-		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, documentoCliente,
-				telefonoContacto, fechaAltaCliente, categoria);
+		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 
 		Dispositivo heladera = new Dispositivo(1, "heladera", 2, true);
 		Dispositivo tele = new Dispositivo(2, "tele", 3, false);
@@ -57,6 +57,11 @@ public class Entrega0Test {
 	@Test
 	public void clienteConAlgunDispositivoEncendido() {
 		Assert.assertTrue(this.cliente.algunDispositivoEncendido());
+	}
+
+	@Test
+	public void clienteConTresDispositivosEnTotal() {
+		Assert.assertEquals(3, this.cliente.cantidadTotalDispositivos());
 	}
 
 	@Test

@@ -1,0 +1,12 @@
+[{
+	"id": 1,
+	"nombre_y_apellido": "Juan Perez",
+	"nombre_de_usuario": "JuanPerez",
+	"contraseña": "asd123",
+	"tipo_documento": "DNI",
+    "numero_documento": 36123894,
+	"telefono": "5555-5555",
+	"domicilio": "Av. Rivadavia 1111, CABA, Buenos Aires",
+	"fecha_alta_servicio": "01/01/2018",
+	"categoria": "R1"
+}]

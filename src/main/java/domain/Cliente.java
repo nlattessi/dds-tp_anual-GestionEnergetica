@@ -4,19 +4,38 @@ import java.util.*;
 
 public class Cliente extends Usuario {
 
-	protected Documento documento;
+	private TipoDocumento tipoDocumento;
+	private int numeroDocumento;
 	private String telefonoContacto;
 	private Date fechaAltaServicio;
 	private Categoria categoria;
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 
-	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, Domicilio domicilio,
-			Documento documento, String telefonoContacto, Date fechaAltaServicio, Categoria categoria) {
+	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
+			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
+			Categoria categoria) {
 		super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
-		this.documento = documento;
+		this.setTipoDocumento(tipoDocumento);
+		this.setNumeroDocumento(numeroDocumento);
 		this.telefonoContacto = telefonoContacto;
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
+	}
+
+	public TipoDocumento getTipoDocumento() {
+		return tipoDocumento;
+	}
+
+	public void setTipoDocumento(TipoDocumento tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public int getNumeroDocumento() {
+		return numeroDocumento;
+	}
+
+	public void setNumeroDocumento(int numeroDocumento) {
+		this.numeroDocumento = numeroDocumento;
 	}
 
 	public String getTelefonoContacto() {
