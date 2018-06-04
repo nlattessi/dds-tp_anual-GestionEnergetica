@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import domain.Acciones;
 import domain.Actuador;
 import domain.ApagarCommand;
 import domain.ApagarRegla;
@@ -52,14 +53,13 @@ public class Entrega1Test {
 	public void dispositivoSeEnciendeSiSeCumpleReglaEncender() {
 		Assert.assertEquals(Estados.APAGADO, this.aireAcondicionado.getEstado());
 
-		EncenderCommand encenderCommand = new EncenderCommand(aireAcondicionado);
+		EncenderCommand encenderCommand = new EncenderCommand();
 
-		Actuador actuador = new Actuador();
-		actuador.setEncenderseComando(encenderCommand);
-
-		EncenderRegla reglaEncenderse = new EncenderRegla();
+		Actuador actuador = new Actuador(this.aireAcondicionado);
+		actuador.agregarAccion(Acciones.ENCENDERSE, encenderCommand);
 
 		Reglamentador reglamentador = new Reglamentador(actuador);
+		EncenderRegla reglaEncenderse = new EncenderRegla();
 		reglamentador.setRegla(reglaEncenderse);
 
 		Sensor sensor = new Sensor();
@@ -75,10 +75,10 @@ public class Entrega1Test {
 
 		Assert.assertEquals(Estados.ENCENDIDO, this.aireAcondicionado.getEstado());
 
-		ApagarCommand apagarCommand = new ApagarCommand(aireAcondicionado);
+		ApagarCommand apagarCommand = new ApagarCommand();
 
-		Actuador actuador = new Actuador();
-		actuador.setApagarCommand(apagarCommand);
+		Actuador actuador = new Actuador(this.aireAcondicionado);
+		actuador.agregarAccion(Acciones.APAGARSE, apagarCommand);
 
 		ApagarRegla apagarRegla = new ApagarRegla();
 
@@ -98,10 +98,10 @@ public class Entrega1Test {
 
 		Assert.assertEquals(Estados.ENCENDIDO, this.aireAcondicionado.getEstado());
 
-		ApagarCommand apagarCommand = new ApagarCommand(aireAcondicionado);
+		ApagarCommand apagarCommand = new ApagarCommand();
 
-		Actuador actuador = new Actuador();
-		actuador.setApagarCommand(apagarCommand);
+		Actuador actuador = new Actuador(this.aireAcondicionado);
+		actuador.agregarAccion(Acciones.APAGARSE, apagarCommand);
 
 		ApagarRegla apagarRegla = new ApagarRegla();
 
@@ -119,10 +119,10 @@ public class Entrega1Test {
 	public void dispositivoNoSeEnciendeSiNoSeCumpleReglaEncender() {
 		Assert.assertEquals(Estados.APAGADO, this.aireAcondicionado.getEstado());
 
-		EncenderCommand encenderCommand = new EncenderCommand(aireAcondicionado);
+		EncenderCommand encenderCommand = new EncenderCommand();
 
-		Actuador actuador = new Actuador();
-		actuador.setEncenderseComando(encenderCommand);
+		Actuador actuador = new Actuador(this.aireAcondicionado);
+		actuador.agregarAccion(Acciones.ENCENDERSE, encenderCommand);
 
 		EncenderRegla reglaEncenderse = new EncenderRegla();
 

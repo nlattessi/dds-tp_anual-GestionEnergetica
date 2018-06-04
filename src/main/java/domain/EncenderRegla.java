@@ -8,6 +8,6 @@ public class EncenderRegla implements Regla {
 
 	@Override
 	public void dispararAccion(Actuador actuador) {
-		actuador.ejecutarComandoEncenderse();
+		actuador.ejecutarAccion(Acciones.ENCENDERSE);
 	}
 }

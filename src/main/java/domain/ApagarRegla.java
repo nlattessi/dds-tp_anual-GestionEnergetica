@@ -8,6 +8,6 @@ public class ApagarRegla implements Regla {
 
 	@Override
 	public void dispararAccion(Actuador actuador) {
-		actuador.ejecutarComandoApagarse();
+		actuador.ejecutarAccion(Acciones.APAGARSE);
 	}
 }

@@ -1,6 +1,6 @@
 package domain;
 
 public interface Command {
-	public void execute();
+	public void execute(Inteligente dispositivo);
 
 }

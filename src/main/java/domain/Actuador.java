@@ -1,32 +1,21 @@
 package domain;
 
+import java.util.HashMap;
+
 public class Actuador {
-	private EncenderCommand encenderCommand;
-	private ApagarCommand apagarCommand;
-	private ModoAhorroEnergiaCommand modoAhorroEnergiaCommand;
+	private Inteligente dispositivo;
+	private HashMap<Acciones, Command> listaComandos;
 
-	public void setEncenderseComando(EncenderCommand encenderCommand) {
-		this.encenderCommand = encenderCommand;
+	public Actuador(Inteligente dispositivo) {
+		this.dispositivo = dispositivo;
+		this.listaComandos = new HashMap<Acciones, Command>();
 	}
 
-	public void setApagarCommand(ApagarCommand apagarCommand) {
-		this.apagarCommand = apagarCommand;
+	public void agregarAccion(Acciones accion, Command command) {
+		this.listaComandos.put(accion, command);
 	}
 
-	public void setModoAhorroEnergiaCommand(ModoAhorroEnergiaCommand modoAhorroEnergiaCommand) {
-		this.modoAhorroEnergiaCommand = modoAhorroEnergiaCommand;
+	public void ejecutarAccion(Acciones accion) {
+		this.listaComandos.get(accion).execute(this.dispositivo);
 	}
-
-	public void ejecutarComandoEncenderse() {
-		this.encenderCommand.execute();
-	}
-
-	public void ejecutarComandoApagarse() {
-		this.apagarCommand.execute();
-	}
-
-	public void ejecutarComandoEntrarModoAhorroEnergia() {
-		this.modoAhorroEnergiaCommand.execute();
-	}
-
 }
