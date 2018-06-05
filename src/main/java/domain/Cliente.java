@@ -11,6 +11,7 @@ public class Cliente extends Usuario {
 	private Date fechaAltaServicio;
 	private Categoria categoria;
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
+	private int puntosAcumulados;
 
 	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
@@ -41,6 +42,9 @@ public class Cliente extends Usuario {
 
 	public String getTelefonoContacto() {
 		return this.telefonoContacto;
+	}
+	public int puntosAcumulados() {
+		return puntosAcumulados;
 	}
 
 	public void setTelefonoContacto(String telefonoContacto) {
@@ -73,6 +77,7 @@ public class Cliente extends Usuario {
 
 	public void agregarDispositivo(Dispositivo dispositivo) {
 		this.dispositivos.add(dispositivo);
+		dispositivo.sumarPuntos(this);
 	}
 
 	public void removerDispositivo(Dispositivo dispositivo) {
@@ -94,10 +99,16 @@ public class Cliente extends Usuario {
 	public int cantidadTotalDispositivos() {
 		return this.dispositivos.size();
 	}
+	
+	public void sumarPuntos(int puntos) {
+		this.puntosAcumulados = puntos + this.puntosAcumulados();
+	}
 
 	private Stream<DispositivoInteligente> getDispositivosInteligentes() {
 		return this.dispositivos.stream().filter(d -> d instanceof DispositivoInteligente)
 				.map(d -> (DispositivoInteligente) d);
 	}
+	
+
 
 }
