@@ -74,14 +74,18 @@ public class Cliente extends Usuario {
 	public void setDispositivos(List<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
 	}
+	
+	public void agregarDispositivo(Dispositivo dispositivo)
+	{
+		this.dispositivos.add(dispositivo);
+	}
 
-	public void agregarDispositivo(Dispositivo dispositivo) {
+	public void agregarDispositivo(DispositivoInteligente dispositivo) {
 		this.dispositivos.add(dispositivo);
 		this.sumarPuntos(15);
 	}
 	
-	// conversion de dispositivo estandar a inteligente
-	public void agregarDispositivo(DispositivoEstandar dispositivo)
+	public void conversionEstandarInteligente(DispositivoEstandar dispositivo)
 	{
 		DispositivoInteligente dispInteligente = new DispositivoInteligente(dispositivo.getId(), dispositivo.getNombre(), dispositivo.getConsumoXHora(), Estados.APAGADO); 
 		this.agregarDispositivo(dispInteligente);
