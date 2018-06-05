@@ -34,6 +34,7 @@ public class Entrega1Test {
 	public void inicio() {
 		this.aireAcondicionado = new DispositivoInteligente(1, "aire acondicionado", 230, Estados.APAGADO);
 		this.tele = new DispositivoEstandar(2, "tele", 3);
+		
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
 		String nombreYApellido = "Juan Perez";
@@ -196,6 +197,13 @@ public class Entrega1Test {
 		Assert.assertEquals(puntosEsperados, this.cliente.puntosAcumulados());
 		
 	}
-	
+	@Test
+	public void clienteAgregaDispEstLoTransfYtiene10ptos() {
+		int puntosEsperados = 10;
+		this.cliente.agregarDispositivo(tele);
+		this.cliente.conversionEstandarInteligente(tele);
+		Assert.assertEquals(puntosEsperados, this.cliente.puntosAcumulados());
+		
+	}
 
 }
