@@ -77,7 +77,15 @@ public class Cliente extends Usuario {
 
 	public void agregarDispositivo(Dispositivo dispositivo) {
 		this.dispositivos.add(dispositivo);
-		dispositivo.sumarPuntos(this);
+		this.sumarPuntos(15);
+	}
+	
+	// conversion de dispositivo estandar a inteligente
+	public void agregarDispositivo(DispositivoEstandar dispositivo)
+	{
+		DispositivoInteligente dispInteligente = new DispositivoInteligente(dispositivo.getId(), dispositivo.getNombre(), dispositivo.getConsumoXHora(), Estados.APAGADO); 
+		this.agregarDispositivo(dispInteligente);
+		this.sumarPuntos(-5);
 	}
 
 	public void removerDispositivo(Dispositivo dispositivo) {
