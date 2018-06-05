@@ -40,4 +40,12 @@ public class Periodo {
 		this.horas = horas;
 	}
 
+	public boolean inicioEsDespuesDe(LocalDateTime fechaHora) {
+		return this.inicio.isEqual(fechaHora) || this.inicio.isAfter(fechaHora);
+	}
+
+	public boolean finEsAntesDe(LocalDateTime fechaHora) {
+		return this.fin.isEqual(fechaHora) || this.fin.isBefore(fechaHora);
+	}
+
 }

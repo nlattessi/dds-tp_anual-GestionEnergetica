@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -53,22 +54,49 @@ public class DispositivoInteligente extends Dispositivo {
 		}
 	}
 
-	public int cuantaEnergiaConsumioEnHoras(int horas) {
-		return this.getConsumoXHora() * horas;
-	}
-
 	public void agregarPeriodo(LocalDateTime inicio, LocalDateTime fin) {
 		this.periodos.add(new Periodo(inicio, fin));
 	}
 
-	// public int consumoTotalEnUltimosPeriodos(int periodos) {
-	// int startValue = 0;
-	// int sumaCantidadHoras = this.periodos.stream().skip(Math.max(0,
-	// this.periodos.size() - periodos)).map(p -> p.getHoras()).reduce(startValue,
-	// (x,y) -> x+y);
-	//
-	//
-	//
-	//
-	// }
+	public int consumoDuranteUltimasNHoras(int horas) {
+		LocalDateTime ahora = LocalDateTime.now();
+		LocalDateTime ahoraMenosHoras = ahora.minusHours(horas);
+		int cantidad = this.consumoTotalComprendidoEntre(ahoraMenosHoras, ahora);
+
+		if (this.estaEncendido()) {
+			if (this.ultimaFechaHoraEncendido.isEqual(ahoraMenosHoras)
+					|| this.ultimaFechaHoraEncendido.isAfter(ahoraMenosHoras)) {
+				cantidad += Duration.between(ahoraMenosHoras, this.ultimaFechaHoraEncendido).toHours()
+						* this.getConsumoXHora();
+			}
+		}
+
+		return cantidad;
+	}
+
+	public int consumoDuranteUltimasNHoras(int horas, LocalDateTime ahora) {
+		LocalDateTime ahoraMenosHoras = ahora.minusHours(horas);
+		int cantidad = this.consumoTotalComprendidoEntre(ahoraMenosHoras, ahora);
+
+		if (this.estaEncendido()) {
+			if (this.ultimaFechaHoraEncendido.isEqual(ahoraMenosHoras)
+					|| this.ultimaFechaHoraEncendido.isAfter(ahoraMenosHoras)) {
+				cantidad += Duration.between(ahoraMenosHoras, this.ultimaFechaHoraEncendido).toHours()
+						* this.getConsumoXHora();
+			}
+		}
+
+		return cantidad;
+	}
+
+	public int consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
+		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
+				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
+
+		return totalHoras * this.getConsumoXHora();
+	}
+
+	public void limpiarPeriodos() {
+		this.periodos.clear();
+	}
 }
