@@ -8,7 +8,6 @@ public class DispositivoInteligente extends Dispositivo {
 	private Estados estado;
 	private ArrayList<Periodo> periodos;
 	private LocalDateTime ultimaFechaHoraEncendido;
-	public int puntosOtorga = 15; 
 
 	public DispositivoInteligente(int dispositivo, String nombre, int consumoXHora, Estados estado) {
 		super(dispositivo, nombre, consumoXHora);
@@ -100,9 +99,4 @@ public class DispositivoInteligente extends Dispositivo {
 	public void limpiarPeriodos() {
 		this.periodos.clear();
 	}
-	
-	public void sumarPuntos(Cliente cliente) {
-		cliente.sumarPuntos(puntosOtorga);
-	}
-
 }

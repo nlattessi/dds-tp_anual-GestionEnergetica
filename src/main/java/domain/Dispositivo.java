@@ -34,8 +34,4 @@ public abstract class Dispositivo {
 	public void setConsumoXHora(int consumoXHora) {
 		this.consumoXHora = consumoXHora;
 	}
-
-	public void sumarPuntos(Cliente cliente) {
-		
-	}
 }
