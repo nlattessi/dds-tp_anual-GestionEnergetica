@@ -27,10 +27,26 @@ import domain.TipoDocumento;
 
 public class Entrega1Test {
 	private DispositivoInteligente aireAcondicionado;
+	private Cliente cliente;
+	private DispositivoEstandar tele;
 
 	@Before
 	public void inicio() {
 		this.aireAcondicionado = new DispositivoInteligente(1, "aire acondicionado", 230, Estados.APAGADO);
+		this.tele = new DispositivoEstandar(2, "tele", 3);
+		String nombreUsuario = "JuanPerez";
+		String contraseña = "asd123";
+		String nombreYApellido = "Juan Perez";
+		TipoDocumento tipoDocumento = TipoDocumento.DNI;
+		int numeroDocumento = 36123894;
+		String telefonoContacto = "5555-5555";
+		String domicilio = "Av. Rivadavia 1111, CABA, Buenos Aires";
+		Categoria categoria = Categoria.R1;
+		Date fechaAltaCliente = new Date();
+
+		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
+		
 	}
 
 	@Test
@@ -165,5 +181,21 @@ public class Entrega1Test {
 		Assert.assertEquals(consumoTotalEsperado, this.aireAcondicionado.consumoTotalComprendidoEntre(
 				LocalDateTime.of(2018, 05, 1, 0, 0), LocalDateTime.of(2018, 06, 30, 0, 0)));
 	}
+	@Test
+	public void clienteAgregaDispIntyTiene15Ptos() {
+		int puntosEsperados = 15;
+		this.cliente.agregarDispositivo(aireAcondicionado);
+		Assert.assertEquals(puntosEsperados, this.cliente.puntosAcumulados());
+		
+	}
+	@Test
+	public void clienteAgregaDispEsteIntyTiene15Ptos() {
+		int puntosEsperados = 15;
+		this.cliente.agregarDispositivo(aireAcondicionado);
+		this.cliente.agregarDispositivo(tele);
+		Assert.assertEquals(puntosEsperados, this.cliente.puntosAcumulados());
+		
+	}
+	
 
 }

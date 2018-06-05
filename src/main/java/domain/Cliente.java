@@ -11,7 +11,7 @@ public class Cliente extends Usuario {
 	private Date fechaAltaServicio;
 	private Categoria categoria;
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
-	private int puntosAcumulados;
+	private int puntosAcumulados=0;
 
 	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
