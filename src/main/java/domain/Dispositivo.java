@@ -1,17 +1,14 @@
 package domain;
 
-public class Dispositivo {
-
+public abstract class Dispositivo {
 	private int id;
 	private String nombre;
 	private int consumoXHora;
-	private boolean encendido;
 
-	public Dispositivo(int dispositivo, String nombre, int consumoXHora, boolean encendido) {
+	public Dispositivo(int dispositivo, String nombre, int consumoXHora) {
 		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
-		this.encendido = encendido;
 	}
 
 	public int getId() {
@@ -36,13 +33,5 @@ public class Dispositivo {
 
 	public void setConsumoXHora(int consumoXHora) {
 		this.consumoXHora = consumoXHora;
-	}
-
-	public boolean getEncendido() {
-		return encendido;
-	}
-
-	public void setEncendido(boolean encendido) {
-		this.encendido = encendido;
 	}
 }

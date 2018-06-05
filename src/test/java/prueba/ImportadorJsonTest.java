@@ -10,6 +10,8 @@ import domain.Administrador;
 import domain.Categoria;
 import domain.Cliente;
 import domain.Dispositivo;
+import domain.DispositivoEstandar;
+import domain.DispositivoInteligente;
 import domain.ImportadorJson;
 
 public class ImportadorJsonTest {
@@ -88,30 +90,30 @@ public class ImportadorJsonTest {
 
 		Assert.assertEquals(dispositivos.size(), 3);
 
-		Dispositivo primerDispositivo = dispositivos.get(0);
+		DispositivoInteligente primerDispositivo = (DispositivoInteligente) dispositivos.get(0);
 		Assert.assertEquals(primerDispositivo.getId(), 1);
 		Assert.assertEquals(primerDispositivo.getNombre(), "heladera");
 		Assert.assertEquals(primerDispositivo.getConsumoXHora(), 2);
-		Assert.assertEquals(primerDispositivo.getEncendido(), false);
+		Assert.assertEquals(primerDispositivo.estaEncendido(), true);
 
-		Dispositivo segundoDispositivo = dispositivos.get(1);
+		DispositivoEstandar segundoDispositivo = (DispositivoEstandar) dispositivos.get(1);
 		Assert.assertEquals(segundoDispositivo.getId(), 2);
 		Assert.assertEquals(segundoDispositivo.getNombre(), "tele");
 		Assert.assertEquals(segundoDispositivo.getConsumoXHora(), 3);
-		Assert.assertEquals(segundoDispositivo.getEncendido(), true);
 
-		Dispositivo tercerDispositivo = dispositivos.get(2);
+		DispositivoEstandar tercerDispositivo = (DispositivoEstandar) dispositivos.get(2);
 		Assert.assertEquals(tercerDispositivo.getId(), 3);
 		Assert.assertEquals(tercerDispositivo.getNombre(), "radio");
 		Assert.assertEquals(tercerDispositivo.getConsumoXHora(), 1);
-		Assert.assertEquals(tercerDispositivo.getEncendido(), false);
 
 		System.out.println("Dispositivos:");
 		for (Dispositivo dispositivo : dispositivos) {
 			System.out.println("Id: " + dispositivo.getId());
 			System.out.println("Nombre: " + dispositivo.getNombre());
 			System.out.println("Consumo por hora: " + dispositivo.getConsumoXHora());
-			System.out.println("Encendido: " + dispositivo.getEncendido());
+			if (dispositivo instanceof DispositivoInteligente) {
+				System.out.println("Encendido: " + ((DispositivoInteligente) dispositivo).estaEncendido());
+			}
 			System.out.println();
 		}
 		System.out.println("---------");

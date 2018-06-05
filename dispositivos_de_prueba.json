@@ -2,18 +2,19 @@
 		"id": 1,
 		"nombre": "heladera",
 		"consumo_por_hora": 2,
-		"encendido": false
+		"inteligente": true,
+		"estado": "encendido"
 	},
 	{
 		"id": 2,
 		"nombre": "tele",
 		"consumo_por_hora": 3,
-		"encendido": true
+		"inteligente": false
 	},
 	{
 		"id": 3,
 		"nombre": "radio",
 		"consumo_por_hora": 1,
-		"encendido": false
+		"inteligente": false
 	}
 ]

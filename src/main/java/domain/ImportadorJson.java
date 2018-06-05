@@ -30,7 +30,7 @@ public class ImportadorJson {
 
 		} catch (IOException e) {
 			System.out.println("Error leyendo el archivo: " + archivo);
-			// e.printStackTrace();
+			e.printStackTrace();
 			System.exit(1);
 		}
 
@@ -42,7 +42,7 @@ public class ImportadorJson {
 			entidades = (JSONArray) obj;
 		} catch (Exception e) {
 			System.out.println("Error parseando el archivo json: " + archivo);
-			// e.printStackTrace();
+			e.printStackTrace();
 			System.exit(1);
 		}
 
@@ -60,14 +60,15 @@ public class ImportadorJson {
 				JSONObject clienteJson = iterator.next();
 
 				int id = (int) (long) clienteJson.get("id");
-				String nombreYApellido = (String) clienteJson.get("nombre_y_apellido");
-				String nombreDeUsuario = (String) clienteJson.get("nombre_de_usuario");
-				String contraseña = (String) clienteJson.get("contraseña");
-				TipoDocumento tipoDeDocumento = TipoDocumento.valueOf((String) clienteJson.get("tipo_documento"));
+				String nombreYApellido = clienteJson.get("nombre_y_apellido").toString();
+				String nombreDeUsuario = clienteJson.get("nombre_de_usuario").toString();
+				String contraseña = clienteJson.get("contraseña").toString();
+				TipoDocumento tipoDeDocumento = TipoDocumento
+						.valueOf(clienteJson.get("tipo_documento").toString().toUpperCase());
 				int numeroDeDocumento = (int) (long) clienteJson.get("numero_documento");
-				String telefonoDeContacto = (String) clienteJson.get("telefono");
-				String domicilioDelServicio = (String) clienteJson.get("domicilio");
-				String fechaDeAltaDelServicioString = (String) clienteJson.get("fecha_alta_servicio");
+				String telefonoDeContacto = clienteJson.get("telefono").toString();
+				String domicilioDelServicio = clienteJson.get("domicilio").toString();
+				String fechaDeAltaDelServicioString = clienteJson.get("fecha_alta_servicio").toString();
 				Date fechaDeAltaDelServicio = null;
 				try {
 					fechaDeAltaDelServicio = sdf.parse(fechaDeAltaDelServicioString);
@@ -83,8 +84,8 @@ public class ImportadorJson {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Error parseando el archivo json");
-			// e.printStackTrace();
+			System.out.println("Error parseando lista clientes en json");
+			e.printStackTrace();
 			System.exit(1);
 		}
 
@@ -100,11 +101,11 @@ public class ImportadorJson {
 				JSONObject administradorJson = iterator.next();
 
 				int id = (int) (long) administradorJson.get("id");
-				String nombreYApellido = (String) administradorJson.get("nombre_y_apellido");
-				String nombreDeUsuario = (String) administradorJson.get("nombre_de_usuario");
-				String contraseña = (String) administradorJson.get("contraseña");
-				String domicilio = (String) administradorJson.get("domicilio");
-				String fechaDeAltaString = (String) administradorJson.get("fecha_de_alta");
+				String nombreYApellido = administradorJson.get("nombre_y_apellido").toString();
+				String nombreDeUsuario = administradorJson.get("nombre_de_usuario").toString();
+				String contraseña = administradorJson.get("contraseña").toString();
+				String domicilio = administradorJson.get("domicilio").toString();
+				String fechaDeAltaString = administradorJson.get("fecha_de_alta").toString();
 				Date fechaDeAlta = null;
 				try {
 					fechaDeAlta = sdf.parse(fechaDeAltaString);
@@ -120,8 +121,9 @@ public class ImportadorJson {
 			}
 
 		} catch (Exception e) {
-			System.out.println("Error parseando el archivo json");
-			// e.printStackTrace();
+			System.out.println("Error parseando lista administradores en json");
+			e.printStackTrace();
+			System.exit(1);
 		}
 
 		return administradores;
@@ -135,18 +137,25 @@ public class ImportadorJson {
 			while (iterator.hasNext()) {
 				JSONObject dispositivoJson = iterator.next();
 
-				int id = (int) (long) dispositivoJson.get("id");
-				String nombre = (String) dispositivoJson.get("nombre");
-				int consumoPorHora = (int) (long) dispositivoJson.get("consumo_por_hora");
-				Boolean encendido = (Boolean) dispositivoJson.get("encendido");
+				Dispositivo dispositivo;
 
-				Dispositivo dispositivo = new Dispositivo(id, nombre, consumoPorHora, encendido);
+				int id = (int) (long) dispositivoJson.get("id");
+				String nombre = dispositivoJson.get("nombre").toString();
+				int consumoPorHora = (int) (long) dispositivoJson.get("consumo_por_hora");
+
+				Boolean inteligente = (Boolean) dispositivoJson.get("inteligente");
+				if (inteligente) {
+					Estados estado = Estados.valueOf(dispositivoJson.get("estado").toString().toUpperCase());
+					dispositivo = new DispositivoInteligente(id, nombre, consumoPorHora, estado);
+				} else {
+					dispositivo = new DispositivoEstandar(id, nombre, consumoPorHora);
+				}
 
 				dispositivos.add(dispositivo);
 			}
 		} catch (Exception e) {
-			System.out.println("Error parseando el archivo json");
-			// e.printStackTrace();
+			System.out.println("Error parseando lista dispositivos en json");
+			e.printStackTrace();
 			System.exit(1);
 		}
 

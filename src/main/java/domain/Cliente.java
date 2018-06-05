@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Cliente extends Usuario {
 
@@ -79,19 +80,24 @@ public class Cliente extends Usuario {
 	}
 
 	public boolean algunDispositivoEncendido() {
-		return this.dispositivos.stream().anyMatch(x -> x.getEncendido() == true);
+		return this.getDispositivosInteligentes().anyMatch(x -> x.estaEncendido());
 	}
 
 	public long cantidadDispositivosEncendidos() {
-		return this.dispositivos.stream().filter(x -> x.getEncendido() == true).count();
+		return this.getDispositivosInteligentes().filter(x -> x.estaEncendido()).count();
 	}
 
 	public long cantidadDispositivosApagados() {
-		return this.dispositivos.stream().filter(x -> x.getEncendido() == false).count();
+		return this.getDispositivosInteligentes().filter(x -> x.estaApagado()).count();
 	}
 
 	public int cantidadTotalDispositivos() {
 		return this.dispositivos.size();
+	}
+
+	private Stream<DispositivoInteligente> getDispositivosInteligentes() {
+		return this.dispositivos.stream().filter(d -> d instanceof DispositivoInteligente)
+				.map(d -> (DispositivoInteligente) d);
 	}
 
 }

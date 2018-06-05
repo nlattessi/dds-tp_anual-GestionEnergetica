@@ -8,6 +8,9 @@ import domain.Administrador;
 import domain.Categoria;
 import domain.Cliente;
 import domain.Dispositivo;
+import domain.DispositivoEstandar;
+import domain.DispositivoInteligente;
+import domain.Estados;
 import domain.TipoDocumento;
 
 import java.text.ParseException;
@@ -33,20 +36,22 @@ public class Entrega0Test {
 		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 
-		Dispositivo heladera = new Dispositivo(1, "heladera", 2, true);
-		Dispositivo tele = new Dispositivo(2, "tele", 3, false);
-		Dispositivo radio = new Dispositivo(3, "radio", 1, true);
+		Dispositivo heladera = new DispositivoInteligente(1, "heladera", 2, Estados.ENCENDIDO);
+		Dispositivo tele = new DispositivoEstandar(2, "tele", 3);
+		Dispositivo radio = new DispositivoEstandar(3, "radio", 1);
+		Dispositivo aireAcondicionado = new DispositivoInteligente(4, "aire acondicionado", 10, Estados.APAGADO);
 		this.cliente.agregarDispositivo(tele);
 		this.cliente.agregarDispositivo(heladera);
 		this.cliente.agregarDispositivo(radio);
+		this.cliente.agregarDispositivo(aireAcondicionado);
 
 		this.administrador = new Administrador(1, nombreUsuario, contraseña, nombreYApellido, domicilio,
 				fechaAltaCliente);
 	}
 
 	@Test
-	public void clienteConDosDispositivoEncendido() {
-		Assert.assertEquals(2, this.cliente.cantidadDispositivosEncendidos());
+	public void clienteConUnDispositivoEncendido() {
+		Assert.assertEquals(1, this.cliente.cantidadDispositivosEncendidos());
 	}
 
 	@Test
@@ -60,8 +65,8 @@ public class Entrega0Test {
 	}
 
 	@Test
-	public void clienteConTresDispositivosEnTotal() {
-		Assert.assertEquals(3, this.cliente.cantidadTotalDispositivos());
+	public void clienteConCuatroDispositivosEnTotal() {
+		Assert.assertEquals(4, this.cliente.cantidadTotalDispositivos());
 	}
 
 	@Test

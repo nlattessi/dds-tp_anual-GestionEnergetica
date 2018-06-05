@@ -3,10 +3,10 @@ package domain;
 import java.util.HashMap;
 
 public class Actuador {
-	private Inteligente dispositivo;
+	private DispositivoInteligente dispositivo;
 	private HashMap<Acciones, Command> listaComandos;
 
-	public Actuador(Inteligente dispositivo) {
+	public Actuador(DispositivoInteligente dispositivo) {
 		this.dispositivo = dispositivo;
 		this.listaComandos = new HashMap<Acciones, Command>();
 	}
