@@ -40,6 +40,9 @@ public class Transformador {
 	public void setZona(Zona zonaElegida) {
 		zona = zonaElegida;
 	}
+	public void agregarCliente(Cliente cliente) {
+		clientesConectados.add(cliente);
+	}
 
 
 	public int getId() {

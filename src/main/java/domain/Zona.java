@@ -47,8 +47,9 @@ public class Zona {
 		}
 	}
 
-	public void conectarCercano(Cliente cliente, int transformadorId) {
-				cliente.setTransformadorId(transformadorId);
+	public void conectarCercano(Cliente cliente, Transformador transformador) {
+				cliente.setTransformadorId(transformador.getId());
+				transformador.agregarCliente(cliente);
 			}
 
 
@@ -61,6 +62,7 @@ public class Zona {
 				minimoDistancia= distancia;
 				minimoTransf = transformador;
 			}
-		}this.conectarCercano(cliente, minimoTransf.getId());
+		}this.conectarCercano(cliente, minimoTransf);
+	
 	}
 }
