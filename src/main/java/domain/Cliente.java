@@ -17,6 +17,7 @@ public class Cliente extends Usuario {
 	private int puntosAcumulados = 0;
 	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
 	private boolean ahorroInteligente; 
+	private Transformador transformador;
 
 	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
@@ -85,6 +86,10 @@ public class Cliente extends Usuario {
 	public List<Dispositivo> getDispositivos() {
 		return dispositivos;
 	}
+	public String getDomicilio() {
+		return domicilio;
+	}
+	
 
 	public void setDispositivos(List<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
@@ -157,5 +162,19 @@ public class Cliente extends Usuario {
 			}
 		}
 	}
+	
+	public void setTransformador(Transformador transformadorElegido) {
+		transformador = transformadorElegido;
+	}
 
+	public double calcularConsumo() {
+		double consumoTotal=0;
+		LocalDateTime fecha = LocalDateTime.now();
+		LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
+		for(Dispositivo dispositivo : this.dispositivos) {
+			
+			consumoTotal = consumoTotal + dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now());
+		}
+		return consumoTotal;
+	}
 }
