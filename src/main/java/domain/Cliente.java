@@ -43,6 +43,7 @@ public class Cliente extends Usuario {
 	public String getTelefonoContacto() {
 		return this.telefonoContacto;
 	}
+
 	public int puntosAcumulados() {
 		return puntosAcumulados;
 	}
@@ -74,9 +75,8 @@ public class Cliente extends Usuario {
 	public void setDispositivos(List<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
 	}
-	
-	public void agregarDispositivo(Dispositivo dispositivo)
-	{
+
+	public void agregarDispositivo(Dispositivo dispositivo) {
 		this.dispositivos.add(dispositivo);
 	}
 
@@ -84,10 +84,10 @@ public class Cliente extends Usuario {
 		this.dispositivos.add(dispositivo);
 		this.sumarPuntos(15);
 	}
-	
-	public void conversionEstandarInteligente(DispositivoEstandar dispositivo)
-	{
-		DispositivoInteligente dispInteligente = new DispositivoInteligente(dispositivo.getId(), dispositivo.getNombre(), dispositivo.getConsumoXHora(), Estados.APAGADO); 
+
+	public void conversionEstandarInteligente(DispositivoEstandar dispositivo) {
+		DispositivoInteligente dispInteligente = new DispositivoInteligente(dispositivo.getId(),
+				dispositivo.getNombre(), dispositivo.getConsumoXHora(), Estados.APAGADO);
 		this.agregarDispositivo(dispInteligente);
 		this.sumarPuntos(-5);
 	}
@@ -111,7 +111,7 @@ public class Cliente extends Usuario {
 	public int cantidadTotalDispositivos() {
 		return this.dispositivos.size();
 	}
-	
+
 	public void sumarPuntos(int puntos) {
 		this.puntosAcumulados = puntos + this.puntosAcumulados();
 	}
@@ -120,7 +120,5 @@ public class Cliente extends Usuario {
 		return this.dispositivos.stream().filter(d -> d instanceof DispositivoInteligente)
 				.map(d -> (DispositivoInteligente) d);
 	}
-	
-
 
 }

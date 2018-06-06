@@ -1,6 +1,5 @@
 package prueba;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -14,12 +13,12 @@ import domain.ApagarCommand;
 import domain.ApagarRegla;
 import domain.Categoria;
 import domain.Cliente;
-import domain.Dispositivo;
 import domain.DispositivoEstandar;
 import domain.DispositivoInteligente;
 import domain.EncenderCommand;
 import domain.EncenderRegla;
 import domain.Estados;
+import domain.Fabricante;
 import domain.Medicion;
 import domain.Reglamentador;
 import domain.Sensor;
@@ -34,7 +33,7 @@ public class Entrega1Test {
 	public void inicio() {
 		this.aireAcondicionado = new DispositivoInteligente(1, "aire acondicionado", 230, Estados.APAGADO);
 		this.tele = new DispositivoEstandar(2, "tele", 3);
-		
+
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
 		String nombreYApellido = "Juan Perez";
@@ -47,7 +46,7 @@ public class Entrega1Test {
 
 		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
-		
+
 	}
 
 	@Test
@@ -149,14 +148,40 @@ public class Entrega1Test {
 	}
 
 	@Test
-	public void dispositivoInteligenteConsumoUltimas3HorasCorrectamente() {
+	public void dispositivoInteligenteConsumoUltimasHoraCorrectamente() {
 		this.aireAcondicionado.limpiarPeriodos();
-		this.aireAcondicionado.agregarPeriodo(LocalDateTime.of(2018, 6, 1, 0, 0), LocalDateTime.of(2018, 6, 1, 20, 0));
+		this.aireAcondicionado.encenderse();
+		this.aireAcondicionado.setUltimaFechaHoraEncendido(LocalDateTime.of(2018, 06, 1, 0, 0));
 
-		int consumoTotalEsperado = 230 * 20;
+		int consumoTotalEsperado = 230 * 1;
 
 		Assert.assertEquals(consumoTotalEsperado,
-				this.aireAcondicionado.consumoDuranteUltimasNHoras(24, LocalDateTime.of(2018, 06, 2, 0, 0)));
+				this.aireAcondicionado.consumoDuranteUltimasNHoras(1, LocalDateTime.of(2018, 06, 1, 6, 0)));
+	}
+
+	@Test
+	public void dispositivoInteligenteConsumoUltimas3HorasCorrectamente() {
+		this.aireAcondicionado.limpiarPeriodos();
+		this.aireAcondicionado.encenderse();
+		this.aireAcondicionado.setUltimaFechaHoraEncendido(LocalDateTime.of(2018, 06, 1, 0, 0));
+
+		int consumoTotalEsperado = 230 * 3;
+
+		Assert.assertEquals(consumoTotalEsperado,
+				this.aireAcondicionado.consumoDuranteUltimasNHoras(3, LocalDateTime.of(2018, 06, 1, 6, 0)));
+	}
+
+	@Test
+	public void dispositivoInteligenteConsumoUltimasHorasSiNoHuboConsumo() {
+		this.aireAcondicionado.limpiarPeriodos();
+		this.aireAcondicionado.encenderse();
+		this.aireAcondicionado.setUltimaFechaHoraEncendido(LocalDateTime.of(2018, 06, 1, 0, 0));
+		this.aireAcondicionado.apagarse();
+
+		int consumoTotalEsperado = 0;
+
+		Assert.assertEquals(consumoTotalEsperado,
+				this.aireAcondicionado.consumoDuranteUltimasNHoras(1, LocalDateTime.of(2018, 06, 1, 6, 0)));
 	}
 
 	@Test
@@ -182,28 +207,103 @@ public class Entrega1Test {
 		Assert.assertEquals(consumoTotalEsperado, this.aireAcondicionado.consumoTotalComprendidoEntre(
 				LocalDateTime.of(2018, 05, 1, 0, 0), LocalDateTime.of(2018, 06, 30, 0, 0)));
 	}
+
 	@Test
 	public void clienteAgregaDispIntyTiene15Ptos() {
 		int puntosEsperados = 15;
 		this.cliente.agregarDispositivo(aireAcondicionado);
 		Assert.assertEquals(puntosEsperados, this.cliente.puntosAcumulados());
-		
+
 	}
+
 	@Test
 	public void clienteAgregaDispEsteIntyTiene15Ptos() {
 		int puntosEsperados = 15;
 		this.cliente.agregarDispositivo(aireAcondicionado);
 		this.cliente.agregarDispositivo(tele);
 		Assert.assertEquals(puntosEsperados, this.cliente.puntosAcumulados());
-		
+
 	}
+
 	@Test
 	public void clienteAgregaDispEstLoTransfYtiene10ptos() {
 		int puntosEsperados = 10;
 		this.cliente.agregarDispositivo(tele);
 		this.cliente.conversionEstandarInteligente(tele);
 		Assert.assertEquals(puntosEsperados, this.cliente.puntosAcumulados());
-		
+
+	}
+
+	@Test
+	public void dispositivoPuedeAsociarseConFabricante() {
+		class JVC {
+			public void init() {
+				System.out.println("Inicializando...");
+			}
+
+			public void prepararMensaje() {
+				System.out.println("Preprando mensaje para enviar");
+			}
+
+			public void enviarApagarse() {
+				System.out.println("Enviando mensaje para apagar dispositivo");
+			}
+
+			public void enviarEncenderse() {
+				System.out.println("Enviando mensaje para encender dispositivo");
+			}
+
+			public void enviarModoAhorroEnergia() {
+				System.out.println("Enviando mensaje para que dispositivo entre en modo ahorro energia");
+			}
+
+			public String obtenerStatus() {
+				return "STATUS: OK";
+			}
+		}
+
+		class JVCAdapter implements Fabricante {
+			private JVC jvc;
+
+			public JVCAdapter(JVC jvc) {
+				this.jvc = jvc;
+				this.jvc.init();
+			}
+
+			@Override
+			public void enviarMensajeApagado() {
+				this.jvc.prepararMensaje();
+				this.jvc.enviarApagarse();
+			}
+
+			@Override
+			public void enviarMensajeEncendido() {
+				this.jvc.prepararMensaje();
+				this.jvc.enviarEncenderse();
+			}
+
+			@Override
+			public void enviarMensajeModoAhorroEnergia() {
+				this.jvc.prepararMensaje();
+				this.jvc.enviarModoAhorroEnergia();
+			}
+
+			@Override
+			public String recibirMensajeStatus() {
+				return this.jvc.obtenerStatus();
+			}
+		}
+
+		JVC jvc = new JVC();
+		Fabricante jvcAdapter = new JVCAdapter(jvc);
+		DispositivoInteligente di = new DispositivoInteligente(1, "radio", 230, Estados.APAGADO, jvcAdapter);
+
+		di.encenderse();
+		di.apagarse();
+		di.modoAhorroEnergia();
+
+		Assert.assertEquals("STATUS: OK", di.getStatusFabricante());
+
 	}
 
 }
