@@ -19,6 +19,8 @@ public class Cliente extends Usuario {
 	private boolean ahorroInteligente;
 	private int periodicidadAhorroInt;	
 	private int contadorId;
+	private int transformadorId;
+	private Locacion coordenadasDomicilio; 
 	
 	public boolean getAhorroInteligente() {
 		return ahorroInteligente;
@@ -50,7 +52,12 @@ public class Cliente extends Usuario {
 	public TipoDocumento getTipoDocumento() {
 		return tipoDocumento;
 	}
-
+	public void setTransformadorId(int transfId) {
+		transformadorId=transfId;
+	}
+	public int getTransformadorId() {
+		return transformadorId;
+	}
 	public void setTipoDocumento(TipoDocumento tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
 	}
@@ -114,6 +121,15 @@ public class Cliente extends Usuario {
 		this.dispositivos.add(dispInteligente);
 		this.sumarPuntos(10);
 	}
+	
+	public void setCoordenadasDomicilio(int lat, int alt) {
+		this.coordenadasDomicilio.x = lat;
+		this.coordenadasDomicilio.y = alt;
+	}
+	public Locacion getCoordenadasDomicilio() {
+		return coordenadasDomicilio;
+	}
+	
 
 	public void removerDispositivo(Dispositivo dispositivo) {
 		this.dispositivos.remove(dispositivo);
@@ -155,6 +171,7 @@ public class Cliente extends Usuario {
 		return this.dispositivos.stream().filter(d -> d instanceof DispositivoInteligente)
 				.map(d -> (DispositivoInteligente) d);
 	}
+	
 	
 	public void calcularHogarEficiente()
 	{
@@ -397,4 +414,5 @@ public class Cliente extends Usuario {
 		return dispositivo;
 	}
 	
+
 }

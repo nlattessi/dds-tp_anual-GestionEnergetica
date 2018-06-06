@@ -4,44 +4,50 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Transformador {
 	private int id;
-	private List <Cliente> clientes = new ArrayList<Cliente>(); 
+
 	private List <Cliente> clientesConectados = new ArrayList<Cliente>(); 
+	private List <Cliente> clientes = new ArrayList<Cliente>();
 	private Zona zona; 
+	private Locacion coordenadas; 
+	
+	public Transformador(int id, Zona zona, int x, int y) {
+		this.id = id;
+		this.zona = zona;
+		this.coordenadas.x = x;
+		this.coordenadas.y = y; 
+	}
 		
+	
 	
 	public double cantidadDeEnergiaSuministrada() {
 		double consumoTotal=0;
-		for(Cliente cliente : this.clientes) {
-			//consumoTotal = consumoTotal + cliente.calcularConsumo();
+		for(Cliente cliente : this.clientesConectados) {
+		//consumoTotal = consumoTotal + cliente.calcularConsumo();
 		}
 		return consumoTotal;
 	}
 	
-	public void setearClientes() {
-		for(Cliente cliente: this.clientes ) {
-			//cliente.setTransformador(this);
-			clientesConectados.add(cliente);
-		}
+	public void setearCliente(Cliente cliente) {
+		cliente.setTransformadorId(this.id);
 	}
 	
 	public void setZona(Zona zonaElegida) {
 		zona = zonaElegida;
 	}
 	
-//falta implementar, lo dejo asi para que no rompa
-	public boolean estaDentro(int radio, String domicilio) {
-		return true;
+	
+	public int getId() {
+		return id;
 	}
 	
-	public boolean validarRadio(int radio) {
-		for(Cliente cliente : this.clientes) {
-		return this.estaDentro(radio, cliente.getDomicilio()); 
-			
-		}
-		return false;
-	}
+
+
+	
+
+
 
 }
 

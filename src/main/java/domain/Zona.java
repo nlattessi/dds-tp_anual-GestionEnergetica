@@ -8,17 +8,16 @@ public class Zona {
 	private int id;
 	private List<Transformador> transformadores = new ArrayList<Transformador>();
 	private int radio; 
+	private Locacion coordenadas;
 	
-	public Zona (int id, int radio) {
-		super();
-		this.id = id; 
-		this.radio = radio;
-		
-	}
+	
+
 	
 	public List<Transformador> getTransformadores() {
 		return transformadores;
+
 	}
+	
 	public double consumoTotalEnergia() {
 		double consumoTotal=0;
 		for(Transformador transformador : this.transformadores) {
@@ -33,12 +32,14 @@ public class Zona {
 		}
 	}
 	
-	public void asociarTransfCliente() {
-		for(Transformador transformador :this.transformadores) {
-			if(transformador.validarRadio(radio)) {
-				transformador.setearClientes();
+	public void conectarCercano(Cliente cliente) {
+		for(Transformador transformador : this.transformadores) {
+			//if(transformador.esMasCercano()) {
+				cliente.setTransformadorId(transformador.getId());
 			}
-			
 		}
 	}
-}
+			
+
+
+	
