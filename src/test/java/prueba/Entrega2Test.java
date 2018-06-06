@@ -20,6 +20,7 @@ public class Entrega2Test {
 	private DispositivoInteligente lavarropas5kg;
 	private Cliente cliente;
 	private DispositivoEstandar ventiladorPie;
+	private DispositivoInteligente heladera;
 	
 	@Before
 	public void inicio() 
@@ -29,19 +30,21 @@ public class Entrega2Test {
 		this.aireAcondicionado2200F.setUsoMensualMaximoHoras(370);
 		this.aireAcondicionado2200F.encenderse();
 		
-		
 		this.lavarropas5kg = new DispositivoInteligente(2, "lavarropas automatico de 5 kg", 0.875, Estados.APAGADO);
 		this.lavarropas5kg.setUsoMensualMinimoHoras(6);
 		this.lavarropas5kg.setUsoMensualMaximoHoras(30);
-		
-		
 		
 		this.ventiladorPie = new DispositivoEstandar(3, "ventilador de pie", 0.06);
 		this.ventiladorPie.setUsoMensualMinimoHoras(120);
 		this.ventiladorPie.setUsoMensualMaximoHoras(360);
 		
+		this.heladera = new DispositivoInteligente(4, "heladera con freezer", 0.09, Estados.APAGADO);
+		this.heladera.setUsoMensualMinimoHoras(40);
+		this.heladera.setUsoMensualMaximoHoras(120);
+		
 		this.aireAcondicionado2200F.setPermiteAhorroInteligente(true);
 		this.lavarropas5kg.setPermiteAhorroInteligente(true);
+		this.heladera.setPermiteCalculoAhorroInteligente(false);
 		
 		this.lavarropas5kg.limpiarPeriodos();
 		this.lavarropas5kg.agregarPeriodo(LocalDateTime.of(2018, 8, 2, 10, 0),
@@ -62,10 +65,10 @@ public class Entrega2Test {
 		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 		
-		
 		this.cliente.agregarDispositivo(this.aireAcondicionado2200F);
 		this.cliente.agregarDispositivo(this.lavarropas5kg);
 		this.cliente.agregarDispositivo(this.ventiladorPie);
+		this.cliente.agregarDispositivo(this.heladera);
 	}
 	
 	@Test
