@@ -58,7 +58,7 @@ public class DispositivoInteligente extends Dispositivo {
 	}
 
 	public void modoAhorroEnergia() {
-		if (this.estado != Estados.MODO_AHORRO_ENERGIA) {
+		if (this.estado != Estados.MODO_AHORRO_ENERGIA && this.estado != APAGADO) {
 			this.estado = Estados.MODO_AHORRO_ENERGIA;
 			this.fabricante.enviarMensajeModoAhorroEnergia();
 		}
