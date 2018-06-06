@@ -76,7 +76,7 @@ public class Cliente extends Usuario {
 		this.dispositivos = dispositivos;
 	}
 
-	public void agregarDispositivo(Dispositivo dispositivo) {
+	public void agregarDispositivo(DispositivoEstandar dispositivo) {
 		this.dispositivos.add(dispositivo);
 	}
 
@@ -88,8 +88,8 @@ public class Cliente extends Usuario {
 	public void conversionEstandarInteligente(DispositivoEstandar dispositivo) {
 		DispositivoInteligente dispInteligente = new DispositivoInteligente(dispositivo.getId(),
 				dispositivo.getNombre(), dispositivo.getConsumoXHora(), Estados.APAGADO);
-		this.agregarDispositivo(dispInteligente);
-		this.sumarPuntos(-5);
+		this.dispositivos.add(dispInteligente);
+		this.sumarPuntos(10);
 	}
 
 	public void removerDispositivo(Dispositivo dispositivo) {
@@ -112,7 +112,7 @@ public class Cliente extends Usuario {
 		return this.dispositivos.size();
 	}
 
-	public void sumarPuntos(int puntos) {
+	private void sumarPuntos(int puntos) {
 		this.puntosAcumulados = puntos + this.puntosAcumulados();
 	}
 

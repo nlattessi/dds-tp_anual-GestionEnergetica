@@ -36,10 +36,10 @@ public class Entrega0Test {
 		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 
-		Dispositivo heladera = new DispositivoInteligente(1, "heladera", 2, Estados.ENCENDIDO);
-		Dispositivo tele = new DispositivoEstandar(2, "tele", 3);
-		Dispositivo radio = new DispositivoEstandar(3, "radio", 1);
-		Dispositivo aireAcondicionado = new DispositivoInteligente(4, "aire acondicionado", 10, Estados.APAGADO);
+		DispositivoInteligente heladera = new DispositivoInteligente(1, "heladera", 2, Estados.ENCENDIDO);
+		DispositivoEstandar tele = new DispositivoEstandar(2, "tele", 3);
+		DispositivoEstandar radio = new DispositivoEstandar(3, "radio", 1);
+		DispositivoInteligente aireAcondicionado = new DispositivoInteligente(4, "aire acondicionado", 10, Estados.APAGADO);
 		this.cliente.agregarDispositivo(tele);
 		this.cliente.agregarDispositivo(heladera);
 		this.cliente.agregarDispositivo(radio);
