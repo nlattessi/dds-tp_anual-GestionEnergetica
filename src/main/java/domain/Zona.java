@@ -32,14 +32,25 @@ public class Zona {
 		}
 	}
 	
-	public void conectarCercano(Cliente cliente) {
-		for(Transformador transformador : this.transformadores) {
-			//if(transformador.esMasCercano()) {
-				cliente.setTransformadorId(transformador.getId());
+	public void conectarCercano(Cliente cliente, int transformadorId) {
+				cliente.setTransformadorId(transformadorId);
 			}
-		}
+		
+	
+	public void obtenerMasCercano(Cliente cliente) {
+		double minimoDistancia = 100000;
+		Transformador minimoTransf =  null;
+		for (Transformador transformador : this.transformadores) {
+			double distancia = coordenadas.obtenerDistancia(transformador.coordenadas.x, transformador.coordenadas.y, cliente.coordenadasDomicilio.x, cliente.coordenadasDomicilio.y);
+			if( distancia<minimoDistancia) {
+				minimoDistancia= distancia; 
+				minimoTransf = transformador;
+			}
+		}this.conectarCercano(cliente, minimoTransf.getId());
 	}
-			
+	
+} 
+
 
 
 	

@@ -20,7 +20,7 @@ public class Cliente extends Usuario {
 	private int periodicidadAhorroInt;	
 	private int contadorId;
 	private int transformadorId;
-	private Locacion coordenadasDomicilio; 
+	Locacion coordenadasDomicilio; 
 	
 	public boolean getAhorroInteligente() {
 		return ahorroInteligente;
@@ -130,6 +130,13 @@ public class Cliente extends Usuario {
 		return coordenadasDomicilio;
 	}
 	
+	public double calcularConsumo() {
+		double consumoTotal =0;
+		for (Dispositivo dispositivo : this.dispositivos) {
+			consumoTotal = consumoTotal + dispositivo.getConsumoXHora()*24;
+		}
+		return consumoTotal;
+	}
 
 	public void removerDispositivo(Dispositivo dispositivo) {
 		this.dispositivos.remove(dispositivo);

@@ -9,9 +9,9 @@ public class Transformador {
 	private int id;
 
 	private List <Cliente> clientesConectados = new ArrayList<Cliente>(); 
-	private List <Cliente> clientes = new ArrayList<Cliente>();
+
 	private Zona zona; 
-	private Locacion coordenadas; 
+	Locacion coordenadas; 
 	
 	public Transformador(int id, Zona zona, int x, int y) {
 		this.id = id;
@@ -21,11 +21,10 @@ public class Transformador {
 	}
 		
 	
-	
 	public double cantidadDeEnergiaSuministrada() {
 		double consumoTotal=0;
 		for(Cliente cliente : this.clientesConectados) {
-		//consumoTotal = consumoTotal + cliente.calcularConsumo();
+		consumoTotal = consumoTotal + cliente.calcularConsumo();
 		}
 		return consumoTotal;
 	}
@@ -42,6 +41,7 @@ public class Transformador {
 	public int getId() {
 		return id;
 	}
+	
 	
 
 
