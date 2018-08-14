@@ -40,7 +40,7 @@ public class SimplexFacade {
 		 
 		 double[] consumoDispositivos = new double[dispositivos.size()];
 		 
-		 for (int i = 0; i < dispositivos.size(); i++)
+		 for (int i = dispositivos.size() -1; i >= 0; i--)
 		 {
 			 consumoDispositivos[i] = dispositivos.get(i).getConsumoXHora();
 		 }
@@ -51,13 +51,13 @@ public class SimplexFacade {
 		 {
 			 double[] variablesRestricciones = new double[dispositivos.size()];
 			 
-			 for (int j = 0; j < dispositivos.size(); j++)
+			 for (int j = dispositivos.size() -1; j >= 0; j--)
 			 {
 					 if (j == i){	variablesRestricciones[j] = 1;	}
 					 else{	variablesRestricciones[j] = 0;	}
 			 }
 			 this.agregarRestriccion(Relationship.GEQ, dispositivos.get(i).getUsoMensualMinimoHoras(), variablesRestricciones);
-			 this.agregarRestriccion(Relationship.LEQ, dispositivos.get(i).getUsoMensualMinimoHoras(), variablesRestricciones);
+			 this.agregarRestriccion(Relationship.LEQ, dispositivos.get(i).getUsoMensualMaximoHoras(), variablesRestricciones);
 		 }
 		 
 		 PointValuePair solucion = this.resolver();
