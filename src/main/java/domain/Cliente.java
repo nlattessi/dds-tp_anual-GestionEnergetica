@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -15,6 +16,7 @@ public class Cliente extends Usuario {
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 	private int puntosAcumulados = 0;
 	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
+	private boolean ahorroInteligente; 
 
 	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
@@ -25,6 +27,7 @@ public class Cliente extends Usuario {
 		this.telefonoContacto = telefonoContacto;
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
+		this.ahorroInteligente = false;
 	}
 
 	public TipoDocumento getTipoDocumento() {
@@ -61,6 +64,14 @@ public class Cliente extends Usuario {
 
 	public void setFechaAltaServicio(Date fechaAltaServicio) {
 		this.fechaAltaServicio = fechaAltaServicio;
+	}
+	
+	public boolean getAhorroInteligente() {
+		return ahorroInteligente;
+	}
+
+	public void setFechaAltaServicio(boolean ahorroInteligente) {
+		this.ahorroInteligente = ahorroInteligente;
 	}
 
 	public Categoria getCategoria() {
@@ -127,6 +138,22 @@ public class Cliente extends Usuario {
 	public void calcularHogarEficiente()
 	{
 		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
+		
+		if (this.ahorroInteligente)
+		{
+			for (Dispositivo dispositivo : this.dispositivos)
+			{
+				if(dispositivo.getPermiteAhorroInteligente())
+				{
+					LocalDateTime fecha = LocalDateTime.now();
+					if (dispositivo.consumoTotalComprendidoEntre(LocalDateTime.of(fecha.getMonthValue(), fecha.getYear(), 1, 0, 0), LocalDateTime.now()) 
+																				> dispositivo.getConsumoRecomendadoHoras())
+					{
+						dispositivo.apagarse();
+					}
+				}
+			}
+		}
 	}
 
 }

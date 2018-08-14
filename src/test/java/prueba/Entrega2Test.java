@@ -67,5 +67,13 @@ public class Entrega2Test {
 		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(2).getNombre() + 
 				" es de: " + cliente.getDispositivos().get(2).getConsumoRecomendadoHoras() + " horas.");
 	}
+	
+	@Test
+	public void testAhorroInteligente()
+	{
+		
+	}
+	
+	
 
 }

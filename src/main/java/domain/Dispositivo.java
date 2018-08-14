@@ -1,5 +1,7 @@
 package domain;
 
+import java.time.LocalDateTime;
+
 public abstract class Dispositivo {
 	private int id;
 	private String nombre;
@@ -7,13 +9,19 @@ public abstract class Dispositivo {
 	private int usoMensualMinimoHoras;
 	private int usoMensualMaximoHoras;
 	private double consumoRecomendadoHoras;
+	private boolean permiteAhorroInteligente;
 
 	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
 		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
 		this.consumoRecomendadoHoras = 0;
+		this.permiteAhorroInteligente = false;
 	}
+	
+	public abstract void apagarse();
+	
+	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 
 	public int getId() {
 		return id;
@@ -61,5 +69,13 @@ public abstract class Dispositivo {
 
 	public void setConsumoRecomendadoHoras(double consumoRecomendadoHoras) {
 		this.consumoRecomendadoHoras = consumoRecomendadoHoras;
+	}
+	
+	public boolean getPermiteAhorroInteligente() {
+		return permiteAhorroInteligente;
+	}
+
+	public void setPermiteAhorroInteligente(boolean permiteAhorroInteligente) {
+		this.permiteAhorroInteligente = permiteAhorroInteligente;
 	}
 }
