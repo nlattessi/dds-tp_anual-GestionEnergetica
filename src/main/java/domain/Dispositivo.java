@@ -3,12 +3,16 @@ package domain;
 public abstract class Dispositivo {
 	private int id;
 	private String nombre;
-	private int consumoXHora;
+	private double consumoXHora;
+	private int usoMensualMinimoHoras;
+	private int usoMensualMaximoHoras;
+	private double consumoRecomendadoHoras;
 
-	public Dispositivo(int dispositivo, String nombre, int consumoXHora) {
+	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
 		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
+		this.consumoRecomendadoHoras = 0;
 	}
 
 	public int getId() {
@@ -27,11 +31,35 @@ public abstract class Dispositivo {
 		this.nombre = nombre;
 	}
 
-	public int getConsumoXHora() {
+	public double getConsumoXHora() {
 		return consumoXHora;
 	}
 
-	public void setConsumoXHora(int consumoXHora) {
+	public void setConsumoXHora(double consumoXHora) {
 		this.consumoXHora = consumoXHora;
+	}
+	
+	public int getUsoMensualMinimoHoras() {
+		return usoMensualMinimoHoras;
+	}
+
+	public void setUsoMensualMinimoHoras(int usoMensualMinimoHoras) {
+		this.usoMensualMinimoHoras = usoMensualMinimoHoras;
+	}
+	
+	public int getUsoMensualMaximoHoras() {
+		return usoMensualMaximoHoras;
+	}
+
+	public void setUsoMensualMaximoHoras(int usoMensualMaximoHoras) {
+		this.usoMensualMaximoHoras = usoMensualMaximoHoras;
+	}
+	
+	public double getConsumoRecomendadoHoras() {
+		return consumoRecomendadoHoras;
+	}
+
+	public void setConsumoRecomendadoHoras(double consumoRecomendadoHoras) {
+		this.consumoRecomendadoHoras = consumoRecomendadoHoras;
 	}
 }

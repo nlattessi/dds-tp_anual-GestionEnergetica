@@ -3,6 +3,8 @@ package domain;
 import java.util.*;
 import java.util.stream.Stream;
 
+import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
+
 public class Cliente extends Usuario {
 
 	private TipoDocumento tipoDocumento;
@@ -12,6 +14,7 @@ public class Cliente extends Usuario {
 	private Categoria categoria;
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 	private int puntosAcumulados = 0;
+	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
 
 	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
@@ -119,6 +122,11 @@ public class Cliente extends Usuario {
 	private Stream<DispositivoInteligente> getDispositivosInteligentes() {
 		return this.dispositivos.stream().filter(d -> d instanceof DispositivoInteligente)
 				.map(d -> (DispositivoInteligente) d);
+	}
+	
+	public void calcularHogarEficiente()
+	{
+		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
 	}
 
 }

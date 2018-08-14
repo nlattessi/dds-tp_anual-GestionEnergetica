@@ -10,11 +10,11 @@ public class DispositivoInteligente extends Dispositivo {
 	private LocalDateTime ultimaFechaHoraEncendido;
 	private Fabricante fabricante;
 
-	public DispositivoInteligente(int dispositivo, String nombre, int consumoXHora, Estados estado) {
+	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado) {
 		this(dispositivo, nombre, consumoXHora, estado, new FabricanteGeneralAdapter());
 	}
 
-	public DispositivoInteligente(int dispositivo, String nombre, int consumoXHora, Estados estado,
+	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado,
 			Fabricante fabricante) {
 		super(dispositivo, nombre, consumoXHora);
 		this.estado = estado;
@@ -68,17 +68,17 @@ public class DispositivoInteligente extends Dispositivo {
 		this.periodos.add(new Periodo(inicio, fin));
 	}
 
-	public int consumoDuranteUltimasNHoras(int horas) {
+	public double consumoDuranteUltimasNHoras(int horas) {
 		LocalDateTime ahora = LocalDateTime.now();
 		return this.consumoDuranteUltimasNHoras(horas, ahora);
 	}
 
-	public int consumoDuranteUltimasNHoras(int horas, LocalDateTime ahora) {
+	public double consumoDuranteUltimasNHoras(int horas, LocalDateTime ahora) {
 		LocalDateTime ahoraMenosHoras = ahora.minusHours(horas);
 		return this.consumoTotalComprendidoEntre(ahoraMenosHoras, ahora);
 	}
 
-	public int consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
+	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
 		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
 				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
 

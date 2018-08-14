@@ -93,7 +93,7 @@ public class ImportadorJsonTest {
 		DispositivoInteligente primerDispositivo = (DispositivoInteligente) dispositivos.get(0);
 		Assert.assertEquals(primerDispositivo.getId(), 1);
 		Assert.assertEquals(primerDispositivo.getNombre(), "heladera");
-		Assert.assertEquals(primerDispositivo.getConsumoXHora(), 2);
+		Assert.assertEquals(primerDispositivo.getConsumoXHora(),2.0);
 		Assert.assertEquals(primerDispositivo.estaEncendido(), true);
 
 		DispositivoEstandar segundoDispositivo = (DispositivoEstandar) dispositivos.get(1);
