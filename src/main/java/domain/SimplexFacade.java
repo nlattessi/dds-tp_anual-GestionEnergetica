@@ -40,7 +40,7 @@ public class SimplexFacade {
 		 
 		 double[] consumoDispositivos = new double[dispositivos.size()];
 		 
-		 for (int i = dispositivos.size() -1; i >= 0; i--)
+		 for (int i = 0; i < dispositivos.size(); i++)
 		 {
 			 consumoDispositivos[i] = dispositivos.get(i).getConsumoXHora();
 		 }
@@ -51,7 +51,7 @@ public class SimplexFacade {
 		 {
 			 double[] variablesRestricciones = new double[dispositivos.size()];
 			 
-			 for (int j = dispositivos.size() -1; j >= 0; j--)
+			 for (int j = 0; j < dispositivos.size(); j++)
 			 {
 					 if (j == i){	variablesRestricciones[j] = 1;	}
 					 else{	variablesRestricciones[j] = 0;	}

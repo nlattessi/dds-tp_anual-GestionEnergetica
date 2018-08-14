@@ -57,9 +57,15 @@ public class Entrega2Test {
 	public void testAlgoritmoSimplex()
 	{
 		cliente.calcularHogarEficiente();
-		Assert.assertEquals(360, cliente.getDispositivos().get(2).getConsumoRecomendadoHoras(), 0.01); // <--- aire acondicionado de 2200 frigorias
+		Assert.assertEquals(370, cliente.getDispositivos().get(0).getConsumoRecomendadoHoras(), 0.01); // <--- aire acondicionado de 2200 frigorias
+		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(0).getNombre() + 
+				" es de: " + cliente.getDispositivos().get(0).getConsumoRecomendadoHoras() + " horas.");
 		Assert.assertEquals(30, cliente.getDispositivos().get(1).getConsumoRecomendadoHoras(), 0.01); // <--- lavarropas automatico de 5 kg
-		Assert.assertEquals(370, cliente.getDispositivos().get(0).getConsumoRecomendadoHoras(), 0.01); // <--- ventilador de pie
+		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(1).getNombre() + 
+				" es de: " + cliente.getDispositivos().get(1).getConsumoRecomendadoHoras() + " horas.");
+		Assert.assertEquals(360, cliente.getDispositivos().get(2).getConsumoRecomendadoHoras(), 0.01); // <--- ventilador de pie
+		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(2).getNombre() + 
+				" es de: " + cliente.getDispositivos().get(2).getConsumoRecomendadoHoras() + " horas.");
 	}
 
 }
