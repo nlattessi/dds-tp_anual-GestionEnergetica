@@ -144,7 +144,7 @@ public class Entrega1Test {
 
 		int consumoEstimadoEsperado = 23 * 5;
 
-		Assert.assertEquals(consumoEstimadoEsperado, dispositivo.estimarConsumo(5));
+		Assert.assertEquals(dispositivo.estimarConsumo(5),consumoEstimadoEsperado, 0.01);
 	}
 
 	@Test
@@ -155,8 +155,8 @@ public class Entrega1Test {
 
 		int consumoTotalEsperado = 230 * 1;
 
-		Assert.assertEquals(consumoTotalEsperado,
-				this.aireAcondicionado.consumoDuranteUltimasNHoras(1, LocalDateTime.of(2018, 06, 1, 6, 0)));
+		Assert.assertEquals(
+				this.aireAcondicionado.consumoDuranteUltimasNHoras(1, LocalDateTime.of(2018, 06, 1, 6, 0)),consumoTotalEsperado,0.01);
 	}
 
 	@Test
@@ -167,8 +167,8 @@ public class Entrega1Test {
 
 		int consumoTotalEsperado = 230 * 3;
 
-		Assert.assertEquals(consumoTotalEsperado,
-				this.aireAcondicionado.consumoDuranteUltimasNHoras(3, LocalDateTime.of(2018, 06, 1, 6, 0)));
+		Assert.assertEquals(
+				this.aireAcondicionado.consumoDuranteUltimasNHoras(3, LocalDateTime.of(2018, 06, 1, 6, 0)),consumoTotalEsperado,0.01);
 	}
 
 	@Test
@@ -180,8 +180,8 @@ public class Entrega1Test {
 
 		int consumoTotalEsperado = 0;
 
-		Assert.assertEquals(consumoTotalEsperado,
-				this.aireAcondicionado.consumoDuranteUltimasNHoras(1, LocalDateTime.of(2018, 06, 1, 6, 0)));
+		Assert.assertEquals(this.aireAcondicionado.consumoDuranteUltimasNHoras(1, LocalDateTime.of(2018, 06, 1, 6, 0)),
+				consumoTotalEsperado,0.01);
 	}
 
 	@Test
@@ -191,8 +191,8 @@ public class Entrega1Test {
 
 		int consumoTotalEsperado = 230 * 3;
 
-		Assert.assertEquals(consumoTotalEsperado, this.aireAcondicionado.consumoTotalComprendidoEntre(
-				LocalDateTime.of(2018, 06, 1, 0, 0), LocalDateTime.of(2018, 06, 1, 3, 0)));
+		Assert.assertEquals(this.aireAcondicionado.consumoTotalComprendidoEntre(
+				LocalDateTime.of(2018, 06, 1, 0, 0), LocalDateTime.of(2018, 06, 1, 3, 0)), consumoTotalEsperado, 0.01);
 	}
 
 	@Test
@@ -204,8 +204,8 @@ public class Entrega1Test {
 
 		int consumoTotalEsperado = 230 * (8 + 3);
 
-		Assert.assertEquals(consumoTotalEsperado, this.aireAcondicionado.consumoTotalComprendidoEntre(
-				LocalDateTime.of(2018, 05, 1, 0, 0), LocalDateTime.of(2018, 06, 30, 0, 0)));
+		Assert.assertEquals(this.aireAcondicionado.consumoTotalComprendidoEntre(
+				LocalDateTime.of(2018, 05, 1, 0, 0), LocalDateTime.of(2018, 06, 30, 0, 0)),consumoTotalEsperado, 0.01);
 	}
 
 	@Test

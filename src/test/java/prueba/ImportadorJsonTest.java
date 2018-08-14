@@ -93,18 +93,18 @@ public class ImportadorJsonTest {
 		DispositivoInteligente primerDispositivo = (DispositivoInteligente) dispositivos.get(0);
 		Assert.assertEquals(primerDispositivo.getId(), 1);
 		Assert.assertEquals(primerDispositivo.getNombre(), "heladera");
-		Assert.assertEquals(primerDispositivo.getConsumoXHora(),2.0);
+		Assert.assertEquals(2, primerDispositivo.getConsumoXHora(),0.01);
 		Assert.assertEquals(primerDispositivo.estaEncendido(), true);
 
 		DispositivoEstandar segundoDispositivo = (DispositivoEstandar) dispositivos.get(1);
 		Assert.assertEquals(segundoDispositivo.getId(), 2);
 		Assert.assertEquals(segundoDispositivo.getNombre(), "tele");
-		Assert.assertEquals(segundoDispositivo.getConsumoXHora(), 3);
+		Assert.assertEquals(3,segundoDispositivo.getConsumoXHora(), 0.01);
 
 		DispositivoEstandar tercerDispositivo = (DispositivoEstandar) dispositivos.get(2);
 		Assert.assertEquals(tercerDispositivo.getId(), 3);
 		Assert.assertEquals(tercerDispositivo.getNombre(), "radio");
-		Assert.assertEquals(tercerDispositivo.getConsumoXHora(), 1);
+		Assert.assertEquals(1, tercerDispositivo.getConsumoXHora(), 0.01);
 
 		System.out.println("Dispositivos:");
 		for (Dispositivo dispositivo : dispositivos) {
