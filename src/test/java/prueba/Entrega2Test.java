@@ -1,5 +1,6 @@
 package prueba;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.junit.Assert;
@@ -26,14 +27,27 @@ public class Entrega2Test {
 		this.aireAcondicionado2200F = new DispositivoInteligente(1, "aire acondicionado de 2200 frigorias", 0.18, Estados.APAGADO);
 		this.aireAcondicionado2200F.setUsoMensualMinimoHoras(90);
 		this.aireAcondicionado2200F.setUsoMensualMaximoHoras(370);
+		this.aireAcondicionado2200F.encenderse();
+		
 		
 		this.lavarropas5kg = new DispositivoInteligente(2, "lavarropas automatico de 5 kg", 0.875, Estados.APAGADO);
 		this.lavarropas5kg.setUsoMensualMinimoHoras(6);
 		this.lavarropas5kg.setUsoMensualMaximoHoras(30);
 		
+		
+		
 		this.ventiladorPie = new DispositivoEstandar(3, "ventilador de pie", 0.06);
 		this.ventiladorPie.setUsoMensualMinimoHoras(120);
 		this.ventiladorPie.setUsoMensualMaximoHoras(360);
+		
+		this.aireAcondicionado2200F.setPermiteAhorroInteligente(true);
+		this.lavarropas5kg.setPermiteAhorroInteligente(true);
+		
+		this.lavarropas5kg.limpiarPeriodos();
+		this.lavarropas5kg.agregarPeriodo(LocalDateTime.of(2018, 8, 2, 10, 0),
+				LocalDateTime.of(2018, 8, 3, 18, 0));
+		this.lavarropas5kg.agregarPeriodo(LocalDateTime.of(2018, 8, 4, 10, 0), LocalDateTime.of(2018, 8, 5, 18, 0));
+		this.lavarropas5kg.encenderse();
 
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
@@ -47,6 +61,7 @@ public class Entrega2Test {
 
 		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
+		
 		
 		this.cliente.agregarDispositivo(this.aireAcondicionado2200F);
 		this.cliente.agregarDispositivo(this.lavarropas5kg);
@@ -71,6 +86,17 @@ public class Entrega2Test {
 	@Test
 	public void testAhorroInteligente()
 	{
+		cliente.setAhorroInteligente(true);
+		
+		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
+		
+		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
+		
+		cliente.calcularHogarEficiente();
+		
+		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg Desp de calcular ahorro inteligente
+		
+		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Desp de calcular ahorro inteligente
 		
 	}
 	

@@ -22,6 +22,8 @@ public abstract class Dispositivo {
 	public abstract void apagarse();
 	
 	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
+	
+	public abstract Estados getEstado();
 
 	public int getId() {
 		return id;

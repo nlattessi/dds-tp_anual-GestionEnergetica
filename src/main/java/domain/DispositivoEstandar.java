@@ -13,4 +13,5 @@ public class DispositivoEstandar extends Dispositivo {
 	
 	public void apagarse(){}
 	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {return 0;};
+	public Estados getEstado() {return null;}
 }

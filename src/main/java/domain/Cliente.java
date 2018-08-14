@@ -70,7 +70,7 @@ public class Cliente extends Usuario {
 		return ahorroInteligente;
 	}
 
-	public void setFechaAltaServicio(boolean ahorroInteligente) {
+	public void setAhorroInteligente(boolean ahorroInteligente) {
 		this.ahorroInteligente = ahorroInteligente;
 	}
 
@@ -146,7 +146,9 @@ public class Cliente extends Usuario {
 				if(dispositivo.getPermiteAhorroInteligente())
 				{
 					LocalDateTime fecha = LocalDateTime.now();
-					if (dispositivo.consumoTotalComprendidoEntre(LocalDateTime.of(fecha.getMonthValue(), fecha.getYear(), 1, 0, 0), LocalDateTime.now()) 
+					
+					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
+					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
 																				> dispositivo.getConsumoRecomendadoHoras())
 					{
 						dispositivo.apagarse();
