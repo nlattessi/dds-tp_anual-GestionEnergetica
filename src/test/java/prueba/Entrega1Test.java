@@ -35,7 +35,7 @@ public class Entrega1Test {
 		this.tele = new DispositivoEstandar(2, "tele", 3);
 
 		String nombreUsuario = "JuanPerez";
-		String contraseña = "asd123";
+		String contraseÃ±a = "asd123";
 		String nombreYApellido = "Juan Perez";
 		TipoDocumento tipoDocumento = TipoDocumento.DNI;
 		int numeroDocumento = 36123894;
@@ -44,7 +44,7 @@ public class Entrega1Test {
 		Categoria categoria = Categoria.R1;
 		Date fechaAltaCliente = new Date();
 
-		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+		this.cliente = new Cliente(1, nombreUsuario, contraseÃ±a, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 
 	}

@@ -1,14 +1,11 @@
 package domain;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 
-
-
-public class Cliente extends Usuario implements Runnable {
+public class Cliente extends Usuario {
 
 	private TipoDocumento tipoDocumento;
 	private int numeroDocumento;
@@ -18,31 +15,17 @@ public class Cliente extends Usuario implements Runnable {
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 	private int puntosAcumulados = 0;
 	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
-	private boolean ahorroInteligente; 
-<<<<<<< HEAD
-	private Thread hiloVerificadorConsumo;
-	
-	static int segundosDeEspera=5;
-=======
-	private Transformador transformador;
->>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 
-	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
+	public Cliente(int id, String nombreUsuario, String contraseÃ±a, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
 			Categoria categoria) {
-		super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
+		super(id, nombreUsuario, contraseÃ±a, nombreYApellido, domicilio);
 		this.setTipoDocumento(tipoDocumento);
 		this.setNumeroDocumento(numeroDocumento);
 		this.telefonoContacto = telefonoContacto;
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
-		this.ahorroInteligente = false;
-<<<<<<< HEAD
-		
-=======
->>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 	}
-	
 
 	public TipoDocumento getTipoDocumento() {
 		return tipoDocumento;
@@ -79,18 +62,6 @@ public class Cliente extends Usuario implements Runnable {
 	public void setFechaAltaServicio(Date fechaAltaServicio) {
 		this.fechaAltaServicio = fechaAltaServicio;
 	}
-	
-	public boolean getAhorroInteligente() {
-		return ahorroInteligente;
-	}
-
-	public void setAhorroInteligente(boolean ahorroInteligente) {
-		this.ahorroInteligente = ahorroInteligente;
-	}
-<<<<<<< HEAD
-
-=======
->>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 
 	public Categoria getCategoria() {
 		return categoria;
@@ -103,10 +74,6 @@ public class Cliente extends Usuario implements Runnable {
 	public List<Dispositivo> getDispositivos() {
 		return dispositivos;
 	}
-	public String getDomicilio() {
-		return domicilio;
-	}
-	
 
 	public void setDispositivos(List<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
@@ -157,107 +124,9 @@ public class Cliente extends Usuario implements Runnable {
 				.map(d -> (DispositivoInteligente) d);
 	}
 	
-	
-
-	public void start() {
-		if(hiloVerificadorConsumo==null) {
-	
-			hiloVerificadorConsumo=new Thread(this);
-			hiloVerificadorConsumo.start();
-		    }
-		}
-	
-	
-	@Override
-	public void run()  
-	{	
-		int c=0;
-		
-		
-		while(c<3) {//prueba solamente tres veces
-		
-			
+	public void calcularHogarEficiente()
+	{
 		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
-		
-		if (this.ahorroInteligente)
-		{
-			for (Dispositivo dispositivo : this.dispositivos)
-			{
-				if(dispositivo.getPermiteAhorroInteligente())
-				{
-					LocalDateTime fecha = LocalDateTime.now();
-					
-					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
-					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
-																				> dispositivo.getConsumoRecomendadoHoras())
-					{
-						dispositivo.apagarse();
-					}
-				}
-			}
-		}
-		
-
-		try {
-			Thread.sleep(segundosDeEspera*1000);
-		}catch(InterruptedException ex){
-			Thread.currentThread().interrupt();
-		}
-		c++;
-					}
-	}
-	
-	public void calcularHogarEficiente() {
-		
-		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
-		
-<<<<<<< HEAD
-		
 	}
 
-	public void aguardar() {
-		try {
-			hiloVerificadorConsumo.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-
-=======
-		if (this.ahorroInteligente)
-		{
-			for (Dispositivo dispositivo : this.dispositivos)
-			{
-				if(dispositivo.getPermiteAhorroInteligente())
-				{
-					LocalDateTime fecha = LocalDateTime.now();
-					
-					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
-					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
-																				> dispositivo.getConsumoRecomendadoHoras())
-					{
-						dispositivo.apagarse();
-					}
-				}
-			}
-		}
-	}
-	
-	public void setTransformador(Transformador transformadorElegido) {
-		transformador = transformadorElegido;
-	}
-
-	public double calcularConsumo() {
-		double consumoTotal=0;
-		LocalDateTime fecha = LocalDateTime.now();
-		LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
-		for(Dispositivo dispositivo : this.dispositivos) {
-			
-			consumoTotal = consumoTotal + dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now());
-		}
-		return consumoTotal;
-	}
->>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 }

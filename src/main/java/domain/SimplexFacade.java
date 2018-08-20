@@ -2,7 +2,6 @@ package domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.*;
 
 import org.apache.commons.math3.exception.TooManyIterationsException;
@@ -32,56 +31,43 @@ public class SimplexFacade {
 	
 	public List<Dispositivo> calcularHogarEficiente(List<Dispositivo> dispositivos)
 	{
-		 List<Dispositivo> dispositivosPermitenCalculo = 
-				 dispositivos.stream().filter(p -> p.getPermiteCalculoAhorroInteligente()).collect(Collectors.<Dispositivo> toList());
-		 List<Dispositivo> dispositivosNoPermitenCalculo = 
-				 dispositivos.stream().filter(p -> p.getPermiteCalculoAhorroInteligente() == false).collect(Collectors.<Dispositivo> toList());
-		 double[] variablesFuncionEc = new double[dispositivosPermitenCalculo.size()];
-		 for (int i = 0; i < dispositivosPermitenCalculo.size(); i++)
+		 double[] variablesFuncionEc = new double[dispositivos.size()];
+		 for (int i = 0; i < dispositivos.size(); i++)
 		 {
 			 variablesFuncionEc[i] = 1;
 		 }
 		 this.crearFuncionEconomica(variablesFuncionEc);
 		 
-		 double[] consumoDispositivos = new double[dispositivosPermitenCalculo.size()];
+		 double[] consumoDispositivos = new double[dispositivos.size()];
 		 
-		 for (int i = 0; i < dispositivosPermitenCalculo.size(); i++)
+		 for (int i = 0; i < dispositivos.size(); i++)
 		 {
-			 consumoDispositivos[i] = dispositivosPermitenCalculo.get(i).getConsumoXHora();
+			 consumoDispositivos[i] = dispositivos.get(i).getConsumoXHora();
 		 }
 		 
 		 this.agregarRestriccion(Relationship.LEQ, 440640, consumoDispositivos);
 		 
-		 for (int i = 0; i < dispositivosPermitenCalculo.size(); i++)
+		 for (int i = 0; i < dispositivos.size(); i++)
 		 {
-			 double[] variablesRestricciones = new double[dispositivosPermitenCalculo.size()];
+			 double[] variablesRestricciones = new double[dispositivos.size()];
 			 
-			 for (int j = 0; j < dispositivosPermitenCalculo.size(); j++)
+			 for (int j = 0; j < dispositivos.size(); j++)
 			 {
 					 if (j == i){	variablesRestricciones[j] = 1;	}
 					 else{	variablesRestricciones[j] = 0;	}
 			 }
-			 this.agregarRestriccion(Relationship.GEQ, dispositivosPermitenCalculo.get(i).getUsoMensualMinimoHoras(), variablesRestricciones);
-			 this.agregarRestriccion(Relationship.LEQ, dispositivosPermitenCalculo.get(i).getUsoMensualMaximoHoras(), variablesRestricciones);
+			 this.agregarRestriccion(Relationship.GEQ, dispositivos.get(i).getUsoMensualMinimoHoras(), variablesRestricciones);
+			 this.agregarRestriccion(Relationship.LEQ, dispositivos.get(i).getUsoMensualMaximoHoras(), variablesRestricciones);
 		 }
 		 
 		 PointValuePair solucion = this.resolver();
 		 
-		 for (int i = 0; i < dispositivosPermitenCalculo.size(); i++)
+		 for (int i = 0; i < dispositivos.size(); i++)
 		 {
-			 dispositivosPermitenCalculo.get(i).setConsumoRecomendadoHoras(solucion.getPoint()[i]);
+			 dispositivos.get(i).setConsumoRecomendadoHoras(solucion.getPoint()[i]);
 		 }
 		 
-		 List<Dispositivo> dispositivosFinal = dispositivosPermitenCalculo;
-		 
-		 if (dispositivosNoPermitenCalculo != null)
-		 {
-			 for(Dispositivo dispositivoNoPermite : dispositivosNoPermitenCalculo)
-			 {
-				 dispositivosFinal.add(dispositivoNoPermite);
-			 }
-		 }
-		 return dispositivosFinal;
+		 return dispositivos;
 	}
 	
 	public void crearFuncionEconomica(double ... coeficientes) {

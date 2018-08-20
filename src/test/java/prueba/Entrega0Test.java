@@ -24,7 +24,7 @@ public class Entrega0Test {
 	@Before
 	public void inicio() {
 		String nombreUsuario = "JuanPerez";
-		String contraseña = "asd123";
+		String contraseÃ±a = "asd123";
 		String nombreYApellido = "Juan Perez";
 		TipoDocumento tipoDocumento = TipoDocumento.DNI;
 		int numeroDocumento = 36123894;
@@ -33,7 +33,7 @@ public class Entrega0Test {
 		Categoria categoria = Categoria.R1;
 		Date fechaAltaCliente = new Date();
 
-		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+		this.cliente = new Cliente(1, nombreUsuario, contraseÃ±a, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 
 		DispositivoInteligente heladera = new DispositivoInteligente(1, "heladera", 2, Estados.ENCENDIDO);
@@ -45,7 +45,7 @@ public class Entrega0Test {
 		this.cliente.agregarDispositivo(radio);
 		this.cliente.agregarDispositivo(aireAcondicionado);
 
-		this.administrador = new Administrador(1, nombreUsuario, contraseña, nombreYApellido, domicilio,
+		this.administrador = new Administrador(1, nombreUsuario, contraseÃ±a, nombreYApellido, domicilio,
 				fechaAltaCliente);
 	}
 

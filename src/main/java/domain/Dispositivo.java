@@ -1,7 +1,5 @@
 package domain;
 
-import java.time.LocalDateTime;
-
 public abstract class Dispositivo {
 	private int id;
 	private String nombre;
@@ -9,29 +7,13 @@ public abstract class Dispositivo {
 	private int usoMensualMinimoHoras;
 	private int usoMensualMaximoHoras;
 	private double consumoRecomendadoHoras;
-	private boolean permiteAhorroInteligente;
-<<<<<<< HEAD
-=======
-	private boolean permiteCalculoAhorroInteligente;
->>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 
 	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
 		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
 		this.consumoRecomendadoHoras = 0;
-		this.permiteAhorroInteligente = false;
-<<<<<<< HEAD
-=======
-		this.permiteCalculoAhorroInteligente = true;
->>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 	}
-	
-	public abstract void apagarse();
-	
-	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
-	
-	public abstract Estados getEstado();
 
 	public int getId() {
 		return id;
@@ -80,23 +62,4 @@ public abstract class Dispositivo {
 	public void setConsumoRecomendadoHoras(double consumoRecomendadoHoras) {
 		this.consumoRecomendadoHoras = consumoRecomendadoHoras;
 	}
-	
-	public boolean getPermiteAhorroInteligente() {
-		return permiteAhorroInteligente;
-	}
-
-	public void setPermiteAhorroInteligente(boolean permiteAhorroInteligente) {
-		this.permiteAhorroInteligente = permiteAhorroInteligente;
-	}
-<<<<<<< HEAD
-=======
-	
-	public boolean getPermiteCalculoAhorroInteligente() {
-		return permiteCalculoAhorroInteligente;
-	}
-
-	public void setPermiteCalculoAhorroInteligente(boolean permiteCalculoAhorroInteligente) {
-		this.permiteCalculoAhorroInteligente = permiteCalculoAhorroInteligente;
-	}
->>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 }

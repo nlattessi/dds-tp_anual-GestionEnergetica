@@ -1,17 +1,17 @@
 package domain;
 
-public abstract class Usuario  {
+public abstract class Usuario {
 
 	protected int id;
 	protected String nombreUsuario;
-	protected String contraseña;
+	protected String contraseÃ±a;
 	protected String nombreYApellido;
 	protected String domicilio;
 
-	public Usuario(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio) {
+	public Usuario(int id, String nombreUsuario, String contraseÃ±a, String nombreYApellido, String domicilio) {
 		this.id = id;
 		this.nombreUsuario = nombreUsuario;
-		this.contraseña = contraseña;
+		this.contraseÃ±a = contraseÃ±a;
 		this.nombreYApellido = nombreYApellido;
 		this.domicilio = domicilio;
 	}
@@ -32,12 +32,12 @@ public abstract class Usuario  {
 		this.nombreUsuario = nombreUsuario;
 	}
 
-	public String getContraseña() {
-		return this.contraseña;
+	public String getContraseÃ±a() {
+		return this.contraseÃ±a;
 	}
 
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setContraseÃ±a(String contraseÃ±a) {
+		this.contraseÃ±a = contraseÃ±a;
 	}
 
 	public String getNombreYApellido() {
