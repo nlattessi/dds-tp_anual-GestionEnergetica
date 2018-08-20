@@ -19,9 +19,13 @@ public class Cliente extends Usuario implements Runnable {
 	private int puntosAcumulados = 0;
 	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
 	private boolean ahorroInteligente; 
+<<<<<<< HEAD
 	private Thread hiloVerificadorConsumo;
 	
 	static int segundosDeEspera=5;
+=======
+	private Transformador transformador;
+>>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 
 	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
@@ -33,7 +37,10 @@ public class Cliente extends Usuario implements Runnable {
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
 		this.ahorroInteligente = false;
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 	}
 	
 
@@ -80,7 +87,10 @@ public class Cliente extends Usuario implements Runnable {
 	public void setAhorroInteligente(boolean ahorroInteligente) {
 		this.ahorroInteligente = ahorroInteligente;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 
 	public Categoria getCategoria() {
 		return categoria;
@@ -93,6 +103,10 @@ public class Cliente extends Usuario implements Runnable {
 	public List<Dispositivo> getDispositivos() {
 		return dispositivos;
 	}
+	public String getDomicilio() {
+		return domicilio;
+	}
+	
 
 	public void setDispositivos(List<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
@@ -197,6 +211,7 @@ public class Cliente extends Usuario implements Runnable {
 		
 		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
 		
+<<<<<<< HEAD
 		
 	}
 
@@ -210,4 +225,39 @@ public class Cliente extends Usuario implements Runnable {
 	}
 
 
+=======
+		if (this.ahorroInteligente)
+		{
+			for (Dispositivo dispositivo : this.dispositivos)
+			{
+				if(dispositivo.getPermiteAhorroInteligente())
+				{
+					LocalDateTime fecha = LocalDateTime.now();
+					
+					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
+					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
+																				> dispositivo.getConsumoRecomendadoHoras())
+					{
+						dispositivo.apagarse();
+					}
+				}
+			}
+		}
+	}
+	
+	public void setTransformador(Transformador transformadorElegido) {
+		transformador = transformadorElegido;
+	}
+
+	public double calcularConsumo() {
+		double consumoTotal=0;
+		LocalDateTime fecha = LocalDateTime.now();
+		LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
+		for(Dispositivo dispositivo : this.dispositivos) {
+			
+			consumoTotal = consumoTotal + dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now());
+		}
+		return consumoTotal;
+	}
+>>>>>>> 83e1e383915be5a9e431af665ffd7b1a1b54407d
 }
