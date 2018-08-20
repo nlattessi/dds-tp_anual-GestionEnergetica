@@ -14,14 +14,14 @@ public class Transformador {
 	public double cantidadDeEnergiaSuministrada() {
 		double consumoTotal=0;
 		for(Cliente cliente : this.clientes) {
-			consumoTotal = consumoTotal + cliente.calcularConsumo();
+			//consumoTotal = consumoTotal + cliente.calcularConsumo();
 		}
 		return consumoTotal;
 	}
 	
 	public void setearClientes() {
 		for(Cliente cliente: this.clientes ) {
-			cliente.setTransformador(this);
+			//cliente.setTransformador(this);
 			clientesConectados.add(cliente);
 		}
 	}
