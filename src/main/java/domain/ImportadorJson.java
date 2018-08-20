@@ -62,7 +62,7 @@ public class ImportadorJson {
 				int id = (int) (long) clienteJson.get("id");
 				String nombreYApellido = clienteJson.get("nombre_y_apellido").toString();
 				String nombreDeUsuario = clienteJson.get("nombre_de_usuario").toString();
-				String contraseÃ±a = clienteJson.get("contraseÃ±a").toString();
+				String contraseña = clienteJson.get("contraseña").toString();
 				TipoDocumento tipoDeDocumento = TipoDocumento
 						.valueOf(clienteJson.get("tipo_documento").toString().toUpperCase());
 				int numeroDeDocumento = (int) (long) clienteJson.get("numero_documento");
@@ -77,7 +77,7 @@ public class ImportadorJson {
 				}
 				Categoria categoria = Categoria.valueOf((String) clienteJson.get("categoria"));
 
-				Cliente cliente = new Cliente(id, nombreDeUsuario, contraseÃ±a, nombreYApellido, domicilioDelServicio,
+				Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
 						tipoDeDocumento, numeroDeDocumento, telefonoDeContacto, fechaDeAltaDelServicio, categoria);
 
 				clientes.add(cliente);
@@ -103,7 +103,7 @@ public class ImportadorJson {
 				int id = (int) (long) administradorJson.get("id");
 				String nombreYApellido = administradorJson.get("nombre_y_apellido").toString();
 				String nombreDeUsuario = administradorJson.get("nombre_de_usuario").toString();
-				String contraseÃ±a = administradorJson.get("contraseÃ±a").toString();
+				String contraseña = administradorJson.get("contraseña").toString();
 				String domicilio = administradorJson.get("domicilio").toString();
 				String fechaDeAltaString = administradorJson.get("fecha_de_alta").toString();
 				Date fechaDeAlta = null;
@@ -114,7 +114,7 @@ public class ImportadorJson {
 					System.exit(1);
 				}
 
-				Administrador administrador = new Administrador(id, nombreDeUsuario, contraseÃ±a, nombreYApellido,
+				Administrador administrador = new Administrador(id, nombreDeUsuario, contraseña, nombreYApellido,
 						domicilio, fechaDeAlta);
 
 				administradores.add(administrador);
