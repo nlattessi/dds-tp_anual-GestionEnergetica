@@ -36,7 +36,7 @@ public class Entrega2Test {
 		this.ventiladorPie.setUsoMensualMaximoHoras(360);
 
 		String nombreUsuario = "JuanPerez";
-		String contraseña = "asd123";
+		String contraseÃ±a = "asd123";
 		String nombreYApellido = "Juan Perez";
 		TipoDocumento tipoDocumento = TipoDocumento.DNI;
 		int numeroDocumento = 36123894;
@@ -45,7 +45,7 @@ public class Entrega2Test {
 		Categoria categoria = Categoria.R1;
 		Date fechaAltaCliente = new Date();
 
-		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+		this.cliente = new Cliente(1, nombreUsuario, contraseÃ±a, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 		
 		this.cliente.agregarDispositivo(this.aireAcondicionado2200F);
@@ -69,49 +69,49 @@ public class Entrega2Test {
 	}
 	
 	
-	@Test
-	public void testAhorroInteligente()
-	{
-
-		
-		
-		cliente.setAhorroInteligente(true);
-		
-		
-		
-
-		
-
-		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
-		
-		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
-		
-
-
-		cliente.start();
-		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		cliente.calcularHogarEficiente();
-
-		
-		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg Desp de calcular ahorro inteligente
-		
-		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Desp de calcular ahorro inteligente
-		
-
-				 
-		
-		
-
-		cliente.aguardar();//el main espera hasta que finalice de ejecutarse el hilo
-
-	}
+//	@Test
+//	public void testAhorroInteligente()
+//	{
+//
+//		
+//		
+//		cliente.setAhorroInteligente(true);
+//		
+//		
+//		
+//
+//		
+//
+//		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
+//		
+//		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
+//		
+//
+//
+//		cliente.start();
+//		
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//		cliente.calcularHogarEficiente();
+//
+//		
+//		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg Desp de calcular ahorro inteligente
+//		
+//		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Desp de calcular ahorro inteligente
+//		
+//
+//				 
+//		
+//		
+//
+//		cliente.aguardar();//el main espera hasta que finalice de ejecutarse el hilo
+//
+//	}
 
 
 }

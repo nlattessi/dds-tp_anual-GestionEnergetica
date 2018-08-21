@@ -33,10 +33,10 @@ public class Cliente extends Usuario implements Runnable{
 	
 	public int segundosDeEspera=5;
 
-	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
+	public Cliente(int id, String nombreUsuario, String contraseÃ±a, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
 			Categoria categoria) {
-		super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
+		super(id, nombreUsuario, contraseÃ±a, nombreYApellido, domicilio);
 		this.setTipoDocumento(tipoDocumento);
 		this.setNumeroDocumento(numeroDocumento);
 		this.telefonoContacto = telefonoContacto;
@@ -154,11 +154,7 @@ public class Cliente extends Usuario implements Runnable{
 		    }
 		}
 	
-
-
-
-
-@Override
+	@Override
 	public void run()  
 	{	
 		int c=0;
@@ -173,7 +169,7 @@ public class Cliente extends Usuario implements Runnable{
 		{
 			for (Dispositivo dispositivo : this.dispositivos)
 			{
-				if(dispositivo.permiteAhorroInteligente())
+				if(dispositivo.getPermiteAhorroInteligente())
 				{
 					LocalDateTime fecha = LocalDateTime.now();
 					

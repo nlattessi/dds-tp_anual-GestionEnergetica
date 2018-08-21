@@ -25,6 +25,7 @@ public class DispositivoInteligente extends Dispositivo {
 		this.fabricante = fabricante;
 	}
 
+	@Override
 	public Estados getEstado() {
 		return estado;
 	}
@@ -41,6 +42,7 @@ public class DispositivoInteligente extends Dispositivo {
 		return this.estado == Estados.APAGADO;
 	}
 
+	@Override
 	public void apagarse() {
 		if (this.estado != Estados.APAGADO) {
 			this.estado = Estados.APAGADO;
@@ -78,6 +80,7 @@ public class DispositivoInteligente extends Dispositivo {
 		return this.consumoTotalComprendidoEntre(ahoraMenosHoras, ahora);
 	}
 
+	@Override
 	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
 		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
 				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
@@ -115,4 +118,5 @@ public class DispositivoInteligente extends Dispositivo {
 	public String getStatusFabricante() {
 		return this.fabricante.recibirMensajeStatus();
 	}
+
 }

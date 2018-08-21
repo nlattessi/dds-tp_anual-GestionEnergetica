@@ -25,6 +25,7 @@ public class Transformador {
 			clientesConectados.add(cliente);
 		}
 	}
+	
 	public void setZona(Zona zonaElegida) {
 		zona = zonaElegida;
 	}
