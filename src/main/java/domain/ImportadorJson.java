@@ -62,7 +62,7 @@ public class ImportadorJson {
 				int id = (int) (long) clienteJson.get("id");
 				String nombreYApellido = clienteJson.get("nombre_y_apellido").toString();
 				String nombreDeUsuario = clienteJson.get("nombre_de_usuario").toString();
-				String contraseña = clienteJson.get("contrase�a").toString();
+				String contraseña = clienteJson.get("contraseña").toString();
 				TipoDocumento tipoDeDocumento = TipoDocumento
 						.valueOf(clienteJson.get("tipo_documento").toString().toUpperCase());
 				int numeroDeDocumento = (int) (long) clienteJson.get("numero_documento");
@@ -103,7 +103,7 @@ public class ImportadorJson {
 				int id = (int) (long) administradorJson.get("id");
 				String nombreYApellido = administradorJson.get("nombre_y_apellido").toString();
 				String nombreDeUsuario = administradorJson.get("nombre_de_usuario").toString();
-				String contraseña = administradorJson.get("contrase�a").toString();
+				String contraseña = administradorJson.get("contraseña").toString();
 				String domicilio = administradorJson.get("domicilio").toString();
 				String fechaDeAltaString = administradorJson.get("fecha_de_alta").toString();
 				Date fechaDeAlta = null;
