@@ -2,6 +2,8 @@ package prueba;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,6 +14,7 @@ import domain.Cliente;
 import domain.DispositivoEstandar;
 import domain.DispositivoInteligente;
 import domain.Estados;
+import domain.FunctionClock;
 import domain.TipoDocumento;
 
 public class Entrega2Test {
@@ -20,6 +23,7 @@ public class Entrega2Test {
 	private DispositivoInteligente lavarropas5kg;
 	private Cliente cliente;
 	private DispositivoEstandar ventiladorPie;
+	boolean asd = true;
 	
 	@Before
 	public void inicio() 
@@ -77,43 +81,35 @@ public class Entrega2Test {
 				" es de: " + cliente.getDispositivos().get(2).getConsumoRecomendadoHoras() + " horas.");
 	}
 	
-	@Test
-	public void testAhorroInteligente() {
-		cliente.setAhorroInteligente(true);
-		
-		cliente.calcularHogarEficiente();
-
-		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
-		
-		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
-	}
-	
-//
-//
-//		cliente.start();
+//	@Test
+//	public void testAhorroInteligente() {
+//		cliente.setAhorroInteligente(true);
 //		
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
 //		cliente.calcularHogarEficiente();
 //
+//		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
 //		
-//		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg Desp de calcular ahorro inteligente
-//		
-//		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Desp de calcular ahorro inteligente
-//		
-//
-//				 
-//		
-//		
-//
-//		cliente.aguardar();//el main espera hasta que finalice de ejecutarse el hilo
-//
+//		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
 //	}
+	
+	@Test
+	public void testPeriodicidadAhorroInteligente() throws InterruptedException {
+		cliente.setAhorroInteligente(true);
+		
+		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
+		
+		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
+		
+		FunctionClock functionClock = new FunctionClock(this.cliente);
+		 
+		 functionClock.Start();
+		 
+		 Thread.sleep(5000);
+		 
+		 Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
+			
+		 Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
+	}
 
 
 }

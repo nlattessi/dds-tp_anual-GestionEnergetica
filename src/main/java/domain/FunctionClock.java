@@ -17,14 +17,14 @@ public class FunctionClock implements Runnable{
         this.cliente.calcularHogarEficiente();
     }
 
-    public void main(String[] args) {
+    public void Start() {
         ScheduledExecutorService scheduler
                 = Executors.newSingleThreadScheduledExecutor();
 
         Runnable task = new FunctionClock(this.cliente);
         int initialDelay = 0;
         int periodicDelay = this.cliente.getPeriodicidadAhorroInteligente();
-        scheduler.scheduleAtFixedRate(task, initialDelay, periodicDelay, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(task, initialDelay, periodicDelay, TimeUnit.SECONDS);
     }
     
     public Cliente getCliente() {
