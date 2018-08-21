@@ -11,6 +11,7 @@ public abstract class Dispositivo {
 	private double consumoRecomendadoHoras;
 	private boolean permiteAhorroInteligente;
 	private boolean permiteCalculoAhorro;
+	private boolean bajoConsumo;
 
 	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
 		this.id = dispositivo;
@@ -89,5 +90,13 @@ public abstract class Dispositivo {
 	
 	public void setPermiteCalculoAhorro(boolean permiteCalculoAhorro) {
 		this.permiteCalculoAhorro = permiteCalculoAhorro;
+	}
+	
+	public boolean getBajoConsumo() {
+		return this.bajoConsumo;
+	}
+	
+	public void setBajoConsumo(boolean bajoConsumo) {
+		this.bajoConsumo = bajoConsumo;
 	}
 }

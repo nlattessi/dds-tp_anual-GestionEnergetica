@@ -23,7 +23,6 @@ public class Entrega2Test {
 	private DispositivoInteligente lavarropas5kg;
 	private Cliente cliente;
 	private DispositivoEstandar ventiladorPie;
-	boolean asd = true;
 	
 	@Before
 	public void inicio() 
