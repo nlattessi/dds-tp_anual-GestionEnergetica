@@ -64,8 +64,7 @@ public class Entrega2Test {
 	}
 	
 	@Test
-	public void testAlgoritmoSimplex()
-	{
+	public void testAlgoritmoSimplex() {
 		cliente.calcularHogarEficiente();
 		Assert.assertEquals(370, cliente.getDispositivos().get(0).getConsumoRecomendadoHoras(), 0.01); // <--- aire acondicionado de 2200 frigorias
 		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(0).getNombre() + 
@@ -79,8 +78,7 @@ public class Entrega2Test {
 	}
 	
 	@Test
-	public void testAhorroInteligente()
-	{
+	public void testAhorroInteligente() {
 		cliente.setAhorroInteligente(true);
 		
 		cliente.calcularHogarEficiente();
@@ -89,6 +87,7 @@ public class Entrega2Test {
 		
 		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
 	}
+	
 //
 //
 //		cliente.start();

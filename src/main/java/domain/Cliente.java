@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 
-public class Cliente extends Usuario implements Runnable{
+public class Cliente extends Usuario {
 
 	private TipoDocumento tipoDocumento;
 	private int numeroDocumento;
@@ -16,9 +16,8 @@ public class Cliente extends Usuario implements Runnable{
 	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 	private int puntosAcumulados = 0;
 	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
-	
 	private boolean ahorroInteligente;
-	
+	private int periodicidadAhorroInt;	
 	
 	public boolean getAhorroInteligente() {
 		return ahorroInteligente;
@@ -43,6 +42,7 @@ public class Cliente extends Usuario implements Runnable{
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
 		this.ahorroInteligente = false;
+		this.periodicidadAhorroInt = 10; 
 	}
 
 	public TipoDocumento getTipoDocumento() {
@@ -136,6 +136,14 @@ public class Cliente extends Usuario implements Runnable{
 	private void sumarPuntos(int puntos) {
 		this.puntosAcumulados = puntos + this.puntosAcumulados();
 	}
+	
+	public int getPeriodicidadAhorroInteligente() {
+		return this.periodicidadAhorroInt;
+	}
+	
+	public void setPeriodicidadAhorroInteligente(int periodicidad) {
+		this.periodicidadAhorroInt = periodicidad;
+	}
 
 	private Stream<DispositivoInteligente> getDispositivosInteligentes() {
 		return this.dispositivos.stream().filter(d -> d instanceof DispositivoInteligente)
@@ -144,7 +152,7 @@ public class Cliente extends Usuario implements Runnable{
 	
 	public void calcularHogarEficiente()
 	{
-		this.simplex.calcularHogarEficiente(dispositivos);
+		this.simplex.calcularHogarEficiente(this.dispositivos);
 		
 		if (this.ahorroInteligente)
 		{
@@ -165,61 +173,61 @@ public class Cliente extends Usuario implements Runnable{
 		}
 	}
 	
-	public void start() {
-		if(hiloVerificadorConsumo==null) {
-	
-			hiloVerificadorConsumo=new Thread(this);
-			hiloVerificadorConsumo.start();
-		    }
-		}
-	
-	@Override
-	public void run()  
-	{	
-		int c=0;
-		
-		
-		while(c<3) {//prueba solamente tres veces
-		
-			
-		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
-		
-		if (this.ahorroInteligente)
-		{
-			for (Dispositivo dispositivo : this.dispositivos)
-			{
-				if(dispositivo.getPermiteAhorroInteligente())
-				{
-					LocalDateTime fecha = LocalDateTime.now();
-					
-					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
-					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
-																				> dispositivo.getConsumoRecomendadoHoras())
-					{
-						dispositivo.apagarse();
-					}
-				}
-			}
-		}
-		
-
-		try {
-			Thread.sleep(segundosDeEspera*1000);
-		}catch(InterruptedException ex){
-			Thread.currentThread().interrupt();
-		}
-		c++;
-					}
-	}
-
-public void aguardar() {
-	try {
-		hiloVerificadorConsumo.join();
-	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-}
+//	public void start() {
+//		if(hiloVerificadorConsumo==null) {
+//	
+//			hiloVerificadorConsumo=new Thread(this);
+//			hiloVerificadorConsumo.start();
+//		    }
+//		}
+//	
+//	@Override
+//	public void run()  
+//	{	
+//		int c=0;
+//		
+//		
+//		while(c<3) {//prueba solamente tres veces
+//		
+//			
+//		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
+//		
+//		if (this.ahorroInteligente)
+//		{
+//			for (Dispositivo dispositivo : this.dispositivos)
+//			{
+//				if(dispositivo.getPermiteAhorroInteligente())
+//				{
+//					LocalDateTime fecha = LocalDateTime.now();
+//					
+//					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
+//					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
+//																				> dispositivo.getConsumoRecomendadoHoras())
+//					{
+//						dispositivo.apagarse();
+//					}
+//				}
+//			}
+//		}
+//		
+//
+//		try {
+//			Thread.sleep(segundosDeEspera*1000);
+//		}catch(InterruptedException ex){
+//			Thread.currentThread().interrupt();
+//		}
+//		c++;
+//					}
+//	}
+//
+//public void aguardar() {
+//	try {
+//		hiloVerificadorConsumo.join();
+//	} catch (InterruptedException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//}
 
 
 
