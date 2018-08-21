@@ -10,12 +10,15 @@ public abstract class Dispositivo {
 	private int usoMensualMaximoHoras;
 	private double consumoRecomendadoHoras;
 	private boolean permiteAhorroInteligente;
+	private boolean permiteCalculoAhorro;
 
 	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
 		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
 		this.consumoRecomendadoHoras = 0;
+		this.permiteAhorroInteligente = false;
+		this.permiteCalculoAhorro = true;
 	}
 		
 	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
@@ -78,5 +81,13 @@ public abstract class Dispositivo {
 	
 	public void setPermiteAhorroInteligente(boolean permiteAhorroInteligente) {
 		this.permiteAhorroInteligente = permiteAhorroInteligente;
+	}
+	
+	public boolean getPermiteCalculoAhorro() {
+		return permiteCalculoAhorro;
+	}
+	
+	public void setPermiteCalculoAhorro(boolean permiteCalculoAhorro) {
+		this.permiteCalculoAhorro = permiteCalculoAhorro;
 	}
 }

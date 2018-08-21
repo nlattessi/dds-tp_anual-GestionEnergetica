@@ -42,6 +42,7 @@ public class Cliente extends Usuario implements Runnable{
 		this.telefonoContacto = telefonoContacto;
 		this.fechaAltaServicio = fechaAltaServicio;
 		this.categoria = categoria;
+		this.ahorroInteligente = false;
 	}
 
 	public TipoDocumento getTipoDocumento() {
@@ -143,7 +144,25 @@ public class Cliente extends Usuario implements Runnable{
 	
 	public void calcularHogarEficiente()
 	{
-		this.setDispositivos(simplex.calcularHogarEficiente(dispositivos));
+		this.simplex.calcularHogarEficiente(dispositivos);
+		
+		if (this.ahorroInteligente)
+		{
+			for (Dispositivo dispositivo : this.dispositivos)
+			{
+				if(dispositivo.getPermiteAhorroInteligente())
+				{
+					LocalDateTime fecha = LocalDateTime.now();
+					
+					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
+					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
+																				> dispositivo.getConsumoRecomendadoHoras())
+					{
+						dispositivo.apagarse();
+					}
+				}
+			}
+		}
 	}
 	
 	public void start() {

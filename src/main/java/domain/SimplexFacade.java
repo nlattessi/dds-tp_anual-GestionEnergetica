@@ -31,40 +31,61 @@ public class SimplexFacade {
 	
 	public List<Dispositivo> calcularHogarEficiente(List<Dispositivo> dispositivos)
 	{
-		 double[] variablesFuncionEc = new double[dispositivos.size()];
-		 for (int i = 0; i < dispositivos.size(); i++)
+		 List<Dispositivo> dispositivosPermitenAhorro = new ArrayList<Dispositivo>();;
+		 
+		 for(Dispositivo dispositivo : dispositivos)
+		 {
+			 if (dispositivo.getPermiteCalculoAhorro())
+			 {
+				 dispositivosPermitenAhorro.add(dispositivo);
+			 }
+		 }
+
+		 double[] variablesFuncionEc = new double[dispositivosPermitenAhorro.size()];
+		 for (int i = 0; i < dispositivosPermitenAhorro.size(); i++)
 		 {
 			 variablesFuncionEc[i] = 1;
 		 }
 		 this.crearFuncionEconomica(variablesFuncionEc);
 		 
-		 double[] consumoDispositivos = new double[dispositivos.size()];
+		 double[] consumoDispositivos = new double[dispositivosPermitenAhorro.size()];
 		 
-		 for (int i = 0; i < dispositivos.size(); i++)
+		 for (int i = 0; i < dispositivosPermitenAhorro.size(); i++)
 		 {
-			 consumoDispositivos[i] = dispositivos.get(i).getConsumoXHora();
+			 consumoDispositivos[i] = dispositivosPermitenAhorro.get(i).getConsumoXHora();
 		 }
 		 
 		 this.agregarRestriccion(Relationship.LEQ, 440640, consumoDispositivos);
 		 
-		 for (int i = 0; i < dispositivos.size(); i++)
+		 for (int i = 0; i < dispositivosPermitenAhorro.size(); i++)
 		 {
-			 double[] variablesRestricciones = new double[dispositivos.size()];
+			 double[] variablesRestricciones = new double[dispositivosPermitenAhorro.size()];
 			 
-			 for (int j = 0; j < dispositivos.size(); j++)
+			 for (int j = 0; j < dispositivosPermitenAhorro.size(); j++)
 			 {
 					 if (j == i){	variablesRestricciones[j] = 1;	}
 					 else{	variablesRestricciones[j] = 0;	}
 			 }
-			 this.agregarRestriccion(Relationship.GEQ, dispositivos.get(i).getUsoMensualMinimoHoras(), variablesRestricciones);
-			 this.agregarRestriccion(Relationship.LEQ, dispositivos.get(i).getUsoMensualMaximoHoras(), variablesRestricciones);
+			 this.agregarRestriccion(Relationship.GEQ, dispositivosPermitenAhorro.get(i).getUsoMensualMinimoHoras(), variablesRestricciones);
+			 this.agregarRestriccion(Relationship.LEQ, dispositivosPermitenAhorro.get(i).getUsoMensualMaximoHoras(), variablesRestricciones);
 		 }
 		 
 		 PointValuePair solucion = this.resolver();
 		 
-		 for (int i = 0; i < dispositivos.size(); i++)
+		 for (int i = 0; i < dispositivosPermitenAhorro.size(); i++)
 		 {
-			 dispositivos.get(i).setConsumoRecomendadoHoras(solucion.getPoint()[i]);
+			 dispositivosPermitenAhorro.get(i).setConsumoRecomendadoHoras(solucion.getPoint()[i]);
+		 }
+		 
+		 for(Dispositivo dispositivoPermA : dispositivosPermitenAhorro)
+		 {
+			 for(Dispositivo dispositivo : dispositivos)
+			 {
+				 if (dispositivo.equals(dispositivoPermA))
+				 {
+					 dispositivo.setConsumoRecomendadoHoras(dispositivoPermA.getConsumoRecomendadoHoras());
+				 }
+			 }
 		 }
 		 
 		 return dispositivos;
