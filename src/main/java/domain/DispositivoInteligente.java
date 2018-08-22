@@ -80,7 +80,6 @@ public class DispositivoInteligente extends Dispositivo {
 		return this.consumoTotalComprendidoEntre(ahoraMenosHoras, ahora);
 	}
 
-	@Override
 	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
 		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
 				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
@@ -93,6 +92,21 @@ public class DispositivoInteligente extends Dispositivo {
 
 		return totalHoras * this.getConsumoXHora();
 	}
+	
+	@Override
+	public double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
+		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
+				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
+
+		if (this.estaEncendido()) {
+			if (inicio.isEqual(this.ultimaFechaHoraEncendido) || inicio.isAfter(this.ultimaFechaHoraEncendido)) {
+				totalHoras += Duration.between(inicio, fin).toHours();
+			}
+		}
+
+		return totalHoras;
+	}
+	
 
 	public void limpiarPeriodos() {
 		this.ultimaFechaHoraEncendido = null;

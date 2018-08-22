@@ -22,9 +22,11 @@ public abstract class Dispositivo {
 		this.permiteCalculoAhorro = true;
 	}
 		
-	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
+	public abstract double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 	
 	public abstract void apagarse();
+	
+	public abstract void encenderse();
 	
 	public abstract Estados getEstado();
 

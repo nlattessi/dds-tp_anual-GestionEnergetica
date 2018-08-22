@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import domain.Categoria;
 import domain.Cliente;
+import domain.Dispositivo;
 import domain.DispositivoEstandar;
 import domain.DispositivoInteligente;
 import domain.Estados;
@@ -18,36 +19,10 @@ import domain.FunctionClock;
 import domain.TipoDocumento;
 
 public class Entrega2Test {
-	
-	private DispositivoInteligente aireAcondicionado2200F;
-	private DispositivoInteligente lavarropas5kg;
 	private Cliente cliente;
-	private DispositivoEstandar ventiladorPie;
 	
 	@Before
-	public void inicio() 
-	{
-		this.aireAcondicionado2200F = new DispositivoInteligente(1, "aire acondicionado de 2200 frigorias", 0.18, Estados.APAGADO);
-		this.aireAcondicionado2200F.setUsoMensualMinimoHoras(90);
-		this.aireAcondicionado2200F.setUsoMensualMaximoHoras(370);
-		this.aireAcondicionado2200F.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 3, 0));
-		this.aireAcondicionado2200F.encenderse();
-		this.aireAcondicionado2200F.setPermiteAhorroInteligente(true);
-		
-		this.lavarropas5kg = new DispositivoInteligente(2, "lavarropas automatico de 5 kg", 0.875, Estados.APAGADO);
-		this.lavarropas5kg.setUsoMensualMinimoHoras(6);
-		this.lavarropas5kg.setUsoMensualMaximoHoras(30);
-		this.lavarropas5kg.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 10, 0));
-		this.lavarropas5kg.agregarPeriodo(LocalDateTime.of(2018, 8, 3, 0, 0), LocalDateTime.of(2018, 8, 3, 10, 0));
-		this.lavarropas5kg.agregarPeriodo(LocalDateTime.of(2018, 8, 6, 0, 0), LocalDateTime.of(2018, 8, 6, 10, 0));
-		this.lavarropas5kg.agregarPeriodo(LocalDateTime.of(2018, 8, 7, 0, 0), LocalDateTime.of(2018, 8, 7, 10, 0));
-		this.lavarropas5kg.encenderse();
-		this.lavarropas5kg.setPermiteAhorroInteligente(true);
-		
-		this.ventiladorPie = new DispositivoEstandar(3, "ventilador de pie", 0.06);
-		this.ventiladorPie.setUsoMensualMinimoHoras(120);
-		this.ventiladorPie.setUsoMensualMaximoHoras(360);
-
+	public void inicio() {
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
 		String nombreYApellido = "Juan Perez";
@@ -60,55 +35,92 @@ public class Entrega2Test {
 
 		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
-		
-		this.cliente.agregarDispositivo(this.aireAcondicionado2200F);
-		this.cliente.agregarDispositivo(this.lavarropas5kg);
-		this.cliente.agregarDispositivo(this.ventiladorPie);
 	}
 	
 	@Test
-	public void testAlgoritmoSimplex() {
-		cliente.calcularHogarEficiente();
-		Assert.assertEquals(370, cliente.getDispositivos().get(0).getConsumoRecomendadoHoras(), 0.01); // <--- aire acondicionado de 2200 frigorias
+	public void testFunctionSimplex() {
+		DispositivoInteligente aireAcondicionado = (DispositivoInteligente) this.cliente.generarAireAcondicionado2200F();
+		DispositivoInteligente lavarropas = (DispositivoInteligente) this.cliente.generarLavarropasAuto5kg();
+		DispositivoEstandar ventiladorDePie = (DispositivoEstandar) this.cliente.generarVentiladorDePie();
+		
+		this.cliente.agregarDispositivo(aireAcondicionado);
+		this.cliente.agregarDispositivo(lavarropas);
+		this.cliente.agregarDispositivo(ventiladorDePie);
+		
+		this.cliente.calcularHogarEficiente();
+		System.out.println("-----------------------------------------------------------");
+		System.out.println("Test function simplex:");
+		Assert.assertEquals(360, cliente.getDispositivos().get(0).getConsumoRecomendadoHoras(), 0.01); 
 		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(0).getNombre() + 
 				" es de: " + cliente.getDispositivos().get(0).getConsumoRecomendadoHoras() + " horas.");
-		Assert.assertEquals(30, cliente.getDispositivos().get(1).getConsumoRecomendadoHoras(), 0.01); // <--- lavarropas automatico de 5 kg
+		Assert.assertEquals(30, cliente.getDispositivos().get(1).getConsumoRecomendadoHoras(), 0.01); 
 		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(1).getNombre() + 
 				" es de: " + cliente.getDispositivos().get(1).getConsumoRecomendadoHoras() + " horas.");
-		Assert.assertEquals(360, cliente.getDispositivos().get(2).getConsumoRecomendadoHoras(), 0.01); // <--- ventilador de pie
+		Assert.assertEquals(360, cliente.getDispositivos().get(2).getConsumoRecomendadoHoras(), 0.01); 
 		System.out.println("El consumo recomendado para " + cliente.getDispositivos().get(2).getNombre() + 
 				" es de: " + cliente.getDispositivos().get(2).getConsumoRecomendadoHoras() + " horas.");
+		System.out.println("-----------------------------------------------------------");
+	}
+	
+	@Test
+	public void testAhorroInteligente() {
+		DispositivoInteligente aireAcondicionado = (DispositivoInteligente) this.cliente.generarAireAcondicionado2200F();
+		aireAcondicionado.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 3, 0));
+		aireAcondicionado.setPermiteAhorroInteligente(true);
+		aireAcondicionado.encenderse();
+			
+		DispositivoInteligente lavarropas = (DispositivoInteligente) this.cliente.generarLavarropasAuto5kg();
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 3, 0, 0), LocalDateTime.of(2018, 8, 3, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 6, 0, 0), LocalDateTime.of(2018, 8, 6, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 7, 0, 0), LocalDateTime.of(2018, 8, 7, 10, 0));
+		lavarropas.setPermiteAhorroInteligente(true);
+		lavarropas.encenderse();
+		
+		DispositivoEstandar ventiladorDePie = (DispositivoEstandar) this.cliente.generarVentiladorDePie();
+		
+		this.cliente.setAhorroInteligente(true);
+		
+		this.cliente.agregarDispositivo(aireAcondicionado);
+		this.cliente.agregarDispositivo(lavarropas);
+		this.cliente.agregarDispositivo(ventiladorDePie);
+		
+		System.out.println("Test ahorro inteligente automatico:");
+		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
+				" ANTES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(0).getEstado().toString() + ".");
+		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
+				" ANTES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(1).getEstado().toString() + ".");
+		
+		cliente.calcularHogarEficiente();
+
+		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado());
+		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); 
+		
+		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
+				" DESPUES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(0).getEstado().toString() + ".");
+		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
+				" DESPUES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(1).getEstado().toString() + ".");
+		System.out.println("-----------------------------------------------------------");
 	}
 	
 //	@Test
-//	public void testAhorroInteligente() {
+//	public void testPeriodicidadAhorroInteligente() throws InterruptedException {
 //		cliente.setAhorroInteligente(true);
 //		
-//		cliente.calcularHogarEficiente();
-//
-//		Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
+//		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
 //		
 //		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
+//		
+//		FunctionClock functionClock = new FunctionClock(this.cliente);
+//		 
+//		 functionClock.Start();
+//		 
+//		 Thread.sleep(5000);
+//		 
+//		 Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
+//			
+//		 Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
 //	}
-	
-	@Test
-	public void testPeriodicidadAhorroInteligente() throws InterruptedException {
-		cliente.setAhorroInteligente(true);
-		
-		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
-		
-		Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
-		
-		FunctionClock functionClock = new FunctionClock(this.cliente);
-		 
-		 functionClock.Start();
-		 
-		 Thread.sleep(5000);
-		 
-		 Assert.assertTrue(Estados.APAGADO == cliente.getDispositivos().get(1).getEstado()); //<--- lavarropas automatico de 5 kg. Antes de calcular ahorro inteligente
-			
-		 Assert.assertTrue(Estados.ENCENDIDO == cliente.getDispositivos().get(0).getEstado()); //<--- aire acondicionado de 2200 frigorias. Antes de calcular ahorro inteligente
-	}
 
 
 }

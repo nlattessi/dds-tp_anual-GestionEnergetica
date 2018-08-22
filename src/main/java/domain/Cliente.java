@@ -118,6 +118,10 @@ public class Cliente extends Usuario {
 	public void removerDispositivo(Dispositivo dispositivo) {
 		this.dispositivos.remove(dispositivo);
 	}
+	
+	public void limpiarDispositivos() {
+		this.dispositivos.clear();
+	}
 
 	public boolean algunDispositivoEncendido() {
 		return this.getDispositivosInteligentes().anyMatch(x -> x.estaEncendido());
@@ -165,7 +169,7 @@ public class Cliente extends Usuario {
 					LocalDateTime fecha = LocalDateTime.now();
 					
 					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
-					if ((dispositivo.consumoTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
+					if ((dispositivo.HorasTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now()))
 																				> dispositivo.getConsumoRecomendadoHoras())
 					{
 						dispositivo.apagarse();

@@ -12,12 +12,13 @@ public class DispositivoEstandar extends Dispositivo {
 	}
 	
 	@Override
-	public void apagarse(){
-		
-	}
+	public void apagarse() {	}
 	
 	@Override
-	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) { 
+	public void encenderse() { }
+	
+	@Override
+	public double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) { 
 		return 0; 
 	}
 	
