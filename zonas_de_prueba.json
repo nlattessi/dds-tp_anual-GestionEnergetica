@@ -1,0 +1,18 @@
+[{
+	"id": 1,
+	"radio": 20,
+	"coordenada_x": 100,
+	"coordenada_y": 100
+},
+{
+	"id": 2,
+	"radio": 40,
+	"coordenada_x": 200,
+	"coordenada_y": 200
+},
+{
+	"id": 3,
+	"radio": 50,
+	"coordenada_x": 500,
+	"coordenada_y": 500
+}]

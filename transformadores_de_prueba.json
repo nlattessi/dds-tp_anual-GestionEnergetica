@@ -1,0 +1,18 @@
+[{
+	"id": 1,
+	"zona_id": 1,
+	"coordenada_x": 100,
+	"coordenada_y": 100
+},
+{
+	"id": 2,
+	"zona_id": 2,
+	"coordenada_x": 200,
+	"coordenada_y": 200
+},
+{
+	"id": 3,
+	"zona_id": 3,
+	"coordenada_x": 500,
+	"coordenada_y": 500
+}]

@@ -162,4 +162,62 @@ public class ImportadorJson {
 		return dispositivos;
 	}
 
+	public List<Zona> importarZonas() {
+		List<Zona> zonas = new ArrayList<Zona>();
+
+		try {
+			Iterator<JSONObject> iterator = this.entidades.iterator();
+			while (iterator.hasNext()) {
+				JSONObject zonaJson = iterator.next();
+
+				Zona zona;
+
+				int id = (int) (long) zonaJson.get("id");
+				int radio = (int) (long) zonaJson.get("radio");
+				int coordenadaX = (int) (long) zonaJson.get("coordenada_x");
+				int coordenadaY = (int) (long) zonaJson.get("coordenada_y");
+
+				zona = new Zona(id, radio, coordenadaX, coordenadaY);
+
+				zonas.add(zona);
+			}
+		} catch (Exception e) {
+			System.out.println("Error parseando lista zonas en json");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		return zonas;
+	}
+
+	public List<Transformador> importarTransformadores(List<Zona> zonas) {
+		List<Transformador> transformadores = new ArrayList<Transformador>();
+
+		try {
+			Iterator<JSONObject> iterator = this.entidades.iterator();
+			while (iterator.hasNext()) {
+				JSONObject transformadorJson = iterator.next();
+
+				Transformador transformador;
+
+				int id = (int) (long) transformadorJson.get("id");
+				int coordenadaX = (int) (long) transformadorJson.get("coordenada_x");
+				int coordenadaY = (int) (long) transformadorJson.get("coordenada_y");
+				int zonaId = (int) (long) transformadorJson.get("zona_id");
+
+				Zona zona = zonas.stream().filter(item -> zonaId == item.getId()).findAny().orElse(null);
+
+				transformador = new Transformador(id, zona, coordenadaX, coordenadaY);
+
+				transformadores.add(transformador);
+			}
+		} catch (Exception e) {
+			System.out.println("Error parseando lista zonas en json");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		return transformadores;
+	}
+
 }
