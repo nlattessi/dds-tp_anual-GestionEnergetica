@@ -32,7 +32,7 @@ public class Entrega2Test {
 		Categoria categoria = Categoria.R1;
 		Date fechaAltaCliente = new Date();
 
-		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+		this.cliente = new Cliente(nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 	}
 	

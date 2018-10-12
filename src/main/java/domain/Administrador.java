@@ -10,7 +10,8 @@ public class Administrador extends Usuario {
 
 	public Administrador(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			Date fechaAltaSistema) {
-		super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
+		//super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
+		super(nombreUsuario, contraseña, nombreYApellido, domicilio);
 		this.fechaAltaSistema = fechaAltaSistema;
 	}
 

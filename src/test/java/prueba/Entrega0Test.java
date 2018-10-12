@@ -32,14 +32,15 @@ public class Entrega0Test {
 		String domicilio = "Av. Rivadavia 1111, CABA, Buenos Aires";
 		Categoria categoria = Categoria.R1;
 		Date fechaAltaCliente = new Date();
-
-		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+		
+		//this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+		this.cliente = new Cliente(nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 
-		DispositivoInteligente heladera = new DispositivoInteligente(1, "heladera", 2, Estados.ENCENDIDO);
-		DispositivoEstandar tele = new DispositivoEstandar(2, "tele", 3);
-		DispositivoEstandar radio = new DispositivoEstandar(3, "radio", 1);
-		DispositivoInteligente aireAcondicionado = new DispositivoInteligente(4, "aire acondicionado", 10, Estados.APAGADO);
+		DispositivoInteligente heladera = new DispositivoInteligente("heladera", 2, Estados.ENCENDIDO);
+		DispositivoEstandar tele = new DispositivoEstandar("tele", 3);
+		DispositivoEstandar radio = new DispositivoEstandar("radio", 1);
+		DispositivoInteligente aireAcondicionado = new DispositivoInteligente("aire acondicionado", 10, Estados.APAGADO);
 		this.cliente.agregarDispositivo(tele);
 		this.cliente.agregarDispositivo(heladera);
 		this.cliente.agregarDispositivo(radio);

@@ -31,8 +31,8 @@ public class Entrega1Test {
 
 	@Before
 	public void inicio() {
-		this.aireAcondicionado = new DispositivoInteligente(1, "aire acondicionado", 230, Estados.APAGADO);
-		this.tele = new DispositivoEstandar(2, "tele", 3);
+		this.aireAcondicionado = new DispositivoInteligente("aire acondicionado", 230, Estados.APAGADO);
+		this.tele = new DispositivoEstandar("tele", 3);
 
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
@@ -44,7 +44,7 @@ public class Entrega1Test {
 		Categoria categoria = Categoria.R1;
 		Date fechaAltaCliente = new Date();
 
-		this.cliente = new Cliente(1, nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+		this.cliente = new Cliente(nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 
 	}
@@ -140,7 +140,7 @@ public class Entrega1Test {
 
 	@Test
 	public void dispositivoEstandarEstimaConsumoCorrectamente() {
-		DispositivoEstandar dispositivo = new DispositivoEstandar(1, "radio", 23);
+		DispositivoEstandar dispositivo = new DispositivoEstandar("radio", 23);
 
 		int consumoEstimadoEsperado = 23 * 5;
 
@@ -296,7 +296,7 @@ public class Entrega1Test {
 
 		JVC jvc = new JVC();
 		Fabricante jvcAdapter = new JVCAdapter(jvc);
-		DispositivoInteligente di = new DispositivoInteligente(1, "radio", 230, Estados.APAGADO, jvcAdapter);
+		DispositivoInteligente di = new DispositivoInteligente("radio", 230, Estados.APAGADO, jvcAdapter);
 
 		di.encenderse();
 		di.apagarse();

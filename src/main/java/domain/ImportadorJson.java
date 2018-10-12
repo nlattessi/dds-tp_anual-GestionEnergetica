@@ -88,8 +88,8 @@ public class ImportadorJson {
 					e.printStackTrace();
 				}
 				Categoria categoria = Categoria.valueOf((String) clienteJson.get("categoria"));
-
-				Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
+				//Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
+				Cliente cliente = new Cliente(nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
 						tipoDeDocumento, numeroDeDocumento, telefonoDeContacto, fechaDeAltaDelServicio, categoria);
 
 				clientes.add(cliente);
@@ -158,9 +158,11 @@ public class ImportadorJson {
 				Boolean inteligente = (Boolean) dispositivoJson.get("inteligente");
 				if (inteligente) {
 					Estados estado = Estados.valueOf(dispositivoJson.get("estado").toString().toUpperCase());
-					dispositivo = new DispositivoInteligente(id, nombre, consumoPorHora, estado);
+					//dispositivo = new DispositivoInteligente(id, nombre, consumoPorHora, estado);
+					dispositivo = new DispositivoInteligente(nombre, consumoPorHora, estado);
 				} else {
-					dispositivo = new DispositivoEstandar(id, nombre, consumoPorHora);
+					//dispositivo = new DispositivoEstandar(id, nombre, consumoPorHora);
+					dispositivo = new DispositivoEstandar(nombre, consumoPorHora);
 				}
 
 				dispositivos.add(dispositivo);
