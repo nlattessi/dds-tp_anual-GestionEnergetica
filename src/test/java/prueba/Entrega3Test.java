@@ -17,6 +17,7 @@ import domain.Actuador;
 import domain.Categoria;
 import domain.Cliente;
 import domain.ComparacionesReglaGenerica;
+import domain.Dispositivo;
 import domain.DispositivoInteligente;
 import domain.EncenderCommand;
 import domain.EncenderRegla;
@@ -185,6 +186,99 @@ public class Entrega3Test {
 		List<Transformador> transformadoresActual = this.model.buscarTodos(Transformador.class);
 		
 		assertEquals(transformadoresActual.size(), cantidad + 1);
+	}
+	
+	@Test
+	public void casoDePrueba5() {
+		//Dado un hogar y un periodo mostrar el consumo total
+		
+		//Hogar => Cliente
+		String nombreUsuario = "JuanPerez";
+		String contraseña = "asd123";
+		String nombreYApellido = "Juan Perez";
+		TipoDocumento tipoDocumento = TipoDocumento.DNI;
+		int numeroDocumento = 36123894;
+		String telefonoContacto = "5555-5555";
+		String domicilio = "Av. Rivadavia 1111, CABA, Buenos Aires";
+		Categoria categoria = Categoria.R1;
+		Date fechaAltaCliente = new Date();
+		Cliente cliente = new Cliente(nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
+				numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
+		
+		DispositivoInteligente dispositivo1 = new DispositivoInteligente("aire acondicionado de 2200 frigorias", 1.013,
+				Estados.APAGADO);
+		dispositivo1.setUsoMensualMinimoHoras(90);
+		dispositivo1.setUsoMensualMaximoHoras(360);
+		dispositivo1.setBajoConsumo(true);
+		
+		dispositivo1.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 10, 0));
+		dispositivo1.agregarPeriodo(LocalDateTime.of(2018, 9, 1, 0, 0), LocalDateTime.of(2018, 9, 1, 10, 0));
+		dispositivo1.agregarPeriodo(LocalDateTime.of(2018, 10, 1, 0, 0), LocalDateTime.of(2018, 10, 1, 10, 0));
+		dispositivo1.agregarPeriodo(LocalDateTime.of(2018, 10, 12, 0, 0), LocalDateTime.of(2018, 10, 12, 10, 0));
+		
+		cliente.agregarDispositivo(dispositivo1);
+		
+		DispositivoInteligente dispositivo2 = new DispositivoInteligente("Lavarropas automatico de 5kg", 0.175,
+		Estados.APAGADO);
+		dispositivo2.setUsoMensualMinimoHoras(6);
+		dispositivo2.setUsoMensualMaximoHoras(30);
+		dispositivo2.setBajoConsumo(true);
+		
+		dispositivo2.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 10, 0));
+		dispositivo2.agregarPeriodo(LocalDateTime.of(2018, 9, 3, 0, 0), LocalDateTime.of(2018, 9, 3, 10, 0));
+		dispositivo2.agregarPeriodo(LocalDateTime.of(2018, 10, 6, 0, 0), LocalDateTime.of(2018, 10, 6, 10, 0));
+		dispositivo2.agregarPeriodo(LocalDateTime.of(2018, 10, 7, 0, 0), LocalDateTime.of(2018, 10, 7, 10, 0));
+		
+		cliente.agregarDispositivo(dispositivo2);
+		
+		//Periodo
+		Periodo periodo = new Periodo(LocalDateTime.of(2018, 10, 1, 0, 0), LocalDateTime.of(2018, 10, 31, 11, 59));
+		
+		System.out.println("-----------------------------------------------------------");
+		System.out.println("Hogar: " + cliente.getDomicilio());
+		System.out.println("ConsumoTotal: " + cliente.calcularConsumoEntrePeriodos(periodo.getInicio(), periodo.getFin()));
+		
+		assertEquals(23.75,cliente.calcularConsumoEntrePeriodos(periodo.getInicio(), periodo.getFin()),0.01);
+		
+		
+		//Dado un dispositivo y un periodo, mostrar por consola su consumo promedio
+		System.out.println("dispositivo: " + dispositivo1.getNombre());
+		System.out.println("Cosumo Promedio: " + dispositivo1.consumoPromedioComprendidoEntre(periodo.getInicio(), periodo.getFin()));
+		
+		
+		//Dado un transformador y un periodo, mostrar por consola su consumo promedio
+		Zona zona = new Zona(1000, -38, -58);
+		Transformador transformador = new Transformador(zona, -38, -58);
+		transformador.agregarCliente(cliente);
+		System.out.println("Consumo promedio Transformador: " + transformador.consumoPromedioEntre(periodo.getInicio(), periodo.getFin()));
+		
+		
+		//Recuperar un dispositivo asociado a un hogar de ese transformador e incrementar  un 1000% el consumo para ese periodo.
+		this.model.agregar(transformador);
+		int id = transformador.getId();
+		
+		Transformador transformadorRecuperado = this.model.buscar(Transformador.class, id);
+		
+		DispositivoInteligente dispositivoTransformador = (DispositivoInteligente)transformador.getClientesConectados().get(0).getDispositivos().get(0);
+		
+		System.out.println("Consumo antes de incrementacion: " + dispositivoTransformador.consumoTotalComprendidoEntre(periodo.getInicio(), periodo.getFin()));
+		
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 2, 0, 0), LocalDateTime.of(2018, 10, 2, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 3, 0, 0), LocalDateTime.of(2018, 10, 3, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 4, 0, 0), LocalDateTime.of(2018, 10, 4, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 5, 0, 0), LocalDateTime.of(2018, 10, 5, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 6, 0, 0), LocalDateTime.of(2018, 10, 6, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 7, 0, 0), LocalDateTime.of(2018, 10, 7, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 8, 0, 0), LocalDateTime.of(2018, 10, 8, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 9, 0, 0), LocalDateTime.of(2018, 10, 9, 20, 0));
+		dispositivoTransformador.agregarPeriodo(LocalDateTime.of(2018, 10, 10, 0, 0), LocalDateTime.of(2018, 10, 10, 20, 0));
+		
+		System.out.println("Consumo despues de incrementacion: " + dispositivoTransformador.consumoTotalComprendidoEntre(periodo.getInicio(), periodo.getFin()));
+		
+		
+		//Persistir el dispositivo y mostrar consumo para ese transofrmador 
+		
+		
 	}
 
 }

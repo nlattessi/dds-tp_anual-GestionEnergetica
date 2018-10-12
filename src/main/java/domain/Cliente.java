@@ -188,6 +188,14 @@ public class Cliente extends Usuario {
 		}
 		return consumoTotal;
 	}
+	
+	public double calcularConsumoEntrePeriodos(LocalDateTime inicio, LocalDateTime fin) {
+		double consumoTotal = 0;
+		for (Dispositivo dispositivo : this.dispositivos) {
+			consumoTotal = consumoTotal + dispositivo.consumoTotalComprendidoEntre(inicio, fin);
+		}
+		return consumoTotal;
+	}
 
 	public void removerDispositivo(Dispositivo dispositivo) {
 		this.dispositivos.remove(dispositivo);

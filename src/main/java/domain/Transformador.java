@@ -1,5 +1,6 @@
 package domain;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,14 @@ public class Transformador extends EntidadPersistente{
 		}
 		return consumoTotal;
 	}
+	
+	public double consumoPromedioEntre(LocalDateTime inicio, LocalDateTime fin) {
+		double consumoPromedio = 0;
+		for (Cliente cliente : this.clientesConectados) {
+			consumoPromedio = consumoPromedio + cliente.calcularConsumoEntrePeriodos(inicio, fin);
+		}
+		return (consumoPromedio / Duration.between(inicio, fin).toDays());
+	}
 
 	public void setearCliente(Cliente cliente) {
 		cliente.setTransformador(this);
@@ -67,6 +76,10 @@ public class Transformador extends EntidadPersistente{
 
 	public void agregarCliente(Cliente cliente) {
 		clientesConectados.add(cliente);
+	}
+	
+	public List<Cliente> getClientesConectados() {
+		return this.clientesConectados;
 	}
 
 //	public int getId() {

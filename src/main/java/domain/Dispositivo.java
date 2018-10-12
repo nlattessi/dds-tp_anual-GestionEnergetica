@@ -37,6 +37,8 @@ public abstract class Dispositivo extends EntidadPersistente{
 		
 	public abstract double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 	
+	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
+	
 	public abstract void apagarse();
 	
 	public abstract void encenderse();

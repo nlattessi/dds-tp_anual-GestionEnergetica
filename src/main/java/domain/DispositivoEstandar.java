@@ -30,6 +30,11 @@ public class DispositivoEstandar extends Dispositivo {
 	}
 	
 	@Override
+	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) { 
+		return 0; 
+	}
+	
+	@Override
 	public Estados getEstado(){ return null; }
 
 }
