@@ -13,9 +13,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import models.ModelHelper;
+
 @Entity(name = "dispositivo_inteligente")
 @Table(name = "dispositivo_inteligente")
-public class DispositivoInteligente extends Dispositivo {
+public class DispositivoInteligente extends Dispositivo {	
 	private Estados estado;
 
 	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -60,6 +62,7 @@ public class DispositivoInteligente extends Dispositivo {
 	}
 
 	public void setEstado(Estados estado) {
+		HistorialEstadoDispositivoInteligente.guardarHistorial(this, this.estado, estado);
 		this.estado = estado;
 	}
 
@@ -74,7 +77,7 @@ public class DispositivoInteligente extends Dispositivo {
 	@Override
 	public void apagarse() {
 		if (this.estado != Estados.APAGADO) {
-			this.estado = Estados.APAGADO;
+			setEstado(Estados.APAGADO);
 			this.periodos.add(new Periodo(this.ultimaFechaHoraEncendido, LocalDateTime.now()));
 			this.fabricante.enviarMensajeApagado();
 		}
@@ -82,7 +85,7 @@ public class DispositivoInteligente extends Dispositivo {
 
 	public void encenderse() {
 		if (this.estado != Estados.ENCENDIDO) {
-			this.estado = Estados.ENCENDIDO;
+			setEstado(Estados.ENCENDIDO);
 			this.ultimaFechaHoraEncendido = LocalDateTime.now();
 			this.fabricante.enviarMensajeEncendido();
 		}
@@ -91,6 +94,7 @@ public class DispositivoInteligente extends Dispositivo {
 	public void modoAhorroEnergia() {
 		if (this.estado != Estados.MODO_AHORRO_ENERGIA && this.estado != Estados.APAGADO) {
 			this.estado = Estados.MODO_AHORRO_ENERGIA;
+			setEstado(Estados.MODO_AHORRO_ENERGIA);
 			this.fabricante.enviarMensajeModoAhorroEnergia();
 		}
 	}

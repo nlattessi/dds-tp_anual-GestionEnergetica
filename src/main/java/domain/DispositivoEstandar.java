@@ -2,8 +2,10 @@ package domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Entity;
 import javax.persistence.Table;
 
+@Entity
 @Table(name = "dispositivo_estandar")
 public class DispositivoEstandar extends Dispositivo {
 //	public DispositivoEstandar(int dispositivo, String nombre, double consumoXHora) {

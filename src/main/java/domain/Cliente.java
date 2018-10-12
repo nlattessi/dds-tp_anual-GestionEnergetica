@@ -167,6 +167,8 @@ public class Cliente extends Usuario {
 				dispositivo.getConsumoXHora(), Estados.APAGADO);
 		this.dispositivos.add(dispInteligente);
 		this.sumarPuntos(10);
+		
+		HistorialConversionEstandarInteligente.guardarHistorial(this, dispositivo, dispInteligente);
 	}
 
 	public void setCoordenadasDomicilio(int lat, int alt) {
