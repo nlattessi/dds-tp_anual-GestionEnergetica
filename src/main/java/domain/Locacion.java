@@ -1,6 +1,6 @@
 package domain;
 
-public class Locacion extends EntidadPersistente{
+public class Locacion {
 	int x;
 	int y;
 

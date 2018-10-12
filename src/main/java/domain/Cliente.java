@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -37,7 +38,11 @@ public class Cliente extends Usuario {
 	private boolean ahorroInteligente;
 	private int periodicidadAhorroInt;
 	private int contadorId;
-	private int transformadorId;
+//	private int transformadorId;
+	
+	@ManyToOne
+	@JoinColumn(name = "transformador_id", referencedColumnName = "id")
+	private Transformador transformador;
 
 	@Transient
 	private Locacion coordenadasDomicilio;
@@ -82,12 +87,20 @@ public class Cliente extends Usuario {
 		return tipoDocumento;
 	}
 
-	public void setTransformadorId(int transfId) {
-		transformadorId = transfId;
+//	public void setTransformadorId(int transfId) {
+//		transformadorId = transfId;
+//	}
+//
+//	public int getTransformadorId() {
+//		return transformadorId;
+//	}
+	
+	public void setTransformador(Transformador transformador) {
+		this.transformador = transformador;
 	}
-
-	public int getTransformadorId() {
-		return transformadorId;
+	
+	public Transformador getTransformador() {
+		return transformador;
 	}
 
 	public void setTipoDocumento(TipoDocumento tipoDocumento) {

@@ -4,21 +4,40 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zona {
-	private int id;
-	private List<Transformador> transformadores = new ArrayList<Transformador>();
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "zona")
+public class Zona extends EntidadPersistente{
+//	private int id;
+	
+	@OneToMany(mappedBy = "zona", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Transformador> transformadores = new ArrayList<>();
+	
 	private int radio;
+	private int geolocalizacionX = 0;
+	private int geolocalizacionY = 0;
+	
+	@Transient
 	private Locacion coordenadas;
 
-	public Zona(int id, int radio, int x, int y) {
-		this.id = id;
+//	public Zona(int id, int radio, int x, int y) {
+	public Zona(int radio, int x, int y) {
+//		this.id = id;
 		this.radio = radio;
-		this.coordenadas = new Locacion(x, y);
+		this.geolocalizacionX = x;
+		this.geolocalizacionY = y;
+		this.coordenadas = new Locacion(this.geolocalizacionX, this.geolocalizacionY);
 	}
 
-	public int getId() {
-		return id;
-	}
+//	public int getId() {
+//		return id;
+//	}
 
 	public int getRadio() {
 		return radio;
@@ -30,7 +49,6 @@ public class Zona {
 
 	public List<Transformador> getTransformadores() {
 		return transformadores;
-
 	}
 
 	public double consumoTotalEnergia() {
@@ -48,16 +66,16 @@ public class Zona {
 	}
 
 	public void conectarCercano(Cliente cliente, Transformador transformador) {
-				cliente.setTransformadorId(transformador.getId());
-				transformador.agregarCliente(cliente);
-			}
-
+//				cliente.setTransformadorId(transformador.getId());
+		cliente.setTransformador(transformador);
+		transformador.agregarCliente(cliente);
+	}
 
 	public void obtenerMasCercano(Cliente cliente) {
 		double minimoDistancia = 100000;
 		Transformador minimoTransf =  null;
 		for (Transformador transformador : this.transformadores) {
-			double distancia = coordenadas.obtenerDistancia(transformador.coordenadas.x, transformador.coordenadas.y, cliente.coordenadasDomicilio.x, cliente.coordenadasDomicilio.y);
+			double distancia = coordenadas.obtenerDistancia(transformador.coordenadas.x, transformador.coordenadas.y, cliente.getCoordenadasDomicilio().x, cliente.getCoordenadasDomicilio().y);
 			if( distancia<minimoDistancia) {
 				minimoDistancia= distancia;
 				minimoTransf = transformador;

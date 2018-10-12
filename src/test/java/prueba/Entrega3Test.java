@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,10 +21,13 @@ import domain.DispositivoInteligente;
 import domain.EncenderCommand;
 import domain.EncenderRegla;
 import domain.Estados;
+import domain.ImportadorJson;
 import domain.Periodo;
 import domain.ReglaGenerica;
 import domain.Reglamentador;
 import domain.TipoDocumento;
+import domain.Transformador;
+import domain.Zona;
 import models.ModelHelper;
 
 public class Entrega3Test {
@@ -150,6 +156,35 @@ public class Entrega3Test {
 		encenderReglaRecuperada = this.model.buscar(ReglaGenerica.class, id);
 		
 		assertEquals(22, encenderReglaRecuperada.getValor());
+	}
+	
+	@Test
+	public void casoDePrueba4() {		
+		List<Zona> zonas = ImportadorJson.desdeArchivo("zonas_de_prueba.json").importarZonas();
+		
+		ImportadorJson importador = ImportadorJson.desdeArchivo("transformadores_de_prueba.json");
+		importador.importarTransformadores(zonas);
+		
+		// Recuperar todos los transformadores persistidos. Registrar la cantidad.
+		List<Transformador> transformadores = this.model.buscarTodos(Transformador.class);
+		int cantidad = transformadores.size();
+		
+		// Agregar una instancia de Transformador al JSON de entradas.
+		JSONArray entidadesJson = importador.getEntidades();
+		JSONObject obj = new JSONObject();
+		obj.put("zona_id", 3L);
+		obj.put("coordenada_x", 512L);
+		obj.put("coordenada_y", 128L);
+		entidadesJson.add(obj);
+		importador.setEntidades(entidadesJson);
+		
+		// Ejecutar el método de lectura y persistencia.
+		importador.limpiarTablaTransformadores().importarTransformadores(zonas);
+		
+		// Evaluar que la cantidad actual sea la anterior + 1.
+		List<Transformador> transformadoresActual = this.model.buscarTodos(Transformador.class);
+		
+		assertEquals(transformadoresActual.size(), cantidad + 1);
 	}
 
 }

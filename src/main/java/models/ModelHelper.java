@@ -82,6 +82,13 @@ public class ModelHelper {
 		this.execute("remove", unObjeto);
 	}
 	
+	public int eliminarTodos(Class<?> clase) {
+		this.initTransaccion();
+		int cant = this.entityManager().createQuery("DELETE FROM " + clase.getName()).executeUpdate();
+		this.commitTransaccion();
+		return cant;
+	}
+	
 	public <T> T buscar(Class<T> clase, int id) {
 		T find = (T) this.entityManager().find(clase, id);
 		return find;
