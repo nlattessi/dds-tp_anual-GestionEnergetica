@@ -3,25 +3,54 @@ package domain;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity(name = "dispositivo_inteligente")
+@Table(name = "dispositivo_inteligente")
 public class DispositivoInteligente extends Dispositivo {
 	private Estados estado;
-	private ArrayList<Periodo> periodos;
+
+	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<Periodo> periodos = new ArrayList<>();
+
 	private LocalDateTime ultimaFechaHoraEncendido;
+
+	@Transient
 	private Fabricante fabricante;
 
-	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado) {
-		this(dispositivo, nombre, consumoXHora, estado, new FabricanteGeneralAdapter());
+//	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado) {
+//		this(dispositivo, nombre, consumoXHora, estado, new FabricanteGeneralAdapter());
+//	}
+
+	public DispositivoInteligente(String nombre, double consumoXHora, Estados estado) {
+		this(nombre, consumoXHora, estado, new FabricanteGeneralAdapter());
 	}
 
-	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado,
-			Fabricante fabricante) {
-		super(dispositivo, nombre, consumoXHora);
+//	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado,
+//			Fabricante fabricante) {
+//		super(dispositivo, nombre, consumoXHora);
+//		this.estado = estado;
+//		if (this.estado == Estados.ENCENDIDO) {
+//			this.ultimaFechaHoraEncendido = LocalDateTime.now();
+//		}
+//		this.periodos = new ArrayList<Periodo>();
+//		this.fabricante = fabricante;
+//	}
+
+	public DispositivoInteligente(String nombre, double consumoXHora, Estados estado, Fabricante fabricante) {
+		super(nombre, consumoXHora);
 		this.estado = estado;
 		if (this.estado == Estados.ENCENDIDO) {
 			this.ultimaFechaHoraEncendido = LocalDateTime.now();
 		}
-		this.periodos = new ArrayList<Periodo>();
 		this.fabricante = fabricante;
 	}
 
@@ -67,7 +96,13 @@ public class DispositivoInteligente extends Dispositivo {
 	}
 
 	public void agregarPeriodo(LocalDateTime inicio, LocalDateTime fin) {
-		this.periodos.add(new Periodo(inicio, fin));
+		Periodo periodo = new Periodo(inicio, fin);
+		periodos.add(periodo);
+		periodo.setDispositivo(this);
+	}
+	
+	public List<Periodo> getPeriodosDelMes(int mes) {
+		return periodos.stream().filter(p -> p.getInicio().getMonthValue() == mes).collect(Collectors.toList());
 	}
 
 	public double consumoDuranteUltimasNHoras(int horas) {
@@ -92,7 +127,7 @@ public class DispositivoInteligente extends Dispositivo {
 
 		return totalHoras * this.getConsumoXHora();
 	}
-	
+
 	@Override
 	public double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
 		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
@@ -106,7 +141,6 @@ public class DispositivoInteligente extends Dispositivo {
 
 		return totalHoras;
 	}
-	
 
 	public void limpiarPeriodos() {
 		this.ultimaFechaHoraEncendido = null;

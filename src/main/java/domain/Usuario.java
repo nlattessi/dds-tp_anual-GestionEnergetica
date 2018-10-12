@@ -1,28 +1,41 @@
 package domain;
 
-public abstract class Usuario {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-	protected int id;
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Usuario extends EntidadPersistente{
+
+	//protected int id;
 	protected String nombreUsuario;
 	protected String contraseña;
 	protected String nombreYApellido;
 	protected String domicilio;
 
-	public Usuario(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio) {
-		this.id = id;
+//	public Usuario(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio) {
+	public Usuario(String nombreUsuario, String contraseña, String nombreYApellido, String domicilio) {
+//		this.id = id;
 		this.nombreUsuario = nombreUsuario;
 		this.contraseña = contraseña;
 		this.nombreYApellido = nombreYApellido;
 		this.domicilio = domicilio;
 	}
 
-	public int getId() {
-		return this.id;
-	}
+//	public int getId() {
+//		return this.id;
+//	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
+//	public void setId(int id) {
+//		this.id = id;
+//	}
 
 	public String getNombreUsuario() {
 		return this.nombreUsuario;

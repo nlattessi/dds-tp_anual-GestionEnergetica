@@ -3,17 +3,37 @@ package domain;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class Periodo {
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "periodo")
+public class Periodo extends EntidadPersistente{
 
 	private LocalDateTime inicio;
 	private LocalDateTime fin;
 	private long horas;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dispositivo_id")
+    private Dispositivo dispositivo;
 
 	public Periodo(LocalDateTime inicio, LocalDateTime fin) {
 		this.setInicio(inicio);
 		this.setFin(fin);
 
 		this.setHoras(Duration.between(inicio, fin).toHours());
+	}
+	
+	public Dispositivo getDispositivo() {
+		return dispositivo;
+	}
+	
+	public void setDispositivo(Dispositivo dispositivo) {
+		this.dispositivo = dispositivo;
 	}
 
 	public LocalDateTime getInicio() {
