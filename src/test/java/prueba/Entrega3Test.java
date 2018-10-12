@@ -277,7 +277,9 @@ public class Entrega3Test {
 		
 		
 		//Persistir el dispositivo y mostrar consumo para ese transofrmador 
-		
+		this.model.agregar(dispositivoTransformador);
+		int idDispositivo = dispositivoTransformador.getId();
+		System.out.println("Consumo Transformador despues de modificar dispositivo: " + transformador.consumoPromedioEntre(periodo.getInicio(), periodo.getFin()));
 		
 	}
 
