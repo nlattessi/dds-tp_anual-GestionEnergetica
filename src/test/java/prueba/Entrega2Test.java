@@ -69,10 +69,10 @@ public class Entrega2Test {
 		aireAcondicionado.encenderse();
 			
 		DispositivoInteligente lavarropas = (DispositivoInteligente) this.cliente.generarLavarropasAuto5kg();
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 10, 0));
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 3, 0, 0), LocalDateTime.of(2018, 8, 3, 10, 0));
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 6, 0, 0), LocalDateTime.of(2018, 8, 6, 10, 0));
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 7, 0, 0), LocalDateTime.of(2018, 8, 7, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 1, 0, 0), LocalDateTime.of(2018, 10, 1, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 3, 0, 0), LocalDateTime.of(2018, 10, 3, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 6, 0, 0), LocalDateTime.of(2018, 10, 6, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 7, 0, 0), LocalDateTime.of(2018, 10, 7, 10, 0));
 		lavarropas.setPermiteAhorroInteligente(true);
 		lavarropas.encenderse();
 		
@@ -87,7 +87,7 @@ public class Entrega2Test {
 		System.out.println("Test ahorro inteligente automatico:");
 		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
 				" ANTES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(0).getEstado().toString() + ".");
-		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
+		System.out.println("El estado del " + this.cliente.getDispositivos().get(1).getNombre() +
 				" ANTES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(1).getEstado().toString() + ".");
 		
 		Assert.assertTrue(Estados.ENCENDIDO == this.cliente.getDispositivos().get(0).getEstado());
@@ -100,7 +100,7 @@ public class Entrega2Test {
 		
 		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
 				" DESPUES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(0).getEstado().toString() + ".");
-		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
+		System.out.println("El estado del " + this.cliente.getDispositivos().get(1).getNombre() +
 				" DESPUES de calculo de ahorro inteligente es " + this.cliente.getDispositivos().get(1).getEstado().toString() + ".");
 		System.out.println("-----------------------------------------------------------");
 	}
@@ -108,13 +108,13 @@ public class Entrega2Test {
 	@Test
 	public void test3PeriodicidadAhorroInteligente() throws InterruptedException {
 		DispositivoInteligente aireAcondicionado = (DispositivoInteligente) this.cliente.generarAireAcondicionado2200F();
-		aireAcondicionado.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 3, 0));
+		aireAcondicionado.agregarPeriodo(LocalDateTime.of(2018, 10, 1, 0, 0), LocalDateTime.of(2018, 10, 1, 3, 0));
 		aireAcondicionado.setPermiteAhorroInteligente(true);
 		aireAcondicionado.encenderse();
 			
 		DispositivoInteligente lavarropas = (DispositivoInteligente) this.cliente.generarLavarropasAuto5kg();
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 1, 0, 0), LocalDateTime.of(2018, 8, 1, 10, 0));
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 3, 0, 0), LocalDateTime.of(2018, 8, 3, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 1, 0, 0), LocalDateTime.of(2018, 10, 1, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 3, 0, 0), LocalDateTime.of(2018, 10, 3, 10, 0));
 
 
 		lavarropas.setPermiteAhorroInteligente(true);
@@ -143,7 +143,7 @@ public class Entrega2Test {
 		
 		Thread.sleep(10000);
 		
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 6, 0, 0), LocalDateTime.of(2018, 8, 6, 9, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 6, 0, 0), LocalDateTime.of(2018, 10, 6, 9, 0));
 		
 		System.out.println("Despues de corrido una vez el calculo y agregandole un periodo a lavarropas: ");
 		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
@@ -156,9 +156,9 @@ public class Entrega2Test {
 		
 		Thread.sleep(10000);
 		 
-		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 8, 7, 0, 0), LocalDateTime.of(2018, 8, 7, 10, 0));
+		lavarropas.agregarPeriodo(LocalDateTime.of(2018, 10, 7, 0, 0), LocalDateTime.of(2018, 10, 7, 10, 0));
 		
-		Thread.sleep(10000);
+		Thread.sleep(15000);
 		
 		System.out.println("Despues de corrido varias veces el calculo y agregandole otro periodo a lavarropas que hace que se apague: ");
 		System.out.println("El estado del " + this.cliente.getDispositivos().get(0).getNombre() +
