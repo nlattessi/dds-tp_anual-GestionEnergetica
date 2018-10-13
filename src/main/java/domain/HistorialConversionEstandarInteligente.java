@@ -1,5 +1,6 @@
 package domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -50,15 +51,15 @@ public class HistorialConversionEstandarInteligente extends EntidadPersistente {
 		this.inteligente = inteligente;
 	}
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "cliente_id", referencedColumnName = "id")
 	private Cliente cliente;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "estandar_id", referencedColumnName = "id")
 	private DispositivoEstandar estandar;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "inteligente_id", referencedColumnName = "id")
 	private DispositivoInteligente inteligente;
 }

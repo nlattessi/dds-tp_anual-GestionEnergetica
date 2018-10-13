@@ -1,5 +1,6 @@
 package domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,7 +13,7 @@ import models.ModelHelper;
 public class HistorialEstadoDispositivoInteligente extends EntidadPersistente {
 	private static ModelHelper model = new ModelHelper();
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dispositivo_inteligente_id", referencedColumnName = "id")
 	private DispositivoInteligente dispositivoInteligente;
 	

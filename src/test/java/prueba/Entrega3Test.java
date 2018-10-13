@@ -45,13 +45,8 @@ public class Entrega3Test {
 	}
 
 	@Test
-	public void test() {
-		// fail("Not yet implemented");
-	}
-
-	@Test
 	public void persistirUsuarios() {
-		String nombreUsuario = "JuanPerez";
+		String nombreUsuario = "UsuarioPrueba1";
 		String contraseña = "asd123";
 		String nombreYApellido = "Juan Perez";
 		TipoDocumento tipoDocumento = TipoDocumento.DNI;
@@ -65,14 +60,18 @@ public class Entrega3Test {
 		this.model.agregar(cliente);
 		int idCliente = cliente.getId();
 		System.out.println("Se persistió el cliente con el id: " + idCliente);
-		assertEquals(3, idCliente);
 
-		Administrador administrador = new Administrador(1, nombreUsuario, contraseña, nombreYApellido, domicilio,
+		Cliente clienteRecuperado = this.model.buscar(Cliente.class, new ImmutablePair<>("nombreUsuario", "UsuarioPrueba1"));
+		assertEquals(clienteRecuperado.getId(), idCliente);
+
+		Administrador administrador = new Administrador(1, "AdministradorPrueba1", contraseña, nombreYApellido, domicilio,
 				fechaAltaCliente);
 		this.model.agregar(administrador);
 		int idAdministrador = administrador.getId();
 		System.out.println("Se persistió el administrador con el id: " + idAdministrador);
-		assertEquals(4, idAdministrador);
+
+		Administrador administradorRecuperado = this.model.buscar(Administrador.class, new ImmutablePair<>("nombreUsuario", "AdministradorPrueba1"));
+		assertEquals(administradorRecuperado.getId(), idAdministrador);
 	}
 
 	@Test
@@ -243,7 +242,7 @@ public class Entrega3Test {
 		List<Zona> zonas = ImportadorJson.desdeArchivo("zonas_de_prueba.json").importarZonas();
 
 		ImportadorJson importador = ImportadorJson.desdeArchivo("transformadores_de_prueba.json");
-		importador.importarTransformadores(zonas);
+		importador.limpiarTablaTransformadores().importarTransformadores(zonas);
 
 		// Recuperar todos los transformadores persistidos. Registrar la cantidad.
 		List<Transformador> transformadores = this.model.buscarTodos(Transformador.class);

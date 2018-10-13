@@ -23,16 +23,23 @@ import domain.Medicion;
 import domain.Reglamentador;
 import domain.Sensor;
 import domain.TipoDocumento;
+import models.ModelHelper;
 
 public class Entrega1Test {
 	private DispositivoInteligente aireAcondicionado;
 	private Cliente cliente;
 	private DispositivoEstandar tele;
+	
+	private ModelHelper model;
 
 	@Before
 	public void inicio() {
+		this.model = new ModelHelper();
+		
 		this.aireAcondicionado = new DispositivoInteligente("aire acondicionado", 230, Estados.APAGADO);
+		this.model.agregar(this.aireAcondicionado);
 		this.tele = new DispositivoEstandar("tele", 3);
+		this.model.agregar(this.tele);
 
 		String nombreUsuario = "JuanPerez";
 		String contraseña = "asd123";
