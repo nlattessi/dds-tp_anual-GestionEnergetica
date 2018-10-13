@@ -2,6 +2,7 @@ package domain;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -24,6 +25,10 @@ public abstract class Dispositivo extends EntidadPersistente{
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", referencedColumnName = "id")
 	private Cliente cliente;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
+	private Reglamentador reglamentador;
 
 //	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
 	public Dispositivo(String nombre, double consumoXHora) {

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,9 +29,11 @@ import domain.Estados;
 import domain.HistorialConversionEstandarInteligente;
 import domain.HistorialEstadoDispositivoInteligente;
 import domain.ImportadorJson;
+import domain.Medicion;
 import domain.Periodo;
 import domain.ReglaGenerica;
 import domain.Reglamentador;
+import domain.Sensor;
 import domain.TipoDocumento;
 import domain.Transformador;
 import domain.Zona;
@@ -116,6 +119,43 @@ public class Entrega3Test {
 		HistorialConversionEstandarInteligente historialDispo = this.model.buscar(HistorialConversionEstandarInteligente.class, new ImmutablePair<>("cliente_id", cliente.getId()));
 		assertEquals(plancha.getNombre(), historialDispo.getEstandar().getNombre());
 		assertEquals(cliente.getNombreUsuario(), historialDispo.getCliente().getNombreUsuario());
+	}
+	
+	@Test
+	public void persistirActuadoresYSensores() {		
+		DispositivoInteligente aireAcondicionado = new DispositivoInteligente("aire acondicionado", 230, Estados.APAGADO);
+		
+		// TODO: Como persistir el command en la db
+		EncenderCommand encenderCommand = new EncenderCommand();
+
+		Actuador actuador = new Actuador(aireAcondicionado);
+		actuador.agregarAccion(Acciones.ENCENDERSE, encenderCommand);
+
+		ReglaGenerica reglaEncenderse = ReglaGenerica.crearEncenderRegla("temperatura", ComparacionesReglaGenerica.MAYORIGUAL, 24);
+		
+		Reglamentador reglamentador = new Reglamentador(actuador);
+		reglamentador.agregarReglaGenerica(reglaEncenderse);
+		this.model.agregar(reglamentador);
+
+		Sensor sensor = new Sensor();
+		sensor.registerReglamentador(reglamentador);
+		this.model.agregar(sensor);
+		int sensorId = sensor.getId();
+
+		sensor.agregarMedicion(new Medicion("temperatura", 26));
+		
+		// Busco la última medicion realizada por el sensor
+		Medicion ultimaMedicion = this.model.buscar(Medicion.class, new ImmutablePair<>("sensor_id", sensorId));
+		assertEquals("temperatura", ultimaMedicion.getMagnitud());
+		assertEquals(26, ultimaMedicion.getValor());
+		
+		Sensor sensorRecuperado = this.model.buscar(Sensor.class, sensorId);
+		
+		// Paso por la cadena sensor recuperador de la db -> reglamentadores -> primer reglamentador -> actuador -> dispositivo -> nombre
+		// Para corroborar que se están guardando todas las entidades
+		String nombreDispositivo = sensorRecuperado.getReglamentadores().stream().findFirst().get().getActuador().getDispositivo().getNombre();
+		
+		assertEquals("aire acondicionado", nombreDispositivo);
 	}
 
 	@Test
@@ -205,7 +245,7 @@ public class Entrega3Test {
 		DispositivoInteligente dispositivo = new DispositivoInteligente("aire acondicionado de 2200 frigorias", 1.013,
 				Estados.APAGADO);
 		this.model.agregar(dispositivo);
-		encenderRegla.setDispositivo(dispositivo);
+//		encenderRegla.setDispositivo(dispositivo);
 
 		// Agregar condiciones y acciones y persistirla.
 		encenderRegla.setNombreMagnitud("temperatura");
@@ -220,7 +260,7 @@ public class Entrega3Test {
 
 		assertEquals(Estados.APAGADO, dispositivo.getEstado());
 
-		Actuador actuador = new Actuador((DispositivoInteligente) encenderReglaRecuperada.getDispositivo());
+		Actuador actuador = new Actuador(dispositivo);
 		actuador.agregarAccion(Acciones.ENCENDERSE, new EncenderCommand());
 		encenderReglaRecuperada.dispararAccion(actuador);
 

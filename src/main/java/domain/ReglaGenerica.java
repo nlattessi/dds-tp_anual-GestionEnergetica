@@ -1,5 +1,6 @@
 package domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,9 +14,22 @@ public class ReglaGenerica extends EntidadPersistente implements Regla {
 	private ComparacionesReglaGenerica comparacion;
 	private Acciones accion;
 	
-	@ManyToOne
-	@JoinColumn(name = "dispositivo_id", referencedColumnName = "id")
-	private Dispositivo dispositivo;
+//	@ManyToOne
+//	@JoinColumn(name = "dispositivo_id", referencedColumnName = "id")
+//	private Dispositivo dispositivo;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
+	private Reglamentador reglamentador;
+	
+	public static ReglaGenerica crearEncenderRegla(String nombreMagnitud, ComparacionesReglaGenerica comparacion, int valor) {
+		ReglaGenerica encenderRegla = new ReglaGenerica();
+		encenderRegla.setNombreMagnitud(nombreMagnitud);
+		encenderRegla.setComparacion(comparacion);
+		encenderRegla.setValor(valor);
+		encenderRegla.setAccion(Acciones.ENCENDERSE);
+		return encenderRegla;
+	}
 
 	public Acciones getAccion() {
 		return accion;
@@ -25,13 +39,13 @@ public class ReglaGenerica extends EntidadPersistente implements Regla {
 		this.accion = accion;
 	}
 	
-	public Dispositivo getDispositivo() {
-		return dispositivo;
-	}
-
-	public void setDispositivo(Dispositivo dispositivo) {
-		this.dispositivo = dispositivo;
-	}
+//	public Dispositivo getDispositivo() {
+//		return dispositivo;
+//	}
+//
+//	public void setDispositivo(Dispositivo dispositivo) {
+//		this.dispositivo = dispositivo;
+//	}
 
 	public String getNombreMagnitud() {
 		return nombreMagnitud;
