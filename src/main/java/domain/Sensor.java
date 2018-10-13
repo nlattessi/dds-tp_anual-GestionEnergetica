@@ -3,12 +3,16 @@ package domain;
 import java.util.ArrayList;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "sensor")
 public class Sensor extends EntidadPersistente implements Subject {
 	private ArrayList<Observer> observers;
+	@ManyToOne
+	@JoinColumn(name = "sensor_id", referencedColumnName = "id")
 	private Medicion medicion;
 
 	public Sensor() {

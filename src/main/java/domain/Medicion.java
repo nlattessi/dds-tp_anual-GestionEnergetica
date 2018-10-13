@@ -1,6 +1,11 @@
 package domain;
 
-public class Medicion {
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "medicion")
+public class Medicion extends EntidadPersistente{
 	private String magnitud;
 	private int valor;
 

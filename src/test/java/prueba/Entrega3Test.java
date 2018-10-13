@@ -65,14 +65,14 @@ public class Entrega3Test {
 		this.model.agregar(cliente);
 		int idCliente = cliente.getId();
 		System.out.println("Se persistió el cliente con el id: " + idCliente);
-		assertEquals(1, idCliente);
+		assertEquals(3, idCliente);
 
 		Administrador administrador = new Administrador(1, nombreUsuario, contraseña, nombreYApellido, domicilio,
 				fechaAltaCliente);
 		this.model.agregar(administrador);
 		int idAdministrador = administrador.getId();
 		System.out.println("Se persistió el administrador con el id: " + idAdministrador);
-		assertEquals(2, idAdministrador);
+		assertEquals(4, idAdministrador);
 	}
 
 	@Test

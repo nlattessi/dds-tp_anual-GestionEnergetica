@@ -12,6 +12,10 @@ import models.ModelHelper;
 public class HistorialEstadoDispositivoInteligente extends EntidadPersistente {
 	private static ModelHelper model = new ModelHelper();
 	
+	@ManyToOne
+	@JoinColumn(name = "dispositivo_inteligente_id", referencedColumnName = "id")
+	private DispositivoInteligente dispositivoInteligente;
+	
 	public static void guardarHistorial(DispositivoInteligente dispositivo, Estados estadoActual, Estados nuevoEstado) {
 		HistorialEstadoDispositivoInteligente historial = new HistorialEstadoDispositivoInteligente(dispositivo,
 				estadoActual, nuevoEstado);
@@ -49,9 +53,7 @@ public class HistorialEstadoDispositivoInteligente extends EntidadPersistente {
 		this.nuevoEstado = nuevoEstado;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "dispositivo_inteligente_id", referencedColumnName = "id")
-	private DispositivoInteligente dispositivoInteligente;
+
 	
 	private Estados estadoActual;
 	private Estados nuevoEstado;
