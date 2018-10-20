@@ -2,8 +2,17 @@ package domain;
 
 import java.time.LocalDateTime;
 
-public abstract class Dispositivo {
-	private int id;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class Dispositivo extends EntidadPersistente{
+	//private int id;
 	private String nombre;
 	private double consumoXHora;
 	private int usoMensualMinimoHoras;
@@ -12,9 +21,18 @@ public abstract class Dispositivo {
 	private boolean permiteAhorroInteligente;
 	private boolean permiteCalculoAhorro;
 	private boolean bajoConsumo;
+	
+	@ManyToOne
+	@JoinColumn(name = "cliente_id", referencedColumnName = "id")
+	private Cliente cliente;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
+	private Reglamentador reglamentador;
 
-	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
-		this.id = dispositivo;
+//	public Dispositivo(int dispositivo, String nombre, double consumoXHora) {
+	public Dispositivo(String nombre, double consumoXHora) {
+//		this.id = dispositivo;
 		this.nombre = nombre;
 		this.consumoXHora = consumoXHora;
 		this.consumoRecomendadoHoras = 0;
@@ -24,20 +42,30 @@ public abstract class Dispositivo {
 		
 	public abstract double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 	
+	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
+	
 	public abstract void apagarse();
 	
 	public abstract void encenderse();
 	
 	public abstract Estados getEstado();
 
-	public int getId() {
-		return id;
+//	public int getId() {
+//		return id;
+//	}
+
+//	public void setId(int id) {
+//		this.id = id;
+//	}
+
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
-
+	
 	public String getNombre() {
 		return nombre;
 	}

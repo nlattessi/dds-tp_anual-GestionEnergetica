@@ -2,15 +2,22 @@ package domain;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import java.util.Calendar;
 
+@Entity
+@Table(name = "cliente")
 public class Administrador extends Usuario {
 
 	private Date fechaAltaSistema;
 
 	public Administrador(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			Date fechaAltaSistema) {
-		super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
+		//super(id, nombreUsuario, contraseña, nombreYApellido, domicilio);
+		super(nombreUsuario, contraseña, nombreYApellido, domicilio);
 		this.fechaAltaSistema = fechaAltaSistema;
 	}
 

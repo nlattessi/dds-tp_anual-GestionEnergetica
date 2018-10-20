@@ -13,13 +13,17 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import models.ModelHelper;
+
 public class ImportadorJson {
 
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	private JSONArray entidades;
+	private ModelHelper model;
 
 	public ImportadorJson(JSONArray entidades) {
 		this.entidades = entidades;
+		this.model = new ModelHelper();
 	}
 
 	public static ImportadorJson desdeArchivo(String archivo) {
@@ -50,6 +54,14 @@ public class ImportadorJson {
 
 		return importador;
 	}
+	
+	public JSONArray getEntidades() {
+		return entidades;
+	}
+	
+	public void setEntidades(JSONArray entidades) {
+		this.entidades = entidades;
+	}
 
 	public List<Cliente> importarClientes() {
 		List<Cliente> clientes = new ArrayList<Cliente>();
@@ -76,8 +88,8 @@ public class ImportadorJson {
 					e.printStackTrace();
 				}
 				Categoria categoria = Categoria.valueOf((String) clienteJson.get("categoria"));
-
-				Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
+				//Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
+				Cliente cliente = new Cliente(nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
 						tipoDeDocumento, numeroDeDocumento, telefonoDeContacto, fechaDeAltaDelServicio, categoria);
 
 				clientes.add(cliente);
@@ -146,9 +158,11 @@ public class ImportadorJson {
 				Boolean inteligente = (Boolean) dispositivoJson.get("inteligente");
 				if (inteligente) {
 					Estados estado = Estados.valueOf(dispositivoJson.get("estado").toString().toUpperCase());
-					dispositivo = new DispositivoInteligente(id, nombre, consumoPorHora, estado);
+					//dispositivo = new DispositivoInteligente(id, nombre, consumoPorHora, estado);
+					dispositivo = new DispositivoInteligente(nombre, consumoPorHora, estado);
 				} else {
-					dispositivo = new DispositivoEstandar(id, nombre, consumoPorHora);
+					//dispositivo = new DispositivoEstandar(id, nombre, consumoPorHora);
+					dispositivo = new DispositivoEstandar(nombre, consumoPorHora);
 				}
 
 				dispositivos.add(dispositivo);
@@ -172,12 +186,13 @@ public class ImportadorJson {
 
 				Zona zona;
 
-				int id = (int) (long) zonaJson.get("id");
+//				int id = (int) (long) zonaJson.get("id");
 				int radio = (int) (long) zonaJson.get("radio");
 				int coordenadaX = (int) (long) zonaJson.get("coordenada_x");
 				int coordenadaY = (int) (long) zonaJson.get("coordenada_y");
 
-				zona = new Zona(id, radio, coordenadaX, coordenadaY);
+//				zona = new Zona(id, radio, coordenadaX, coordenadaY);
+				zona = new Zona(radio, coordenadaX, coordenadaY);
 
 				zonas.add(zona);
 			}
@@ -188,6 +203,12 @@ public class ImportadorJson {
 		}
 
 		return zonas;
+	}
+	
+	public ImportadorJson limpiarTablaTransformadores() {
+		this.model.eliminarTodos(Transformador.class);
+		
+		return this;
 	}
 
 	public List<Transformador> importarTransformadores(List<Zona> zonas) {
@@ -200,14 +221,16 @@ public class ImportadorJson {
 
 				Transformador transformador;
 
-				int id = (int) (long) transformadorJson.get("id");
-				int coordenadaX = (int) (long) transformadorJson.get("coordenada_x");
-				int coordenadaY = (int) (long) transformadorJson.get("coordenada_y");
-				int zonaId = (int) (long) transformadorJson.get("zona_id");
+//				int id = (int) (long) transformadorJson.get("id");
+				int coordenadaX = ((Long) transformadorJson.get("coordenada_x")).intValue();
+				int coordenadaY = ((Long) transformadorJson.get("coordenada_y")).intValue();
+				int zonaId = ((Long) transformadorJson.get("zona_id")).intValue();
 
 				Zona zona = zonas.stream().filter(item -> zonaId == item.getId()).findAny().orElse(null);
 
-				transformador = new Transformador(id, zona, coordenadaX, coordenadaY);
+//				transformador = new Transformador(id, zona, coordenadaX, coordenadaY);
+				transformador = new Transformador(zona, coordenadaX, coordenadaY);
+				this.model.agregar(transformador);
 
 				transformadores.add(transformador);
 			}
