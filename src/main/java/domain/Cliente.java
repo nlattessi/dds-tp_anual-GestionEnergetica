@@ -62,6 +62,10 @@ public class Cliente extends Usuario {
 	public Thread hiloVerificadorConsumo;
 
 	public int segundosDeEspera = 5;
+	
+	public Cliente() {
+		super();
+	}
 
 //	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 //			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,

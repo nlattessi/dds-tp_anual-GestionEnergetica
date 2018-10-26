@@ -3,16 +3,21 @@ package domain;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import java.util.Calendar;
 
 @Entity
-@Table(name = "cliente")
+@DiscriminatorValue("administrador")
 public class Administrador extends Usuario {
 
 	private Date fechaAltaSistema;
+	
+	public Administrador() {
+		super();
+	}
 
 	public Administrador(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			Date fechaAltaSistema) {

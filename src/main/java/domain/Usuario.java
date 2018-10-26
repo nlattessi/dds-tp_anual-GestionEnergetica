@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type")
 public abstract class Usuario extends EntidadPersistente{
 
 	//protected int id;
@@ -19,6 +20,10 @@ public abstract class Usuario extends EntidadPersistente{
 	protected String contraseña;
 	protected String nombreYApellido;
 	protected String domicilio;
+	
+	public Usuario() {
+		
+	}
 
 //	public Usuario(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio) {
 	public Usuario(String nombreUsuario, String contraseña, String nombreYApellido, String domicilio) {
