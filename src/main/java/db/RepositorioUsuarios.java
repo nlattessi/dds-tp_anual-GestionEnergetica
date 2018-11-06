@@ -6,27 +6,23 @@ import javax.persistence.TypedQuery;
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 
 import domain.Administrador;
+import domain.Cliente;
 import domain.Usuario;
 
 public class RepositorioUsuarios implements WithGlobalEntityManager {
 
 	public static RepositorioUsuarios instancia = new RepositorioUsuarios();
 
-//	public void agregar(Proyecto proyecto) {
-//		entityManager().persist(proyecto);
-//	}
-//
-//	public List<Proyecto> listar() {
-//		return entityManager().createQuery("from Proyecto", Proyecto.class).getResultList();
-//	}
-//
-//	public Proyecto buscar(long id) {
-//		return entityManager().find(Proyecto.class, id);
-//	}
-
 	public Usuario buscarPorNombreUsuario(String nombreUsuario) {
 
-		return (Usuario) entityManager().createQuery("select a from Usuario a").getResultList().stream().filter(u -> ((Usuario) u).getNombreUsuario().equals(nombreUsuario)).findFirst().orElse(null);
+		return (Usuario) entityManager().createQuery("select a from Usuario a").getResultList().stream()
+				.filter(u -> ((Usuario) u).getNombreUsuario().equals(nombreUsuario)).findFirst().orElse(null);
+	}
+	
+	public Cliente buscarClientePorNombreUsuario(String nombreUsuario) {
+		return entityManager().createQuery("SELECT c FROM Cliente c WHERE nombreUsuario = :nombreUsuario", Cliente.class)
+				.setParameter("nombreUsuario", nombreUsuario)
+				.getSingleResult();
 	}
 
 }

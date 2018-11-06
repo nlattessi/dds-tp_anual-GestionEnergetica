@@ -3,35 +3,68 @@ package domain;
 import java.util.HashMap;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
-@Entity
+@Entity(name = "Actuador")
 @Table(name = "actuador")
-public class Actuador extends EntidadPersistente {
+public class Actuador {
+	// Variables
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, nullable = false)
+	protected int id;
+
+	@Version
+	@Column
+	protected Long version;
+
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "dispositivo_inteligente_id", referencedColumnName = "id")
+//	private DispositivoInteligente dispositivo;
+
+	@OneToOne
+	@JoinColumn(name = "dispositivo_id")
+	private DispositivoInteligente dispositivo;
+
+	@OneToOne(mappedBy = "actuador")
+	private Reglamentador reglamentador;
+
+	@Transient
+	private HashMap<Acciones, Command> listaComandos;
+
+	public Actuador() {
+
+	}
+
+	public Actuador(DispositivoInteligente dispositivo) {
+		this.dispositivo = dispositivo;
+		this.listaComandos = new HashMap<Acciones, Command>();
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public DispositivoInteligente getDispositivo() {
 		return dispositivo;
 	}
 
 	public void setDispositivo(DispositivoInteligente dispositivo) {
 		this.dispositivo = dispositivo;
-	}
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "dispositivo_inteligente_id", referencedColumnName = "id")
-	private DispositivoInteligente dispositivo;
-	
-	@Transient
-	private HashMap<Acciones, Command> listaComandos;
-
-	public Actuador(DispositivoInteligente dispositivo) {
-		this.dispositivo = dispositivo;
-		this.listaComandos = new HashMap<Acciones, Command>();
 	}
 
 	public void agregarAccion(Acciones accion, Command command) {

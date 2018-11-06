@@ -9,7 +9,6 @@ import domain.Usuario;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 
 public class LoginController {
 	public static ModelAndView show(Request req, Response res) {
@@ -56,4 +55,11 @@ public class LoginController {
 		response.redirect("/login");
 		return null;
 	};
+	
+	public static void ensureUserIsLoggedIn(Request request, Response response) {
+        if (request.session().attribute("currentUser") == null) {
+            request.session().attribute("loginRedirect", request.pathInfo());
+            response.redirect("/login");
+        }
+    };
 }

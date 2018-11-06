@@ -4,17 +4,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
-@Entity
+@Entity(name = "Reglamentador")
 @Table(name = "reglamentador")
-public class Reglamentador extends EntidadPersistente implements Observer {
+public class Reglamentador implements Observer {
+
+	public Sensor getSensor() {
+		return sensor;
+	}
+
+	public void setSensor(Sensor sensor) {
+		this.sensor = sensor;
+	}
+
+	// Variables
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, nullable = false)
+	protected int id;
+
+	@Version
+	@Column
+	protected Long version;
+
 //	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private List<Dispositivo> dispositivos;
 
@@ -32,18 +57,34 @@ public class Reglamentador extends EntidadPersistente implements Observer {
 	@Transient
 	private List<Regla> reglas;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "actuador_id", referencedColumnName = "id")
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "actuador_id", referencedColumnName = "id")
+//	private Actuador actuador;
+
+	@OneToOne
+	@JoinColumn(name = "actuador_id")
 	private Actuador actuador;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "sensor_id", referencedColumnName = "id")
 	private Sensor sensor;
+
+	public Reglamentador() {
+
+	}
 
 	public Reglamentador(Actuador actuador) {
 		this.reglas = new ArrayList<Regla>();
 		this.reglasGenericas = new ArrayList<>();
 		this.actuador = actuador;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public void setRegla(Regla regla) {

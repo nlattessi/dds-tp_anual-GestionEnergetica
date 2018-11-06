@@ -112,7 +112,7 @@ public class ImportadorJson {
 			while (iterator.hasNext()) {
 				JSONObject administradorJson = iterator.next();
 
-				int id = (int) (long) administradorJson.get("id");
+//				int id = (int) (long) administradorJson.get("id");
 				String nombreYApellido = administradorJson.get("nombre_y_apellido").toString();
 				String nombreDeUsuario = administradorJson.get("nombre_de_usuario").toString();
 				String contraseña = administradorJson.get("contraseña").toString();
@@ -126,7 +126,7 @@ public class ImportadorJson {
 					System.exit(1);
 				}
 
-				Administrador administrador = new Administrador(id, nombreDeUsuario, contraseña, nombreYApellido,
+				Administrador administrador = new Administrador(nombreDeUsuario, contraseña, nombreYApellido,
 						domicilio, fechaDeAlta);
 
 				administradores.add(administrador);

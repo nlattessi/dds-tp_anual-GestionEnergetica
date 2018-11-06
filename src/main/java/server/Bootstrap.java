@@ -5,6 +5,8 @@ import java.util.Date;
 import org.uqbarproject.jpa.java8.extras.EntityManagerOps;
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps;
+
+import db.RepositorioUsuarios;
 import domain.Administrador;
 import domain.Categoria;
 import domain.Cliente;
@@ -16,7 +18,13 @@ public class Bootstrap implements WithGlobalEntityManager, EntityManagerOps, Tra
 	}
 
 	public void init() {
+
 		withTransaction(() -> {
+
+//			Cliente clienteExistente = RepositorioUsuarios.instancia.buscarClientePorNombreUsuario("JuanPerez");
+//			if (clienteExistente == null) {
+//				return;
+//			}
 
 			String nombreUsuario = "JuanPerez";
 			String contraseña = "asd123";
@@ -27,12 +35,12 @@ public class Bootstrap implements WithGlobalEntityManager, EntityManagerOps, Tra
 			String domicilio = "Av. Rivadavia 1111, CABA, Buenos Aires";
 			Categoria categoria = Categoria.R1;
 			Date fechaAltaCliente = new Date();
-			
+
 			Cliente cliente = new Cliente(nombreUsuario, contraseña, nombreYApellido, domicilio, tipoDocumento,
 					numeroDocumento, telefonoContacto, fechaAltaCliente, categoria);
 			persist(cliente);
 
-			Administrador admin = new Administrador(1, "admin1", "adminpass", nombreYApellido, domicilio,
+			Administrador admin = new Administrador("admin1", "adminpass", nombreYApellido, domicilio,
 					fechaAltaCliente);
 			persist(admin);
 //			
@@ -49,5 +57,6 @@ public class Bootstrap implements WithGlobalEntityManager, EntityManagerOps, Tra
 //			Proyecto proyecto3 = new Proyecto("Proyecto 3", new BigDecimal(3000));
 //			persist(proyecto3);
 		});
+
 	}
 }

@@ -67,7 +67,7 @@ public class Entrega3Test {
 		Cliente clienteRecuperado = this.model.buscar(Cliente.class, new ImmutablePair<>("nombreUsuario", "UsuarioPrueba1"));
 		assertEquals(clienteRecuperado.getId(), idCliente);
 
-		Administrador administrador = new Administrador(1, "AdministradorPrueba1", contraseña, nombreYApellido, domicilio,
+		Administrador administrador = new Administrador("AdministradorPrueba1", contraseña, nombreYApellido, domicilio,
 				fechaAltaCliente);
 		this.model.agregar(administrador);
 		int idAdministrador = administrador.getId();
