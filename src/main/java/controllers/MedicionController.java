@@ -27,6 +27,8 @@ public class MedicionController {
 
 			return obj;
 		}
+		
+		
 
 		response.type("application/json");
 		response.status(200);

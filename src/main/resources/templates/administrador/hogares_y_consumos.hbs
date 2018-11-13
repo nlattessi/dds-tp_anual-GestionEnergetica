@@ -1,4 +1,4 @@
-{{#partial "contenido_cliente"}}
+{{#partial "contenido_administrador"}}
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
   <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
@@ -10,12 +10,7 @@
     </div>
   </div>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-    <h1 class="h2">Dispositivos</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <a href="/cliente/dispositivos/nuevo" class="btn btn-sm btn-outline-secondary">Agregar</a>
-      </div>
-    </div>
+    <h1 class="h2">Hogares y consumos</h1>
   </div>
 
   <div class="table-responsive">
@@ -23,29 +18,21 @@
       <thead>
         <tr>
           <th>#</th>
+          <th>Cliente</th>
           <th>Dispositivo</th>
-          <th>Equipo concreto</th>
-          <th>¿Es inteligente?</th>
-          <th>¿Es equipo de bajo consumo?</th>
-          <th>Consumo (kWh)</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
+        {{#each clientes}}
         {{#each dispositivos}}
         <tr>
-          <td>{{id}}</td>
-          <td>{{categoria}}</td>
-          <td>{{nombre}}</td>
-          <td>{{isTrue esInteligente}}</td>
-          <td>{{isTrue bajoConsumo}}</td>
-          <td>{{consumoXHora}}</td>
-          <td>
-            <form action={{urlBorrar}} method="POST" onsubmit="return confirm('Estas seguro de borrar el dispositivo?')">
-              <button class="btn btn-sm btn-outline-secondary" type="submit">Borrar</button>
-            </form>
-          </td>
+          <td>{{../id}}</td>
+          <td>{{../nombreYApellido}}</td>
+          <td>{{categoria}} - {{nombre}}</td>
+          <td>{{#if esInteligente}}<a class="btn btn-sm btn-outline-secondary" href="{{urlVerConsumo}}">Ver consumos</a>{{/if}}</td>
         </tr>
+        {{/each}}
         {{/each}}
       </tbody>
     </table>
@@ -54,4 +41,4 @@
 
 {{/partial}}
 
-{{>cliente/layout_cliente.hbs}}
+{{>administrador/layout_administrador.hbs}}

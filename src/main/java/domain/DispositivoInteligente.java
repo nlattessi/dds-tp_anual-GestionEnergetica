@@ -31,10 +31,10 @@ public class DispositivoInteligente extends Dispositivo {
 	@Column
 	private LocalDateTime ultimaFechaHoraEncendido;
 
-	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<Periodo> periodos = new ArrayList<>();
 
-	@OneToOne(mappedBy = "dispositivo")
+	@OneToOne(mappedBy = "dispositivo", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Actuador actuador;
 
 	@Transient
@@ -49,6 +49,11 @@ public class DispositivoInteligente extends Dispositivo {
 		this(nombre, consumoXHora, estado, new FabricanteGeneralAdapter());
 	}
 
+	public DispositivoInteligente(DispositivoMaestro maestro, Estados estado) {
+		this(maestro, estado, new FabricanteGeneralAdapter());
+		maestro.addDispositivo(this);
+	}
+
 	public DispositivoInteligente(String nombre, double consumoXHora, Estados estado, Fabricante fabricante) {
 		super(nombre, consumoXHora);
 		this.estado = estado;
@@ -58,7 +63,24 @@ public class DispositivoInteligente extends Dispositivo {
 		this.fabricante = fabricante;
 	}
 
+	public DispositivoInteligente(DispositivoMaestro maestro, Estados estado, Fabricante fabricante) {
+		super(maestro);
+		this.estado = estado;
+		if (this.estado == Estados.ENCENDIDO) {
+			this.ultimaFechaHoraEncendido = LocalDateTime.now();
+		}
+		this.fabricante = fabricante;
+	}
+
 	// Setters - Getters
+	public List<Periodo> getPeriodos() {
+		return periodos;
+	}
+
+	public void setPeriodos(List<Periodo> periodos) {
+		this.periodos = periodos;
+	}
+
 	public Actuador getActuador() {
 		return actuador;
 	}

@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -22,21 +23,21 @@ public class Actuador {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", updatable = false, nullable = false)
-	protected int id;
+	private int id;
 
 	@Version
 	@Column
-	protected Long version;
+	private Long version;
 
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "dispositivo_inteligente_id", referencedColumnName = "id")
 //	private DispositivoInteligente dispositivo;
 
 	@OneToOne
-	@JoinColumn(name = "dispositivo_id")
+    @MapsId
 	private DispositivoInteligente dispositivo;
 
-	@OneToOne(mappedBy = "actuador")
+	@OneToOne(mappedBy = "actuador", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Reglamentador reglamentador;
 
 	@Transient

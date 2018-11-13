@@ -23,21 +23,31 @@ import domain.Estados;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
+import spark.utils.SessionHelper;
 
-public class DispositivoController implements WithGlobalEntityManager, TransactionalOps {
+public class DispositivoController {
+
+	private RepositorioDispositivos repositorioDispositivos;
+	private RepositorioUsuarios repositorioUsuarios;
+
+	public DispositivoController(RepositorioDispositivos repositorioDispositivos,
+			RepositorioUsuarios repositorioUsuarios) {
+		this.repositorioDispositivos = repositorioDispositivos;
+		this.repositorioUsuarios = repositorioUsuarios;
+	}
 
 	public ModelAndView listarDispositivosMaestros(Request request, Response response) {
-		LoginController.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		Map<String, List<DispositivoMaestro>> model = new HashMap<>();
-		List<DispositivoMaestro> dispositivos = RepositorioDispositivos.instancia.listarMaestros();
+		List<DispositivoMaestro> dispositivos = this.repositorioDispositivos.listarMaestros();
 
 		model.put("dispositivos", dispositivos);
 		return new ModelAndView(model, "administrador/listar_dispositivos_maestros.hbs");
 	}
 
 	public ModelAndView nuevoDispositivoMaestro(Request request, Response response) {
-		LoginController.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		Map<String, Object> model = new HashMap<>();
 		model.put("categoriaDispositivo", CategoriaDispositivo.values());
@@ -63,32 +73,29 @@ public class DispositivoController implements WithGlobalEntityManager, Transacti
 		DispositivoMaestro dispositivo = new DispositivoMaestro(categoria, nombre, esInteligente, esBajoConsumo,
 				consumo);
 
-		withTransaction(() -> {
-			RepositorioDispositivos.instancia.agregarMaestro(dispositivo);
-		});
+		this.repositorioDispositivos.agregarMaestro(dispositivo);
 
 		response.redirect("/administrador/dispositivos");
 		return null;
 	}
 
 	public ModelAndView listarDispositivosCliente(Request request, Response response) {
-		LoginController.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		Map<String, List<Dispositivo>> model = new HashMap<>();
-		withTransaction(() -> {
-			List<Dispositivo> dispositivos = RepositorioDispositivos.instancia
-					.listarCliente(request.session().attribute("currentUser"));
-			model.put("dispositivos", dispositivos);
-		});
+
+		List<Dispositivo> dispositivos = repositorioDispositivos
+				.listarCliente(request.session().attribute("currentUser"));
+		model.put("dispositivos", dispositivos);
 
 		return new ModelAndView(model, "cliente/listar_dispositivos_cliente.hbs");
 	}
 
 	public ModelAndView nuevoDispositivoCliente(Request request, Response response) {
-		LoginController.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		Map<String, Object> model = new HashMap<>();
-		List<DispositivoMaestro> dispositivos = RepositorioDispositivos.instancia.listarMaestros();
+		List<DispositivoMaestro> dispositivos = repositorioDispositivos.listarMaestros();
 		model.put("dispositivoMaestros", dispositivos);
 //		model.put("estadosDispositivo", Estados.values());
 
@@ -98,7 +105,7 @@ public class DispositivoController implements WithGlobalEntityManager, Transacti
 	public Void crearDispositivoCliente(Request request, Response response) {
 		String maestroParam = request.queryParams("maestro");
 		int maestroId = Integer.parseInt(maestroParam);
-		DispositivoMaestro maestro = RepositorioDispositivos.instancia.buscarDispositivoMaestro(maestroId);
+		DispositivoMaestro maestro = repositorioDispositivos.buscarDispositivoMaestro(maestroId);
 
 //		String estadoParam = request.queryParams("estado");
 //		Estados estado = Estados.valueOf(estadoParam);
@@ -112,25 +119,24 @@ public class DispositivoController implements WithGlobalEntityManager, Transacti
 		Dispositivo dispositivo;
 
 		if (maestro.isEsInteligente()) {
-			dispositivo = new DispositivoInteligente(maestro.getNombre(), maestro.getConsumo(), Estados.APAGADO);
+			dispositivo = new DispositivoInteligente(maestro, Estados.APAGADO);
 		} else {
-			dispositivo = new DispositivoEstandar(maestro.getNombre(), maestro.getConsumo());
+			dispositivo = new DispositivoEstandar(maestro);
 		}
 
 		dispositivo.setUsoMensualMinimoHoras(usoMensualMinimoHoras);
 		dispositivo.setUsoMensualMaximoHoras(usoMensualMaximoHoras);
-		dispositivo.setCategoria(maestro.getCategoria());
-		dispositivo.setBajoConsumo(maestro.isEsBajoConsumo());
+//		dispositivo.setCategoria(maestro.getCategoria());
+//		dispositivo.setBajoConsumo(maestro.isEsBajoConsumo());
 
-		Cliente cliente = RepositorioUsuarios.instancia
-				.buscarClientePorNombreUsuario(request.session().attribute("currentUser"));
+		Cliente cliente = repositorioUsuarios.buscarClientePorNombreUsuario(request.session().attribute("currentUser"));
 
 		dispositivo.setCliente(cliente);
-		
-		withTransaction(() -> {
-			RepositorioDispositivos.instancia.agregar(dispositivo);
-			cliente.agregarDispositivo(dispositivo);
-		});
+
+//		withTransaction(() -> {
+		repositorioDispositivos.agregar(dispositivo);
+		cliente.agregarDispositivo(dispositivo);
+//		});
 
 		response.redirect("/cliente/dispositivos");
 		return null;
@@ -139,9 +145,9 @@ public class DispositivoController implements WithGlobalEntityManager, Transacti
 	public Void borrarDispositivoCliente(Request request, Response response) {
 		String id = request.params("id");
 
-		withTransaction(() -> {
-			RepositorioDispositivos.instancia.borrarDispositivoCliente(Integer.parseInt(id));
-		});
+//		withTransaction(() -> {
+		repositorioDispositivos.borrarDispositivoCliente(Integer.parseInt(id));
+//		});
 
 		response.redirect("/cliente/dispositivos");
 		return null;

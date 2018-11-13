@@ -21,6 +21,11 @@ public class DispositivoEstandar extends Dispositivo {
 		super(nombre, consumoXHora);
 	}
 
+	public DispositivoEstandar(DispositivoMaestro maestro) {
+		super(maestro);
+		maestro.addDispositivo(this);
+	}
+
 	// Setters - Getters
 
 	public boolean getEsInteligente() {

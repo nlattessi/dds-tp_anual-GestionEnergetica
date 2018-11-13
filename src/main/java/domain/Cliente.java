@@ -58,7 +58,7 @@ public class Cliente extends Usuario {
 //	private int transformadorId;
 //	public int segundosDeEspera = 5;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Dispositivo> dispositivos;
 
 	@ManyToOne

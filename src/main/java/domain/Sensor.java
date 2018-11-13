@@ -25,11 +25,11 @@ public class Sensor implements Subject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", updatable = false, nullable = false)
-	protected int id;
+	private int id;
 
 	@Version
 	@Column
-	protected Long version;
+	private Long version;
 
 	@Transient
 	private List<Observer> observers = new ArrayList<Observer>();
@@ -39,7 +39,8 @@ public class Sensor implements Subject {
 	@Transient
 	private Medicion medicion;
 
-	@OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sensor", orphanRemoval = true)
 	private List<Reglamentador> reglamentadores = new ArrayList<Reglamentador>();
 
 	@OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

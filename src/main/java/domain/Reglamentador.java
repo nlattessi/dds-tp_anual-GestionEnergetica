@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -22,29 +23,36 @@ import javax.persistence.Version;
 @Table(name = "reglamentador")
 public class Reglamentador implements Observer {
 
-	public Sensor getSensor() {
-		return sensor;
-	}
-
-	public void setSensor(Sensor sensor) {
-		this.sensor = sensor;
-	}
-
 	// Variables
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", updatable = false, nullable = false)
-	protected int id;
+	private int id;
 
 	@Version
 	@Column
-	protected Long version;
+	private Long version;
 
 //	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private List<Dispositivo> dispositivos;
 
 	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ReglaGenerica> reglasGenericas;
+
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "actuador_id", referencedColumnName = "id")
+//	private Actuador actuador;
+
+	@OneToOne
+//	@MapsId
+    @JoinColumn(name = "actuador_id")
+	private Actuador actuador;
+
+	@ManyToOne
+	private Sensor sensor;
+	
+//	@OneToOne(mappedBy = "reglamentador", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Sensor sensor;
 
 	public Actuador getActuador() {
 		return actuador;
@@ -54,20 +62,16 @@ public class Reglamentador implements Observer {
 		this.actuador = actuador;
 	}
 
+	public Sensor getSensor() {
+		return sensor;
+	}
+
+	public void setSensor(Sensor sensor) {
+		this.sensor = sensor;
+	}
+
 	@Transient
 	private List<Regla> reglas;
-
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "actuador_id", referencedColumnName = "id")
-//	private Actuador actuador;
-
-	@OneToOne
-	@JoinColumn(name = "actuador_id")
-	private Actuador actuador;
-
-	@ManyToOne
-	@JoinColumn(name = "sensor_id", referencedColumnName = "id")
-	private Sensor sensor;
 
 	public Reglamentador() {
 

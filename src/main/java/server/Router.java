@@ -6,6 +6,8 @@ import controllers.DispositivoController;
 import controllers.HomeController;
 import controllers.LoginController;
 import controllers.MedicionController;
+import db.RepositorioDispositivos;
+import db.RepositorioUsuarios;
 import spark.Spark;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 import spark.utils.BooleanHelper;
@@ -23,14 +25,25 @@ public class Router {
 
 		Spark.staticFiles.location("/public");
 
-		DispositivoController dispositivoController = new DispositivoController();
+		RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios();
+		RepositorioDispositivos repositorioDispositivos = new RepositorioDispositivos();
+
+		LoginController loginController = new LoginController(repositorioUsuarios);
+		DispositivoController dispositivoController = new DispositivoController(repositorioDispositivos,
+				repositorioUsuarios);
+		AdministradorController administradorController = new AdministradorController(repositorioUsuarios,
+				repositorioDispositivos);
 
 		Spark.get("/", HomeController::home, engine);
-		Spark.get("/login", LoginController::show, engine);
-		Spark.post("/login", LoginController::handleLoginPost, engine);
-		Spark.get("/logout", LoginController::handleLogoutPost, engine);
+		Spark.get("/login", loginController::show, engine);
+		Spark.post("/login", loginController::handleLoginPost, engine);
+		Spark.get("/logout", loginController::handleLogoutPost, engine);
 
-		Spark.get("/administrador/dashboard", AdministradorController::dashboard, engine);
+		Spark.get("/administrador/dashboard", administradorController::dashboard, engine);
+
+		Spark.get("/administrador/hogares_y_consumos", administradorController::listarHogaresYConsumos, engine);
+		Spark.get("/administrador/hogares_y_consumos/:id", administradorController::verConsumos, engine);
+
 		Spark.get("/administrador/dispositivos", dispositivoController::listarDispositivosMaestros, engine);
 		Spark.get("/administrador/dispositivos/nuevo", dispositivoController::nuevoDispositivoMaestro, engine);
 		Spark.post("/administrador/dispositivos", dispositivoController::crearDispositivoMaestro);
@@ -42,7 +55,7 @@ public class Router {
 		Spark.post("/cliente/dispositivos/:id/borrar", dispositivoController::borrarDispositivoCliente);
 //		Spark.get("/cliente/dispositivos/:id/editar", dispositivoController::editarDispositivoCliente, engine);
 //		Spark.get("/cliente/dispositivos/:id/actualizar", dispositivoController::actualizarDispositivoCliente);
-		
+
 		Spark.post("/medicion", MedicionController::tomarMedicion);
 	}
 

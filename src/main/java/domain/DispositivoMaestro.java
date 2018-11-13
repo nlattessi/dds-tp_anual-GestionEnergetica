@@ -1,12 +1,36 @@
 package domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Version;
 
-@Entity
-public class DispositivoMaestro extends EntidadPersistente {
+@Entity(name = "DispositivoMaestro")
+@Table(name = "dispositivo_maestro")
+public class DispositivoMaestro {
 
+	// Variables
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, nullable = false)
+	protected int id;
+
+	@Version
+	@Column
+	protected Long version;
+
+	@Column
 	private CategoriaDispositivo categoria;
+
+	@Column
 	private String nombre;
 
 	@Column(columnDefinition = "BOOLEAN")
@@ -15,7 +39,11 @@ public class DispositivoMaestro extends EntidadPersistente {
 	@Column(columnDefinition = "BOOLEAN")
 	private boolean esBajoConsumo;
 
+	@Column
 	private double consumo;
+
+	@OneToMany(mappedBy = "maestro", fetch = FetchType.EAGER)
+	private List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
 
 	public DispositivoMaestro(CategoriaDispositivo categoria, String nombre, boolean esInteligente,
 			boolean esBajoConsumo, double consumoXHora) {
@@ -28,6 +56,19 @@ public class DispositivoMaestro extends EntidadPersistente {
 
 	public DispositivoMaestro() {
 
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void addDispositivo(Dispositivo dispositivo) {
+		this.dispositivos.add(dispositivo);
+		dispositivo.setMaestro(this);
 	}
 
 	public CategoriaDispositivo getCategoria() {

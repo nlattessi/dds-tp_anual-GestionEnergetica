@@ -34,11 +34,11 @@ public abstract class Dispositivo {
 	@Column
 	protected Long version;
 
-	@Column
-	private String nombre;
+//	@Column
+//	private String nombre;
 
-	@Column
-	private double consumoXHora;
+//	@Column
+//	private double consumoXHora;
 
 	@Column
 	private int usoMensualMinimoHoras;
@@ -55,11 +55,11 @@ public abstract class Dispositivo {
 	@Column(columnDefinition = "BOOLEAN")
 	private boolean permiteCalculoAhorro;
 
-	@Column(columnDefinition = "BOOLEAN")
-	private boolean bajoConsumo;
+//	@Column(columnDefinition = "BOOLEAN")
+//	private boolean bajoConsumo;
 
-	@Column
-	private CategoriaDispositivo categoria;
+//	@Column
+//	private CategoriaDispositivo categoria;
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", referencedColumnName = "id")
@@ -68,14 +68,25 @@ public abstract class Dispositivo {
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
 //	private Reglamentador reglamentador;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "dispositivo_maestro_id")
+	private DispositivoMaestro maestro;
+
 	// Constructores
 	public Dispositivo() {
 	}
 
 	public Dispositivo(String nombre, double consumoXHora) {
-		this.nombre = nombre;
-		this.consumoXHora = consumoXHora;
+//		this.nombre = nombre;
+//		this.consumoXHora = consumoXHora;
+		this.consumoRecomendadoHoras = 0;
+		this.permiteAhorroInteligente = false;
+		this.permiteCalculoAhorro = true;
+	}
+
+	public Dispositivo(DispositivoMaestro maestro) {
+		this.maestro = maestro;
 		this.consumoRecomendadoHoras = 0;
 		this.permiteAhorroInteligente = false;
 		this.permiteCalculoAhorro = true;
@@ -90,12 +101,22 @@ public abstract class Dispositivo {
 		this.id = id;
 	}
 
+	public DispositivoMaestro getMaestro() {
+		return maestro;
+	}
+
+	public void setMaestro(DispositivoMaestro maestro) {
+		this.maestro = maestro;
+	}
+
 	public CategoriaDispositivo getCategoria() {
-		return categoria;
+//		return categoria;
+		return maestro.getCategoria();
 	}
 
 	public void setCategoria(CategoriaDispositivo categoria) {
-		this.categoria = categoria;
+//		this.categoria = categoria;
+		maestro.setCategoria(categoria);
 	}
 
 	public abstract double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
@@ -117,19 +138,23 @@ public abstract class Dispositivo {
 	}
 
 	public String getNombre() {
-		return nombre;
+//		return nombre;
+		return maestro.getNombre();
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+//		this.nombre = nombre;
+		maestro.setNombre(nombre);
 	}
 
 	public double getConsumoXHora() {
-		return consumoXHora;
+//		return consumoXHora;
+		return maestro.getConsumo();
 	}
 
 	public void setConsumoXHora(double consumoXHora) {
-		this.consumoXHora = consumoXHora;
+//		this.consumoXHora = consumoXHora;
+		maestro.setConsumo(consumoXHora);
 	}
 
 	public int getUsoMensualMinimoHoras() {
@@ -173,11 +198,13 @@ public abstract class Dispositivo {
 	}
 
 	public boolean getBajoConsumo() {
-		return this.bajoConsumo;
+//		return this.bajoConsumo;
+		return maestro.isEsBajoConsumo();
 	}
 
 	public void setBajoConsumo(boolean bajoConsumo) {
-		this.bajoConsumo = bajoConsumo;
+//		this.bajoConsumo = bajoConsumo;
+		maestro.setEsBajoConsumo(bajoConsumo);
 	}
 
 	public String getUrlBorrar() {
@@ -186,5 +213,9 @@ public abstract class Dispositivo {
 
 	public String getUrlEditar() {
 		return "/cliente/dispositivos/" + id + "/editar";
+	}
+	
+	public String getUrlVerConsumo() {
+		return "/administrador/hogares_y_consumos/" + id;
 	}
 }

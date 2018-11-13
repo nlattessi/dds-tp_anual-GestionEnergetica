@@ -8,7 +8,7 @@ public class Server {
 		Spark.port(9000);
 		Spark.threadPool(4);
 		DebugScreen.enableDebugScreen();
-		new Bootstrap().init();
+//		new Bootstrap().init();
 		Router.configure();
 	}
 }

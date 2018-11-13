@@ -1,28 +1,54 @@
 package domain;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "regla")
-public class ReglaGenerica extends EntidadPersistente implements Regla {
+public class ReglaGenerica implements Regla {
+
+	// Variables
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, nullable = false)
+	private int id;
+
+	@Version
+	@Column
+	private Long version;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	private String nombreMagnitud;
 	private int valor;
 	private ComparacionesReglaGenerica comparacion;
 	private Acciones accion;
-	
+
 //	@ManyToOne
 //	@JoinColumn(name = "dispositivo_id", referencedColumnName = "id")
 //	private Dispositivo dispositivo;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
+
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
+	@ManyToOne
 	private Reglamentador reglamentador;
-	
-	public static ReglaGenerica crearEncenderRegla(String nombreMagnitud, ComparacionesReglaGenerica comparacion, int valor) {
+
+	public static ReglaGenerica crearEncenderRegla(String nombreMagnitud, ComparacionesReglaGenerica comparacion,
+			int valor) {
 		ReglaGenerica encenderRegla = new ReglaGenerica();
 		encenderRegla.setNombreMagnitud(nombreMagnitud);
 		encenderRegla.setComparacion(comparacion);
@@ -38,7 +64,7 @@ public class ReglaGenerica extends EntidadPersistente implements Regla {
 	public void setAccion(Acciones accion) {
 		this.accion = accion;
 	}
-	
+
 //	public Dispositivo getDispositivo() {
 //		return dispositivo;
 //	}
