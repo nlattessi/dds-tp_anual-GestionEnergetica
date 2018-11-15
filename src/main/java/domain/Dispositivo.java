@@ -216,6 +216,6 @@ public abstract class Dispositivo {
 	}
 	
 	public String getUrlVerConsumo() {
-		return "/administrador/hogares_y_consumos/" + id;
+		return "/administrador/hogares-consumos/" + id;
 	}
 }

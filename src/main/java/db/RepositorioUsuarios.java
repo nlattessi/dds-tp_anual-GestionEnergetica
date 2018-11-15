@@ -56,6 +56,16 @@ public class RepositorioUsuarios {
 		return cliente;
 	}
 
+	public Cliente buscarClientePorId(int id) {
+		EntityManager em = emf.createEntityManager();
+
+		Cliente cliente = em.find(Cliente.class, id);
+
+		em.close();
+
+		return cliente;
+	}
+
 	public List<Cliente> listarClientes() {
 		EntityManager em = emf.createEntityManager();
 

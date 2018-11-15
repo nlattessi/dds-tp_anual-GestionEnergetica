@@ -36,6 +36,11 @@
 			<property name="hibernate.format_sql" value="true" />
 			<property name="use_sql_comments" value="true" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.spatial.dialect.mysql.MySQL5InnoDBSpatialDialect" />
+
+
+
 		</properties>
 
 	</persistence-unit>

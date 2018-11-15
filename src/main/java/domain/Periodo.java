@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+
+import db.LocalDateTimeAttributeConverter;
 
 @Entity(name = "Periodo")
 @Table(name = "periodo")
@@ -30,6 +33,8 @@ public class Periodo {
 	@Column
 	protected Long version;
 
+//	@Column(name = "inicio", columnDefinition = "TIMESTAMP")
+//	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	@Basic
 	private LocalDateTime inicio;
 

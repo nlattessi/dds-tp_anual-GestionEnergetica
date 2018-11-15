@@ -58,8 +58,10 @@ public class Cliente extends Usuario {
 //	private int transformadorId;
 //	public int segundosDeEspera = 5;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Dispositivo> dispositivos;
+//	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cliente_id")
+	private Set<Dispositivo> dispositivos = new HashSet<Dispositivo>();
 
 	@ManyToOne
 	@JoinColumn(name = "transformador_id", referencedColumnName = "id")
@@ -91,7 +93,7 @@ public class Cliente extends Usuario {
 		this.ahorroInteligente = false;
 		this.periodicidadAhorroInt = 10;
 //		this.contadorId = 0;
-		this.dispositivos = new ArrayList<>();
+//		this.dispositivos = new ArrayList<>();
 		this.coordenadasDomicilio = new Locacion(geolocalizacionX, geolocalizacionY);
 	}
 
@@ -163,11 +165,11 @@ public class Cliente extends Usuario {
 		this.categoria = categoria;
 	}
 
-	public List<Dispositivo> getDispositivos() {
+	public Set<Dispositivo> getDispositivos() {
 		return dispositivos;
 	}
 
-	public void setDispositivos(List<Dispositivo> dispositivos) {
+	public void setDispositivos(Set<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
 	}
 

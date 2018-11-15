@@ -1,6 +1,9 @@
 package db;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,6 +14,7 @@ import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 import domain.Actuador;
 import domain.Cliente;
 import domain.Dispositivo;
+import domain.DispositivoEstandar;
 import domain.DispositivoInteligente;
 import domain.DispositivoMaestro;
 import domain.Reglamentador;
@@ -116,5 +120,46 @@ public class RepositorioDispositivos {
 
 	public void borrarDispositivoCliente(int id) {
 		Dispositivo dispositivo = buscarDispositivoCliente(id);
+	}
+
+	public Map<String, String> consumoPromedioPorTipoPorPeriodo(boolean esInteligente, LocalDateTime inicio,
+			LocalDateTime fin) {
+		Map<String, String> reporte = new HashMap<>();
+
+		List<Dispositivo> dispositivos = (esInteligente) ? listarInteligente() : listarEstandar();
+
+		double consumoTotal = 0;
+		for (Dispositivo dispositivo : dispositivos) {
+			consumoTotal = consumoTotal + dispositivo.consumoTotalComprendidoEntre(inicio, fin);
+		}
+//		return consumoTotal;
+
+		double consumoPromedio = (consumoTotal == 0) ? 0 : (consumoTotal / dispositivos.size());
+
+		reporte.put("cantidad_dispositivos", String.valueOf(dispositivos.size()));
+		reporte.put("consumo_promedio", String.valueOf(consumoPromedio));
+
+		return reporte;
+	}
+
+	public List<Dispositivo> listarEstandar() {
+		EntityManager em = emf.createEntityManager();
+
+		List lista = em.createQuery("SELECT de FROM DispositivoEstandar de", DispositivoEstandar.class).getResultList();
+
+		em.close();
+
+		return lista;
+	}
+
+	public List<Dispositivo> listarInteligente() {
+		EntityManager em = emf.createEntityManager();
+
+		List lista = em.createQuery("SELECT di FROM DispositivoInteligente di", DispositivoInteligente.class)
+				.getResultList();
+
+		em.close();
+
+		return lista;
 	}
 }

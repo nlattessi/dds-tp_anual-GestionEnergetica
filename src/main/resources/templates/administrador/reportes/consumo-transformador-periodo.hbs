@@ -1,0 +1,51 @@
+{{#partial "contenido_administrador"}}
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+        <div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+            <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+            <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+        <h1 class="h2">Reporte Consumo por transformador por periodo</h1>
+    </div>
+
+    <form action="/administrador/reportes/consumo-transformador-periodo" method="POST">
+
+        <div class="form-group">
+            <label for="inicio">Periodo: inicio</label>
+            <input type="text" class="form-control" id="inicio" name="inicio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fin">Periodo: fin</label>
+            <input type="text" class="form-control" id="fin" name="fin" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ver</button>
+    </form>
+
+
+</main>
+{{/partial}}
+
+{{#partial "extra_js"}}
+<script type="text/javascript">
+    $(function () {
+        const config = {
+            "locale": "es",
+            "enableTime": true,
+            "dateFormat": "d/m/Y H:i",
+            "allowInput": false
+        }
+        
+        $("#inicio").flatpickr(config);
+        $("#fin").flatpickr(config);
+    });
+</script>
+{{/partial}}
+
+{{>administrador/layout_administrador.hbs}}
