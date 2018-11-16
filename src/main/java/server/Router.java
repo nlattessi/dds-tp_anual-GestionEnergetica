@@ -83,6 +83,9 @@ public class Router {
 		
 		Spark.get("/cliente/carga-archivo-dispositivos", clienteController::formCargaArchivoDispositivos, engine);
 		Spark.post("/cliente/carga-archivo-dispositivos", clienteController::procesarCargaArchivoDispositivos);
+		
+		Spark.get("/cliente/simplex", clienteController::formSimplex, engine);
+		Spark.post("/cliente/simplex", clienteController::procesarSimplex, engine);
 
 		Spark.post("/medicion", MedicionController::tomarMedicion);
 

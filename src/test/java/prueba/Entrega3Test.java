@@ -380,7 +380,7 @@ public class Entrega3Test {
 		Transformador transformadorRecuperado = this.model.buscar(Transformador.class, id);
 
 		DispositivoInteligente dispositivoTransformador = (DispositivoInteligente) transformador.getClientesConectados()
-				.get(0).getDispositivos().get(0);
+				.get(0).getDispositivos().toArray()[0];
 
 		System.out.println("Consumo antes de incrementacion: "
 				+ dispositivoTransformador.consumoTotalComprendidoEntre(periodo.getInicio(), periodo.getFin()));

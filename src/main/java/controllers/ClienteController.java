@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,5 +134,38 @@ public class ClienteController {
 
 		response.redirect("/cliente/dispositivos");
 		return null;
+	}
+	
+	public ModelAndView formSimplex(Request request, Response response) {
+//		SessionHelper.ensureUserIsLoggedIn(request, response);
+
+		return new ModelAndView(null, "cliente/simplex.hbs");
+	}
+
+	public ModelAndView procesarSimplex(Request request, Response response) {
+//		SessionHelper.ensureUserIsLoggedIn(request, response);
+
+//		String inicioParam = request.queryParams("inicio");
+//		String finParam = request.queryParams("fin");
+//
+		int userId = request.session().attribute("userId");
+		Cliente cliente = repositorioUsuarios.buscarClientePorId(userId);
+		
+		cliente.calcularHogarEficiente();
+		Map<String, List<Dispositivo>> model = new HashMap<>();
+		model.put("dispositivos", new ArrayList(cliente.getDispositivos()));
+//
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+//		LocalDateTime inicio = LocalDateTime.parse(inicioParam, formatter);
+//		LocalDateTime fin = LocalDateTime.parse(finParam, formatter);
+//
+//		double consumo = cliente.calcularConsumoEntrePeriodos(inicio, fin);
+//
+//		Map<String, String> model = new HashMap<>();
+//		model.put("periodo_inicio", inicioParam);
+//		model.put("periodo_fin", finParam);
+//		model.put("consumo", String.valueOf(consumo));
+
+		return new ModelAndView(model, "cliente/simplex-resultado.hbs");
 	}
 }
