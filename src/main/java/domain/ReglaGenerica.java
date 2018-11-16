@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-@Entity
+@Entity(name = "Regla")
 @Table(name = "regla")
 public class ReglaGenerica implements Regla {
 
@@ -25,17 +25,16 @@ public class ReglaGenerica implements Regla {
 	@Column
 	private Long version;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	@Column
 	private String nombreMagnitud;
+
+	@Column
 	private int valor;
+
+	@Column
 	private ComparacionesReglaGenerica comparacion;
+
+	@Column
 	private Acciones accion;
 
 //	@ManyToOne
@@ -45,6 +44,7 @@ public class ReglaGenerica implements Regla {
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
 	@ManyToOne
+	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
 	private Reglamentador reglamentador;
 
 	public static ReglaGenerica crearEncenderRegla(String nombreMagnitud, ComparacionesReglaGenerica comparacion,
@@ -55,6 +55,14 @@ public class ReglaGenerica implements Regla {
 		encenderRegla.setValor(valor);
 		encenderRegla.setAccion(Acciones.ENCENDERSE);
 		return encenderRegla;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Acciones getAccion() {
@@ -97,6 +105,14 @@ public class ReglaGenerica implements Regla {
 		this.comparacion = comparacion;
 	}
 
+	public Reglamentador getReglamentador() {
+		return reglamentador;
+	}
+
+	public void setReglamentador(Reglamentador reglamentador) {
+		this.reglamentador = reglamentador;
+	}
+
 	@Override
 	public boolean cumple(Medicion medicion) {
 		return (sameMagnitud(medicion.getMagnitud()) && comparacionValor(medicion.getValor()));
@@ -117,4 +133,9 @@ public class ReglaGenerica implements Regla {
 		}
 		return false;
 	}
+
+	public String getUrlBorrar() {
+		return "/cliente/reglas/" + id + "/borrar";
+	}
+
 }

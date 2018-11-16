@@ -6,8 +6,10 @@ import controllers.DispositivoController;
 import controllers.HomeController;
 import controllers.LoginController;
 import controllers.MedicionController;
+import controllers.ReglaController;
 import controllers.ReportesController;
 import db.RepositorioDispositivos;
+import db.RepositorioReglas;
 import db.RepositorioTransformadores;
 import db.RepositorioUsuarios;
 import spark.Spark;
@@ -18,6 +20,10 @@ import spark.utils.StringHelper;
 
 import static spark.Spark.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 public class Router {
 
 	public static void configure() {
@@ -26,10 +32,17 @@ public class Router {
 				.withHelper("isDispositivoInteligente", StringHelper.isDispositivoInteligente).build();
 
 		Spark.staticFiles.location("/public");
+		
+	    final String PERSISTENCE_UNIT_NAME = "db";
+	    EntityManagerFactory factory =
+                Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+        EntityManager manager = factory.createEntityManager();
+
 
 		RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios();
 		RepositorioDispositivos repositorioDispositivos = new RepositorioDispositivos();
 		RepositorioTransformadores repositorioTransformadores = new RepositorioTransformadores();
+		RepositorioReglas repositorioReglas = new RepositorioReglas(manager);
 
 		HomeController homeController = new HomeController(repositorioTransformadores);
 		LoginController loginController = new LoginController(repositorioUsuarios);
@@ -40,6 +53,8 @@ public class Router {
 		ReportesController reportesController = new ReportesController(repositorioUsuarios, repositorioDispositivos,
 				repositorioTransformadores);
 		ClienteController clienteController = new ClienteController(repositorioUsuarios, repositorioDispositivos);
+		ReglaController reglaController = new ReglaController(repositorioUsuarios, repositorioReglas,
+				repositorioDispositivos);
 
 		Spark.get("/", homeController::home, engine);
 
@@ -80,12 +95,17 @@ public class Router {
 
 		Spark.get("/cliente/consulta-consumo-periodo", clienteController::formConsumoPeriodo, engine);
 		Spark.post("/cliente/consulta-consumo-periodo", clienteController::procesarConsumoPeriodo, engine);
-		
+
 		Spark.get("/cliente/carga-archivo-dispositivos", clienteController::formCargaArchivoDispositivos, engine);
 		Spark.post("/cliente/carga-archivo-dispositivos", clienteController::procesarCargaArchivoDispositivos);
-		
+
 		Spark.get("/cliente/simplex", clienteController::formSimplex, engine);
 		Spark.post("/cliente/simplex", clienteController::procesarSimplex, engine);
+
+		Spark.get("/cliente/reglas", reglaController::listarReglas, engine);
+		Spark.get("/cliente/reglas/nueva", reglaController::nuevaRegla, engine);
+		Spark.post("/cliente/reglas", reglaController::crearRegla);
+		Spark.post("/cliente/reglas/:id/borrar", reglaController::borrarRegla);
 
 		Spark.post("/medicion", MedicionController::tomarMedicion);
 

@@ -135,7 +135,7 @@ public class ClienteController {
 		response.redirect("/cliente/dispositivos");
 		return null;
 	}
-	
+
 	public ModelAndView formSimplex(Request request, Response response) {
 //		SessionHelper.ensureUserIsLoggedIn(request, response);
 
@@ -150,7 +150,7 @@ public class ClienteController {
 //
 		int userId = request.session().attribute("userId");
 		Cliente cliente = repositorioUsuarios.buscarClientePorId(userId);
-		
+
 		cliente.calcularHogarEficiente();
 		Map<String, List<Dispositivo>> model = new HashMap<>();
 		model.put("dispositivos", new ArrayList(cliente.getDispositivos()));

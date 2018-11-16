@@ -83,10 +83,36 @@ public class RepositorioDispositivos {
 		return lista;
 	}
 
+	public List<DispositivoInteligente> listarClienteInteligentes(String nombreUsuario) {
+//		Cliente cliente = RepositorioUsuarios.instancia.buscarClientePorNombreUsuario(nombreUsuario);
+
+//		return cliente.getDispositivos();
+
+		EntityManager em = emf.createEntityManager();
+
+		List<DispositivoInteligente> lista = em.createQuery(
+				"SELECT d FROM DispositivoInteligente d JOIN d.cliente c WHERE c.nombreUsuario = :nombreUsuario",
+				DispositivoInteligente.class).setParameter("nombreUsuario", nombreUsuario).getResultList();
+
+		em.close();
+
+		return lista;
+	}
+
 	public Dispositivo buscarDispositivoCliente(int id) {
 		EntityManager em = emf.createEntityManager();
 
 		Dispositivo dispositivo = em.find(Dispositivo.class, id);
+
+		em.close();
+
+		return dispositivo;
+	}
+
+	public DispositivoInteligente buscarDispositivoInteligente(int id) {
+		EntityManager em = emf.createEntityManager();
+
+		DispositivoInteligente dispositivo = em.find(DispositivoInteligente.class, id);
 
 		em.close();
 
@@ -115,11 +141,20 @@ public class RepositorioDispositivos {
 		em.getTransaction().commit();
 
 		em.close();
-
 	}
 
 	public void borrarDispositivoCliente(int id) {
+		EntityManager em = emf.createEntityManager();
+
+		em.getTransaction().begin();
+
 		Dispositivo dispositivo = buscarDispositivoCliente(id);
+
+		em.remove(dispositivo);
+
+		em.getTransaction().commit();
+
+		em.close();
 	}
 
 	public Map<String, String> consumoPromedioPorTipoPorPeriodo(boolean esInteligente, LocalDateTime inicio,

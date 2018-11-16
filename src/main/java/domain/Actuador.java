@@ -19,6 +19,7 @@ import javax.persistence.Version;
 @Entity(name = "Actuador")
 @Table(name = "actuador")
 public class Actuador {
+
 	// Variables
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +35,8 @@ public class Actuador {
 //	private DispositivoInteligente dispositivo;
 
 	@OneToOne
-    @MapsId
+//	@MapsId
+    @JoinColumn(name = "dispositivo_id")
 	private DispositivoInteligente dispositivo;
 
 	@OneToOne(mappedBy = "actuador", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -58,6 +60,14 @@ public class Actuador {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Reglamentador getReglamentador() {
+		return reglamentador;
+	}
+
+	public void setReglamentador(Reglamentador reglamentador) {
+		this.reglamentador = reglamentador;
 	}
 
 	public DispositivoInteligente getDispositivo() {

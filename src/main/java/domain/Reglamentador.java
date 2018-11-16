@@ -1,7 +1,9 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,7 +24,6 @@ import javax.persistence.Version;
 @Entity(name = "Reglamentador")
 @Table(name = "reglamentador")
 public class Reglamentador implements Observer {
-
 	// Variables
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,8 +37,8 @@ public class Reglamentador implements Observer {
 //	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private List<Dispositivo> dispositivos;
 
-	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<ReglaGenerica> reglasGenericas;
+	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<ReglaGenerica> reglasGenericas;
 
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "actuador_id", referencedColumnName = "id")
@@ -45,12 +46,12 @@ public class Reglamentador implements Observer {
 
 	@OneToOne
 //	@MapsId
-    @JoinColumn(name = "actuador_id")
+	@JoinColumn(name = "actuador_id")
 	private Actuador actuador;
 
 	@ManyToOne
 	private Sensor sensor;
-	
+
 //	@OneToOne(mappedBy = "reglamentador", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private Sensor sensor;
 
@@ -79,7 +80,7 @@ public class Reglamentador implements Observer {
 
 	public Reglamentador(Actuador actuador) {
 		this.reglas = new ArrayList<Regla>();
-		this.reglasGenericas = new ArrayList<>();
+		this.reglasGenericas = new HashSet<>();
 		this.actuador = actuador;
 	}
 
@@ -97,6 +98,14 @@ public class Reglamentador implements Observer {
 
 	public void agregarReglaGenerica(ReglaGenerica regla) {
 		this.reglasGenericas.add(regla);
+	}
+
+	public Set<ReglaGenerica> getReglasGenericas() {
+		return reglasGenericas;
+	}
+
+	public void setReglasGenericas(Set<ReglaGenerica> reglasGenericas) {
+		this.reglasGenericas = reglasGenericas;
 	}
 
 	@Override

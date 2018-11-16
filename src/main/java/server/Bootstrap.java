@@ -8,6 +8,7 @@ import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps;
 
 import db.RepositorioUsuarios;
+import domain.Actuador;
 import domain.Administrador;
 import domain.Categoria;
 import domain.CategoriaDispositivo;
@@ -28,6 +29,12 @@ public class Bootstrap implements WithGlobalEntityManager, EntityManagerOps, Tra
 	public void init() {
 
 		withTransaction(() -> {
+			
+			DispositivoInteligente d = find(DispositivoInteligente.class, 2);
+			
+			Actuador actuador = new Actuador(d);
+			persist(actuador);
+			
 
 //			String nombreUsuario = "MartinGonzalez";
 //			String contraseña = "asd123";
@@ -44,42 +51,42 @@ public class Bootstrap implements WithGlobalEntityManager, EntityManagerOps, Tra
 //
 //			persist(c);
 			
-			Cliente c = find(Cliente.class, 3);
-			
-			DispositivoMaestro maestro1 = new DispositivoMaestro();
-			maestro1.setCategoria(CategoriaDispositivo.LAVARROPAS);
-			maestro1.setNombre("Lavarropas automatico de 5kg");
-			maestro1.setConsumo(0.175);
-			maestro1.setEsInteligente(true);
-			maestro1.setEsBajoConsumo(true);
-			persist(maestro1);
-			
-			DispositivoInteligente dispositivo1 = new DispositivoInteligente();
-			dispositivo1.setMaestro(maestro1);
-			dispositivo1.setEstado(Estados.APAGADO);
-			dispositivo1.setUsoMensualMinimoHoras(6);
-			dispositivo1.setUsoMensualMaximoHoras(30);
-			
-			dispositivo1.setCliente(c);
-			persist(dispositivo1);
-			c.agregarDispositivo(dispositivo1);
-			
-			DispositivoMaestro maestro2 = new DispositivoMaestro();
-			maestro2.setCategoria(CategoriaDispositivo.VENTILADOR);
-			maestro2.setNombre("Ventilador de pie");
-			maestro2.setConsumo(0.09);
-			maestro2.setEsInteligente(false);
-			maestro2.setEsBajoConsumo(true);
-			persist(maestro2);
-			
-			DispositivoEstandar dispositivo2 = new DispositivoEstandar();
-			dispositivo2.setMaestro(maestro2);
-			dispositivo2.setUsoMensualMinimoHoras(120);
-			dispositivo2.setUsoMensualMaximoHoras(360);
-			
-			dispositivo2.setCliente(c);
-			persist(dispositivo2);
-			c.agregarDispositivo(dispositivo2);
+//			Cliente c = find(Cliente.class, 3);
+//			
+//			DispositivoMaestro maestro1 = new DispositivoMaestro();
+//			maestro1.setCategoria(CategoriaDispositivo.LAVARROPAS);
+//			maestro1.setNombre("Lavarropas automatico de 5kg");
+//			maestro1.setConsumo(0.175);
+//			maestro1.setEsInteligente(true);
+//			maestro1.setEsBajoConsumo(true);
+//			persist(maestro1);
+//			
+//			DispositivoInteligente dispositivo1 = new DispositivoInteligente();
+//			dispositivo1.setMaestro(maestro1);
+//			dispositivo1.setEstado(Estados.APAGADO);
+//			dispositivo1.setUsoMensualMinimoHoras(6);
+//			dispositivo1.setUsoMensualMaximoHoras(30);
+//			
+//			dispositivo1.setCliente(c);
+//			persist(dispositivo1);
+//			c.agregarDispositivo(dispositivo1);
+//			
+//			DispositivoMaestro maestro2 = new DispositivoMaestro();
+//			maestro2.setCategoria(CategoriaDispositivo.VENTILADOR);
+//			maestro2.setNombre("Ventilador de pie");
+//			maestro2.setConsumo(0.09);
+//			maestro2.setEsInteligente(false);
+//			maestro2.setEsBajoConsumo(true);
+//			persist(maestro2);
+//			
+//			DispositivoEstandar dispositivo2 = new DispositivoEstandar();
+//			dispositivo2.setMaestro(maestro2);
+//			dispositivo2.setUsoMensualMinimoHoras(120);
+//			dispositivo2.setUsoMensualMaximoHoras(360);
+//			
+//			dispositivo2.setCliente(c);
+//			persist(dispositivo2);
+//			c.agregarDispositivo(dispositivo2);
 			
 //				Dispositivo dispositivo = new DispositivoEstandar("Ventilador de pie", 0.09);
 //				dispositivo.setUsoMensualMinimoHoras(120);
