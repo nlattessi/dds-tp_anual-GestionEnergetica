@@ -37,7 +37,9 @@ public class Router {
 				repositorioUsuarios);
 		AdministradorController administradorController = new AdministradorController(repositorioUsuarios,
 				repositorioDispositivos);
-		ReportesController reportesController = new ReportesController(repositorioUsuarios, repositorioDispositivos, repositorioTransformadores);
+		ReportesController reportesController = new ReportesController(repositorioUsuarios, repositorioDispositivos,
+				repositorioTransformadores);
+		ClienteController clienteController = new ClienteController(repositorioUsuarios, repositorioDispositivos);
 
 		Spark.get("/", homeController::home, engine);
 
@@ -69,13 +71,18 @@ public class Router {
 		Spark.get("/administrador/dispositivos/nuevo", dispositivoController::nuevoDispositivoMaestro, engine);
 		Spark.post("/administrador/dispositivos", dispositivoController::crearDispositivoMaestro);
 
-		Spark.get("/cliente/dashboard", ClienteController::dashboard, engine);
+		Spark.get("/cliente/dashboard", clienteController::dashboard, engine);
+
 		Spark.get("/cliente/dispositivos", dispositivoController::listarDispositivosCliente, engine);
 		Spark.get("/cliente/dispositivos/nuevo", dispositivoController::nuevoDispositivoCliente, engine);
 		Spark.post("/cliente/dispositivos", dispositivoController::crearDispositivoCliente);
 		Spark.post("/cliente/dispositivos/:id/borrar", dispositivoController::borrarDispositivoCliente);
-//		Spark.get("/cliente/dispositivos/:id/editar", dispositivoController::editarDispositivoCliente, engine);
-//		Spark.get("/cliente/dispositivos/:id/actualizar", dispositivoController::actualizarDispositivoCliente);
+
+		Spark.get("/cliente/consulta-consumo-periodo", clienteController::formConsumoPeriodo, engine);
+		Spark.post("/cliente/consulta-consumo-periodo", clienteController::procesarConsumoPeriodo, engine);
+		
+		Spark.get("/cliente/carga-archivo-dispositivos", clienteController::formCargaArchivoDispositivos, engine);
+		Spark.post("/cliente/carga-archivo-dispositivos", clienteController::procesarCargaArchivoDispositivos);
 
 		Spark.post("/medicion", MedicionController::tomarMedicion);
 

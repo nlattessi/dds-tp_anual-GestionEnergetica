@@ -52,6 +52,7 @@ public class LoginController {
 		}
 
 		req.session().attribute("currentUser", nombreUsuario);
+		req.session().attribute("userId", usuario.getId());
 
 		if (usuario instanceof Administrador) {
 			res.redirect("/administrador/dashboard");
@@ -60,19 +61,13 @@ public class LoginController {
 		res.redirect("/cliente/dashboard");
 
 		return null;
-	}	
+	}
 
 	public ModelAndView handleLogoutPost(Request request, Response response) {
 		request.session().removeAttribute("currentUser");
+		request.session().removeAttribute("userId");
 		request.session().attribute("loggedOut", true);
 		response.redirect("/login");
 		return null;
-	};
-
-	public void ensureUserIsLoggedIn(Request request, Response response) {
-		if (request.session().attribute("currentUser") == null) {
-			request.session().attribute("loginRedirect", request.pathInfo());
-			response.redirect("/login");
-		}
 	};
 }
