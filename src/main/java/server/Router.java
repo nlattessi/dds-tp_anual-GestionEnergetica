@@ -8,7 +8,9 @@ import controllers.LoginController;
 import controllers.MedicionController;
 import controllers.ReglaController;
 import controllers.ReportesController;
+import controllers.ToolsController;
 import db.RepositorioDispositivos;
+import db.RepositorioMediciones;
 import db.RepositorioReglas;
 import db.RepositorioTransformadores;
 import db.RepositorioUsuarios;
@@ -32,17 +34,16 @@ public class Router {
 				.withHelper("isDispositivoInteligente", StringHelper.isDispositivoInteligente).build();
 
 		Spark.staticFiles.location("/public");
-		
-	    final String PERSISTENCE_UNIT_NAME = "db";
-	    EntityManagerFactory factory =
-                Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        EntityManager manager = factory.createEntityManager();
 
+		final String PERSISTENCE_UNIT_NAME = "db";
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+		EntityManager manager = factory.createEntityManager();
 
-		RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios();
-		RepositorioDispositivos repositorioDispositivos = new RepositorioDispositivos();
-		RepositorioTransformadores repositorioTransformadores = new RepositorioTransformadores();
+		RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios(manager);
+		RepositorioDispositivos repositorioDispositivos = new RepositorioDispositivos(manager);
+		RepositorioTransformadores repositorioTransformadores = new RepositorioTransformadores(manager);
 		RepositorioReglas repositorioReglas = new RepositorioReglas(manager);
+		RepositorioMediciones repositorioMediciones = new RepositorioMediciones(manager);
 
 		HomeController homeController = new HomeController(repositorioTransformadores);
 		LoginController loginController = new LoginController(repositorioUsuarios);
@@ -52,9 +53,12 @@ public class Router {
 				repositorioDispositivos);
 		ReportesController reportesController = new ReportesController(repositorioUsuarios, repositorioDispositivos,
 				repositorioTransformadores);
-		ClienteController clienteController = new ClienteController(repositorioUsuarios, repositorioDispositivos);
+		ClienteController clienteController = new ClienteController(repositorioUsuarios, repositorioDispositivos,
+				repositorioMediciones, repositorioReglas);
 		ReglaController reglaController = new ReglaController(repositorioUsuarios, repositorioReglas,
 				repositorioDispositivos);
+		ToolsController toolsController = new ToolsController(repositorioUsuarios, repositorioDispositivos,
+				repositorioTransformadores, repositorioReglas, repositorioMediciones);
 
 		Spark.get("/", homeController::home, engine);
 
@@ -107,7 +111,12 @@ public class Router {
 		Spark.post("/cliente/reglas", reglaController::crearRegla);
 		Spark.post("/cliente/reglas/:id/borrar", reglaController::borrarRegla);
 
+		Spark.get("/cliente/estado-hogar", clienteController::estadoHogar, engine);
+
 		Spark.post("/medicion", MedicionController::tomarMedicion);
+
+		Spark.post("/tools/periodo", toolsController::cargarPeriodo);
+		Spark.post("/tools/medicion", toolsController::cargarMedicion);
 
 	}
 

@@ -20,24 +20,30 @@ import models.ModelHelper;
 //public class RepositorioUsuarios implements WithGlobalEntityManager {
 public class RepositorioUsuarios {
 
-	private EntityManagerFactory emf;
+//	private EntityManagerFactory emf;
+//
+//	public RepositorioUsuarios() {
+//		emf = Persistence.createEntityManagerFactory("db");
+//	}
 
-	public RepositorioUsuarios() {
-		emf = Persistence.createEntityManagerFactory("db");
+	private EntityManager em;
+
+	public RepositorioUsuarios(EntityManager manager) {
+		this.em = manager;
 	}
 
 //	public static RepositorioUsuarios instancia = new RepositorioUsuarios();
 
 	public Usuario buscarPorNombreUsuario(String nombreUsuario) {
 
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		Usuario usuario = null;
 
 		usuario = (Usuario) em.createQuery("select u from Usuario u where nombreUsuario = :nombreUsuario")
 				.setParameter("nombreUsuario", nombreUsuario).getSingleResult();
 
-		em.close();
+//		em.close();
 
 		return usuario;
 
@@ -46,32 +52,32 @@ public class RepositorioUsuarios {
 	}
 
 	public Cliente buscarClientePorNombreUsuario(String nombreUsuario) {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		Cliente cliente = em.createQuery("SELECT c FROM Cliente c WHERE nombreUsuario = :nombreUsuario", Cliente.class)
 				.setParameter("nombreUsuario", nombreUsuario).getSingleResult();
 
-		em.close();
+//		em.close();
 
 		return cliente;
 	}
 
 	public Cliente buscarClientePorId(int id) {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		Cliente cliente = em.find(Cliente.class, id);
 
-		em.close();
+//		em.close();
 
 		return cliente;
 	}
 
 	public List<Cliente> listarClientes() {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		List<Cliente> lista = em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
 
-		em.close();
+//		em.close();
 
 		return lista;
 	}

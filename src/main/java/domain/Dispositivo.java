@@ -1,12 +1,15 @@
 package domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +17,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -41,19 +45,19 @@ public abstract class Dispositivo {
 //	private double consumoXHora;
 
 	@Column
-	private int usoMensualMinimoHoras;
+	protected int usoMensualMinimoHoras;
 
 	@Column
-	private int usoMensualMaximoHoras;
+	protected int usoMensualMaximoHoras;
 
 	@Column
-	private double consumoRecomendadoHoras;
+	protected double consumoRecomendadoHoras;
 
 	@Column(columnDefinition = "BOOLEAN")
-	private boolean permiteAhorroInteligente;
+	protected boolean permiteAhorroInteligente;
 
 	@Column(columnDefinition = "BOOLEAN")
-	private boolean permiteCalculoAhorro;
+	protected boolean permiteCalculoAhorro;
 
 //	@Column(columnDefinition = "BOOLEAN")
 //	private boolean bajoConsumo;
@@ -63,7 +67,7 @@ public abstract class Dispositivo {
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", referencedColumnName = "id")
-	private Cliente cliente;
+	protected Cliente cliente;
 
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "reglamentador_id", referencedColumnName = "id")
@@ -71,7 +75,10 @@ public abstract class Dispositivo {
 
 	@ManyToOne
 	@JoinColumn(name = "dispositivo_maestro_id")
-	private DispositivoMaestro maestro;
+	protected DispositivoMaestro maestro;
+
+	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	protected List<Periodo> periodos = new ArrayList<>();
 
 	// Constructores
 	public Dispositivo() {
@@ -99,6 +106,14 @@ public abstract class Dispositivo {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public List<Periodo> getPeriodos() {
+		return periodos;
+	}
+
+	public void setPeriodos(List<Periodo> periodos) {
+		this.periodos = periodos;
 	}
 
 	public DispositivoMaestro getMaestro() {
@@ -214,7 +229,7 @@ public abstract class Dispositivo {
 	public String getUrlEditar() {
 		return "/cliente/dispositivos/" + id + "/editar";
 	}
-	
+
 	public String getUrlVerConsumo() {
 		return "/administrador/hogares-consumos/" + id;
 	}

@@ -16,9 +16,14 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import models.ModelHelper;
+
 @Entity(name = "Actuador")
 @Table(name = "actuador")
 public class Actuador {
+
+	@Transient
+	private ModelHelper model = new ModelHelper();
 
 	// Variables
 	@Id
@@ -36,10 +41,10 @@ public class Actuador {
 
 	@OneToOne
 //	@MapsId
-    @JoinColumn(name = "dispositivo_id")
+	@JoinColumn(name = "dispositivo_id")
 	private DispositivoInteligente dispositivo;
 
-	@OneToOne(mappedBy = "actuador", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "actuador", orphanRemoval = true, cascade = CascadeType.PERSIST)
 	private Reglamentador reglamentador;
 
 	@Transient
@@ -83,6 +88,26 @@ public class Actuador {
 	}
 
 	public void ejecutarAccion(Acciones accion) {
-		this.listaComandos.get(accion).execute(this.dispositivo);
+//		this.listaComandos.get(accion).execute(this.dispositivo);
+
+		switch (accion) {
+		case ENCENDERSE:
+			Command encender = new EncenderCommand();
+			encender.execute(dispositivo);
+			break;
+		case APAGARSE:
+			Command apagar = new ApagarCommand();
+			apagar.execute(dispositivo);
+			break;
+		case ENTRAR_MODO_AHORRO_ENERGIA:
+			Command modoAhorroEnergia = new ModoAhorroEnergiaCommand();
+			modoAhorroEnergia.execute(dispositivo);
+			break;
+		}
+
+//		DispositivoInteligente d = model.buscar(DispositivoInteligente.class, dispositivo.getId());
+//		d.setEstado(dispositivo.getEstado());
+//		model.actualizar(d);
+//		model.desatachar(d);
 	}
 }

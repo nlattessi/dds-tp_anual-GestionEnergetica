@@ -31,10 +31,7 @@ public class DispositivoInteligente extends Dispositivo {
 	@Column
 	private LocalDateTime ultimaFechaHoraEncendido;
 
-	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private List<Periodo> periodos = new ArrayList<>();
-
-	@OneToOne(mappedBy = "dispositivo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "dispositivo", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	private Actuador actuador;
 
 	@Transient
@@ -73,13 +70,6 @@ public class DispositivoInteligente extends Dispositivo {
 	}
 
 	// Setters - Getters
-	public List<Periodo> getPeriodos() {
-		return periodos;
-	}
-
-	public void setPeriodos(List<Periodo> periodos) {
-		this.periodos = periodos;
-	}
 
 	public Actuador getActuador() {
 		return actuador;
@@ -115,8 +105,15 @@ public class DispositivoInteligente extends Dispositivo {
 	public void apagarse() {
 		if (this.estado != Estados.APAGADO) {
 			setEstado(Estados.APAGADO);
-			this.periodos.add(new Periodo(this.ultimaFechaHoraEncendido, LocalDateTime.now()));
-			this.fabricante.enviarMensajeApagado();
+			
+			Periodo p = new Periodo(this.ultimaFechaHoraEncendido, LocalDateTime.now());
+			p.setDispositivo(this);
+			
+			this.periodos.add(p);
+
+			if (this.fabricante != null) {
+				this.fabricante.enviarMensajeApagado();
+			}
 		}
 	}
 
@@ -124,7 +121,10 @@ public class DispositivoInteligente extends Dispositivo {
 		if (this.estado != Estados.ENCENDIDO) {
 			setEstado(Estados.ENCENDIDO);
 			this.ultimaFechaHoraEncendido = LocalDateTime.now();
-			this.fabricante.enviarMensajeEncendido();
+
+			if (this.fabricante != null) {
+				this.fabricante.enviarMensajeEncendido();
+			}
 		}
 	}
 
@@ -132,7 +132,9 @@ public class DispositivoInteligente extends Dispositivo {
 		if (this.estado != Estados.MODO_AHORRO_ENERGIA && this.estado != Estados.APAGADO) {
 			this.estado = Estados.MODO_AHORRO_ENERGIA;
 			setEstado(Estados.MODO_AHORRO_ENERGIA);
-			this.fabricante.enviarMensajeModoAhorroEnergia();
+			if (this.fabricante != null) {
+				this.fabricante.enviarMensajeModoAhorroEnergia();
+			}
 		}
 	}
 

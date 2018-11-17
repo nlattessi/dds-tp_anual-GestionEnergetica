@@ -37,8 +37,8 @@ public class Reglamentador implements Observer {
 //	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //	private List<Dispositivo> dispositivos;
 
-	@OneToMany(mappedBy = "reglamentador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<ReglaGenerica> reglasGenericas;
+	@OneToMany(mappedBy = "reglamentador", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	private Set<ReglaGenerica> reglasGenericas =  new HashSet<>();
 
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "actuador_id", referencedColumnName = "id")
@@ -72,15 +72,15 @@ public class Reglamentador implements Observer {
 	}
 
 	@Transient
-	private List<Regla> reglas;
+	private List<Regla> reglas = new ArrayList<Regla>();
 
 	public Reglamentador() {
 
 	}
 
 	public Reglamentador(Actuador actuador) {
-		this.reglas = new ArrayList<Regla>();
-		this.reglasGenericas = new HashSet<>();
+//		this.reglas = new ArrayList<Regla>();
+//		this.reglasGenericas = new HashSet<>();
 		this.actuador = actuador;
 	}
 
@@ -106,6 +106,10 @@ public class Reglamentador implements Observer {
 
 	public void setReglasGenericas(Set<ReglaGenerica> reglasGenericas) {
 		this.reglasGenericas = reglasGenericas;
+	}
+	
+	public void removeRegla(ReglaGenerica reglasGenerica) {
+		this.reglasGenericas.remove(reglasGenerica);
 	}
 
 	@Override

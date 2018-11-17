@@ -45,7 +45,8 @@ public class ReglaController {
 
 		Map<String, List<ReglaGenerica>> model = new HashMap<>();
 
-		Cliente cliente = repositorioUsuarios.buscarClientePorNombreUsuario("JuanPerez");
+		int userId = request.session().attribute("userId");
+		Cliente cliente = repositorioUsuarios.buscarClientePorId(userId);
 
 		List reglas = repositorioReglas.listarPorCliente(cliente);
 

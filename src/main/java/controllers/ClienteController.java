@@ -9,14 +9,18 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 
 import db.RepositorioDispositivos;
+import db.RepositorioMediciones;
+import db.RepositorioReglas;
 import db.RepositorioUsuarios;
 import domain.CategoriaDispositivo;
 import domain.Cliente;
@@ -26,6 +30,8 @@ import domain.DispositivoInteligente;
 import domain.DispositivoMaestro;
 import domain.Estados;
 import domain.ImportadorJson;
+import domain.Medicion;
+import domain.Periodo;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -35,10 +41,15 @@ public class ClienteController {
 
 	private RepositorioUsuarios repositorioUsuarios;
 	private RepositorioDispositivos repositorioDispositivos;
+	private RepositorioMediciones repositorioMediciones;
+	private RepositorioReglas repositorioReglas;
 
-	public ClienteController(RepositorioUsuarios repositorioUsuarios, RepositorioDispositivos repositorioDispositivos) {
+	public ClienteController(RepositorioUsuarios repositorioUsuarios, RepositorioDispositivos repositorioDispositivos,
+			RepositorioMediciones repositorioMediciones, RepositorioReglas repositorioReglas) {
 		this.repositorioUsuarios = repositorioUsuarios;
 		this.repositorioDispositivos = repositorioDispositivos;
+		this.repositorioMediciones = repositorioMediciones;
+		this.repositorioReglas = repositorioReglas;
 	}
 
 	public ModelAndView dashboard(Request request, Response response) {
@@ -167,5 +178,28 @@ public class ClienteController {
 //		model.put("consumo", String.valueOf(consumo));
 
 		return new ModelAndView(model, "cliente/simplex-resultado.hbs");
+	}
+
+	public ModelAndView estadoHogar(Request request, Response response) {
+//		SessionHelper.ensureUserIsLoggedIn(request, response);
+
+		Map<String, Object> model = new HashMap<>();
+
+		int userId = request.session().attribute("userId");
+		Cliente cliente = repositorioUsuarios.buscarClientePorId(userId);
+
+		List med = repositorioMediciones.listarPorCliente(cliente);
+		model.put("med", med);
+
+		List<DispositivoInteligente> dispositivos = repositorioDispositivos.listarClienteInteligentes("JuanPerez");
+		model.put("dispositivos", dispositivos);
+		
+		Periodo periodo = repositorioDispositivos.obtenerUltimoPeriodo(cliente);
+		model.put("periodo", periodo);
+
+		List reglas = repositorioReglas.listarPorCliente(cliente);
+		model.put("reglas", reglas);
+
+		return new ModelAndView(model, "cliente/estado-hogar.hbs");
 	}
 }

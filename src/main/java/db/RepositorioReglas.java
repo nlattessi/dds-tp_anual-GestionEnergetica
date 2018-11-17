@@ -9,6 +9,7 @@ import domain.Cliente;
 import domain.ComparacionesReglaGenerica;
 import domain.DispositivoInteligente;
 import domain.ReglaGenerica;
+import domain.Reglamentador;
 
 public class RepositorioReglas {
 	private EntityManager manager;
@@ -38,6 +39,9 @@ public class RepositorioReglas {
 //			Query query = manager.createQuery("DELETE FROM Regla rg WHERE rg = :regla");
 //			query.setParameter("regla", regla);
 //			query.executeUpdate();
+			
+			regla.getReglamentador().removeRegla(regla);
+			
 			manager.remove(regla);
 			manager.getTransaction().commit();
 		}
@@ -51,7 +55,10 @@ public class RepositorioReglas {
 		regla.setValor(valor);
 		regla.setAccion(accion);
 
-		regla.setReglamentador(dispositivo.getActuador().getReglamentador());
+		Reglamentador reglamentador = dispositivo.getActuador().getReglamentador();
+
+		regla.setReglamentador(reglamentador);
+		reglamentador.agregarReglaGenerica(regla);
 
 		manager.getTransaction().begin();
 		manager.persist(regla);

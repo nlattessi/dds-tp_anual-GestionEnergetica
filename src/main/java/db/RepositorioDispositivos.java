@@ -8,43 +8,55 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
 
+import domain.Acciones;
 import domain.Actuador;
 import domain.Cliente;
+import domain.ComparacionesReglaGenerica;
 import domain.Dispositivo;
 import domain.DispositivoEstandar;
 import domain.DispositivoInteligente;
 import domain.DispositivoMaestro;
+import domain.Medicion;
+import domain.Periodo;
+import domain.ReglaGenerica;
 import domain.Reglamentador;
 import domain.Sensor;
 import domain.Usuario;
 
 public class RepositorioDispositivos {
 
-	private EntityManagerFactory emf;
+//	private EntityManagerFactory emf;
+//
+//	public RepositorioDispositivos() {
+//		emf = Persistence.createEntityManagerFactory("db");
+//	}
 
-	public RepositorioDispositivos() {
-		emf = Persistence.createEntityManagerFactory("db");
+	private EntityManager em;
+
+	public RepositorioDispositivos(EntityManager manager) {
+		this.em = manager;
 	}
 
 //	public static RepositorioDispositivos instancia = new RepositorioDispositivos();
 
 	public DispositivoMaestro buscarDispositivoMaestro(int id) {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		DispositivoMaestro dispositivoMaestro = null;
 
 		dispositivoMaestro = em.find(DispositivoMaestro.class, id);
 
-		em.close();
+//		em.close();
 
 		return dispositivoMaestro;
 	}
 
 	public void agregarMaestro(DispositivoMaestro dispositivo) {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		em.getTransaction().begin();
 
@@ -52,16 +64,16 @@ public class RepositorioDispositivos {
 
 		em.getTransaction().commit();
 
-		em.close();
+//		em.close();
 	}
 
 	public List<DispositivoMaestro> listarMaestros() {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		List<DispositivoMaestro> lista = em
 				.createQuery("SELECT dm FROM DispositivoMaestro dm", DispositivoMaestro.class).getResultList();
 
-		em.close();
+//		em.close();
 
 		return lista;
 	}
@@ -71,14 +83,14 @@ public class RepositorioDispositivos {
 
 //		return cliente.getDispositivos();
 
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		List<Dispositivo> lista = em
 				.createQuery("SELECT d FROM Dispositivo d JOIN d.cliente c WHERE c.nombreUsuario = :nombreUsuario",
 						Dispositivo.class)
 				.setParameter("nombreUsuario", nombreUsuario).getResultList();
 
-		em.close();
+//		em.close();
 
 		return lista;
 	}
@@ -88,41 +100,41 @@ public class RepositorioDispositivos {
 
 //		return cliente.getDispositivos();
 
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		List<DispositivoInteligente> lista = em.createQuery(
 				"SELECT d FROM DispositivoInteligente d JOIN d.cliente c WHERE c.nombreUsuario = :nombreUsuario",
 				DispositivoInteligente.class).setParameter("nombreUsuario", nombreUsuario).getResultList();
 
-		em.close();
+//		em.close();
 
 		return lista;
 	}
 
 	public Dispositivo buscarDispositivoCliente(int id) {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		Dispositivo dispositivo = em.find(Dispositivo.class, id);
 
-		em.close();
+//		em.close();
 
 		return dispositivo;
 	}
 
 	public DispositivoInteligente buscarDispositivoInteligente(int id) {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		DispositivoInteligente dispositivo = em.find(DispositivoInteligente.class, id);
 
-		em.close();
+//		em.close();
 
 		return dispositivo;
 	}
 
 	public void agregar(Dispositivo dispositivo) {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
-		em.getTransaction().begin();
+//		em.getTransaction().begin();
 
 		if (dispositivo instanceof DispositivoInteligente) {
 			Actuador actuador = new Actuador((DispositivoInteligente) dispositivo);
@@ -130,31 +142,52 @@ public class RepositorioDispositivos {
 			Sensor sensor = new Sensor();
 			sensor.registerReglamentador(reglamentador);
 
-			em.persist(dispositivo);
-			em.persist(actuador);
-			em.persist(reglamentador);
+			em.getTransaction().begin();
 			em.persist(sensor);
-		} else {
+			em.persist(reglamentador);
+			em.persist(actuador);
 			em.persist(dispositivo);
+			em.getTransaction().commit();
+		} else {
+			em.getTransaction().begin();
+			em.persist(dispositivo);
+			em.getTransaction().commit();
 		}
 
-		em.getTransaction().commit();
+//		em.getTransaction().commit();
 
-		em.close();
+//		em.close();
 	}
 
+//	public void borrarDispositivoCliente(int id) {
+////		EntityManager em = emf.createEntityManager();
+//
+//		em.getTransaction().begin();
+//
+//		Dispositivo dispositivo = em.find(Dispositivo.class, id);
+//
+//		em.remove(dispositivo);
+//
+//		em.getTransaction().commit();
+//
+////		em.close();
+//	}
+
 	public void borrarDispositivoCliente(int id) {
-		EntityManager em = emf.createEntityManager();
+		Dispositivo dispositivo = em.find(Dispositivo.class, id);
+		if (dispositivo != null) {
+			em.getTransaction().begin();
+//			Query query = manager.createQuery("DELETE FROM Regla rg WHERE rg = :regla");
+//			query.setParameter("regla", regla);
+//			query.executeUpdate();
 
-		em.getTransaction().begin();
-
-		Dispositivo dispositivo = buscarDispositivoCliente(id);
-
-		em.remove(dispositivo);
-
-		em.getTransaction().commit();
-
-		em.close();
+//			Actuador a = ((DispositivoInteligente) dispositivo).getActuador();
+//			Reglamentador r = a.getReglamentador();
+//			em.remove(r);
+//			em.remove(a);
+			em.remove(dispositivo);
+			em.getTransaction().commit();
+		}
 	}
 
 	public Map<String, String> consumoPromedioPorTipoPorPeriodo(boolean esInteligente, LocalDateTime inicio,
@@ -178,23 +211,62 @@ public class RepositorioDispositivos {
 	}
 
 	public List<Dispositivo> listarEstandar() {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		List lista = em.createQuery("SELECT de FROM DispositivoEstandar de", DispositivoEstandar.class).getResultList();
 
-		em.close();
+//		em.close();
 
 		return lista;
 	}
 
 	public List<Dispositivo> listarInteligente() {
-		EntityManager em = emf.createEntityManager();
+//		EntityManager em = emf.createEntityManager();
 
 		List lista = em.createQuery("SELECT di FROM DispositivoInteligente di", DispositivoInteligente.class)
 				.getResultList();
 
-		em.close();
+//		em.close();
 
 		return lista;
 	}
+
+	public Periodo obtenerUltimoPeriodo(Cliente cliente) {
+//		EntityManager em = emf.createEntityManager();
+		Query query = em.createQuery(
+				"SELECT p FROM Periodo p INNER JOIN p.dispositivo d WHERE d.cliente = :cliente ORDER BY p.id DESC",
+				Periodo.class);
+		query.setParameter("cliente", cliente);
+		query.setMaxResults(1);
+
+		List res = query.getResultList();
+
+		return (res.size() == 1) ? (Periodo) res.get(0) : null;
+
+//		return (Periodo) query.getResultList().get(0);
+	}
+
+	public void guardarPeriodo(Periodo periodo) {
+		em.getTransaction().begin();
+		em.persist(periodo);
+		em.getTransaction().commit();
+	}
+
+	public Sensor buscarSensorPorId(int id) {
+		Sensor sensor = em.find(Sensor.class, id);
+		return sensor;
+	}
+
+	public void guardarMedicion(Medicion m) {
+		em.getTransaction().begin();
+		em.persist(m);
+		em.getTransaction().commit();
+	}
+	
+	public void actualizar(Dispositivo d) {
+		em.getTransaction().begin();
+		em.persist(d);
+		em.getTransaction().commit();
+	}
+
 }

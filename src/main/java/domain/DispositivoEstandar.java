@@ -51,7 +51,11 @@ public class DispositivoEstandar extends Dispositivo {
 
 	@Override
 	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
-		return 0;
+//		return 0;
+		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
+				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
+		
+		return totalHoras * this.getConsumoXHora();
 	}
 
 	@Override

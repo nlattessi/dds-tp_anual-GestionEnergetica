@@ -13,7 +13,7 @@ import models.ModelHelper;
 public class HistorialEstadoDispositivoInteligente extends EntidadPersistente {
 	private static ModelHelper model = new ModelHelper();
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "dispositivo_inteligente_id", referencedColumnName = "id")
 	private DispositivoInteligente dispositivoInteligente;
 	

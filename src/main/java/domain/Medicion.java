@@ -18,14 +18,6 @@ import models.ModelHelper;
 @Table(name = "medicion")
 public class Medicion {
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	// Variables
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,9 +28,13 @@ public class Medicion {
 	@Column
 	private Long version;
 
+	@Column
 	private String magnitud;
+
+	@Column
 	private int valor;
 
+	@Transient
 	private static ModelHelper model = new ModelHelper();
 
 //	@ManyToOne(cascade = CascadeType.ALL)
@@ -46,9 +42,21 @@ public class Medicion {
 	@ManyToOne
 	private Sensor sensor;
 
+	public Medicion() {
+
+	}
+
 	public static void guardarMedicion(Sensor sensor, Medicion medicion) {
 		medicion.setSensor(sensor);
-		model.agregar(medicion);
+//		model.agregar(medicion);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Sensor getSensor() {

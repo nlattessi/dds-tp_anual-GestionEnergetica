@@ -128,10 +128,19 @@ public class ReglaGenerica implements Regla {
 	}
 
 	private boolean comparacionValor(int valorMedicion) {
-		if (comparacion == ComparacionesReglaGenerica.MAYORIGUAL) {
+
+		switch (comparacion) {
+		case MAYORIGUAL:
 			return valorMedicion >= valor;
+		case MENORIGUAL:
+			return valorMedicion <= valor;
+		case IGUAL:
+			return valorMedicion == valor;
+		case DISTINTODE:
+			return valorMedicion != valor;
+		default:
+			return false;
 		}
-		return false;
 	}
 
 	public String getUrlBorrar() {

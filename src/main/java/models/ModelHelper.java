@@ -81,6 +81,14 @@ public class ModelHelper {
 	public void eliminar(Object unObjeto) {
 		this.execute("remove", unObjeto);
 	}
+	
+	public void actualizar(Object unObjeto) {
+		this.execute("merge", unObjeto);
+	}
+	
+	public void desatachar(Object unObjeto) {
+		this.execute("detach", unObjeto);
+	}
 
 	public int eliminarTodos(Class<?> clase) {
 		this.initTransaccion();

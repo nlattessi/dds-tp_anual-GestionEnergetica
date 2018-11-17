@@ -1,7 +1,9 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,11 +42,11 @@ public class Sensor implements Subject {
 	private Medicion medicion;
 
 //	@OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sensor", orphanRemoval = true)
-	private List<Reglamentador> reglamentadores = new ArrayList<Reglamentador>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "sensor", orphanRemoval = true, fetch = FetchType.EAGER)
+	private Set<Reglamentador> reglamentadores = new HashSet<>();
 
-	@OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Medicion> mediciones = new ArrayList<Medicion>();
+	@OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Medicion> mediciones = new HashSet<>();
 
 	public Sensor() {
 
@@ -92,17 +94,25 @@ public class Sensor implements Subject {
 	}
 
 	public void agregarMedicion(Medicion medicion) {
-		medicion.setSensor(this);
-		Medicion.guardarMedicion(this, medicion);
+//		medicion.setSensor(this);
+//		Medicion.guardarMedicion(this, medicion);
 		this.mediciones.add(medicion);
 		this.notifyReglamentadores(medicion);
 	}
 
-	public List<Reglamentador> getReglamentadores() {
+	public Set<Reglamentador> getReglamentadores() {
 		return reglamentadores;
 	}
 
-	public void setReglamentadores(List<Reglamentador> reglamentadores) {
+	public void setReglamentadores(Set<Reglamentador> reglamentadores) {
 		this.reglamentadores = reglamentadores;
+	}
+	
+	public Set<Medicion> getMediciones() {
+		return mediciones;
+	}
+
+	public void setMediciones(Set<Medicion> mediciones) {
+		this.mediciones = mediciones;
 	}
 }
