@@ -55,7 +55,7 @@ public class Transformador {
 	private float latitud;
 	
 	@Column
-	private float longitud;;
+	private float longitud;
 
 //	@Column(name = "locacion", nullable = false, columnDefinition = "Point")
 //	private Point locacion;

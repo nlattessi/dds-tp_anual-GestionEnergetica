@@ -39,6 +39,12 @@ public abstract class Usuario {
 
 	@Column
 	protected String domicilio;
+	
+	@Column(nullable = true)
+	private Float latitud;	
+	
+	@Column(nullable = true)
+	private Float longitud;
 
 	// Constructores
 	public Usuario() {

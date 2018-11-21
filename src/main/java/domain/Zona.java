@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -25,6 +26,12 @@ public class Zona extends EntidadPersistente{
 	
 	@Transient
 	private Locacion coordenadas;
+	
+	@Column
+	private float latitud;
+	
+	@Column
+	private float longitud;
 
 //	public Zona(int id, int radio, int x, int y) {
 	public Zona(int radio, int x, int y) {
@@ -33,6 +40,10 @@ public class Zona extends EntidadPersistente{
 		this.geolocalizacionX = x;
 		this.geolocalizacionY = y;
 		this.coordenadas = new Locacion(this.geolocalizacionX, this.geolocalizacionY);
+	}
+	
+	public Zona() {
+		
 	}
 
 //	public int getId() {
