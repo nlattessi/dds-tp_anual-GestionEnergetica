@@ -7,45 +7,49 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import models.ModelHelper;
 
-@Entity(name = "dispositivo_inteligente")
+@Entity(name = "DispositivoInteligente")
 @Table(name = "dispositivo_inteligente")
-public class DispositivoInteligente extends Dispositivo {	
+@DiscriminatorValue("2")
+public class DispositivoInteligente extends Dispositivo {
+
+	// Variables
+	@Column
 	private Estados estado;
 
-	@OneToMany(mappedBy = "dispositivo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<Periodo> periodos = new ArrayList<>();
-
+	@Column
 	private LocalDateTime ultimaFechaHoraEncendido;
+
+	@OneToOne(mappedBy = "dispositivo", orphanRemoval = true, cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	private Actuador actuador;
 
 	@Transient
 	private Fabricante fabricante;
 
-//	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado) {
-//		this(dispositivo, nombre, consumoXHora, estado, new FabricanteGeneralAdapter());
-//	}
+	// Constructores
+	public DispositivoInteligente() {
+		super();
+	}
 
 	public DispositivoInteligente(String nombre, double consumoXHora, Estados estado) {
 		this(nombre, consumoXHora, estado, new FabricanteGeneralAdapter());
 	}
 
-//	public DispositivoInteligente(int dispositivo, String nombre, double consumoXHora, Estados estado,
-//			Fabricante fabricante) {
-//		super(dispositivo, nombre, consumoXHora);
-//		this.estado = estado;
-//		if (this.estado == Estados.ENCENDIDO) {
-//			this.ultimaFechaHoraEncendido = LocalDateTime.now();
-//		}
-//		this.periodos = new ArrayList<Periodo>();
-//		this.fabricante = fabricante;
-//	}
+	public DispositivoInteligente(DispositivoMaestro maestro, Estados estado) {
+		this(maestro, estado, new FabricanteGeneralAdapter());
+		maestro.addDispositivo(this);
+	}
 
 	public DispositivoInteligente(String nombre, double consumoXHora, Estados estado, Fabricante fabricante) {
 		super(nombre, consumoXHora);
@@ -54,6 +58,29 @@ public class DispositivoInteligente extends Dispositivo {
 			this.ultimaFechaHoraEncendido = LocalDateTime.now();
 		}
 		this.fabricante = fabricante;
+	}
+
+	public DispositivoInteligente(DispositivoMaestro maestro, Estados estado, Fabricante fabricante) {
+		super(maestro);
+		this.estado = estado;
+		if (this.estado == Estados.ENCENDIDO) {
+			this.ultimaFechaHoraEncendido = LocalDateTime.now();
+		}
+		this.fabricante = fabricante;
+	}
+
+	// Setters - Getters
+
+	public Actuador getActuador() {
+		return actuador;
+	}
+
+	public void setActuador(Actuador actuador) {
+		this.actuador = actuador;
+	}
+
+	public boolean getEsInteligente() {
+		return true;
 	}
 
 	@Override
@@ -78,8 +105,15 @@ public class DispositivoInteligente extends Dispositivo {
 	public void apagarse() {
 		if (this.estado != Estados.APAGADO) {
 			setEstado(Estados.APAGADO);
-			this.periodos.add(new Periodo(this.ultimaFechaHoraEncendido, LocalDateTime.now()));
-			this.fabricante.enviarMensajeApagado();
+			
+			Periodo p = new Periodo(this.ultimaFechaHoraEncendido, LocalDateTime.now());
+			p.setDispositivo(this);
+			
+			this.periodos.add(p);
+
+			if (this.fabricante != null) {
+				this.fabricante.enviarMensajeApagado();
+			}
 		}
 	}
 
@@ -87,7 +121,10 @@ public class DispositivoInteligente extends Dispositivo {
 		if (this.estado != Estados.ENCENDIDO) {
 			setEstado(Estados.ENCENDIDO);
 			this.ultimaFechaHoraEncendido = LocalDateTime.now();
-			this.fabricante.enviarMensajeEncendido();
+
+			if (this.fabricante != null) {
+				this.fabricante.enviarMensajeEncendido();
+			}
 		}
 	}
 
@@ -95,7 +132,9 @@ public class DispositivoInteligente extends Dispositivo {
 		if (this.estado != Estados.MODO_AHORRO_ENERGIA && this.estado != Estados.APAGADO) {
 			this.estado = Estados.MODO_AHORRO_ENERGIA;
 			setEstado(Estados.MODO_AHORRO_ENERGIA);
-			this.fabricante.enviarMensajeModoAhorroEnergia();
+			if (this.fabricante != null) {
+				this.fabricante.enviarMensajeModoAhorroEnergia();
+			}
 		}
 	}
 
@@ -104,7 +143,7 @@ public class DispositivoInteligente extends Dispositivo {
 		periodos.add(periodo);
 		periodo.setDispositivo(this);
 	}
-	
+
 	public List<Periodo> getPeriodosDelMes(int mes) {
 		return periodos.stream().filter(p -> p.getInicio().getMonthValue() == mes).collect(Collectors.toList());
 	}
@@ -151,6 +190,7 @@ public class DispositivoInteligente extends Dispositivo {
 		double totalPromedio = this.consumoTotalComprendidoEntre(inicio, fin) / Duration.between(inicio, fin).toDays();
 		return totalPromedio;
 	}
+
 	public void limpiarPeriodos() {
 		this.ultimaFechaHoraEncendido = null;
 		this.periodos.clear();

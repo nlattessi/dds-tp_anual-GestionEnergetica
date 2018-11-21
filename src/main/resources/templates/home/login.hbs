@@ -1,0 +1,26 @@
+{{#partial "extra_css"}}
+	<link href="/signin.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "contenido"}}
+
+<form class="form-signin text-center" method="post">
+	
+  <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+  	
+  <label for="inputEmail" class="sr-only">Nombre de usuario</label>
+  <input type="text" id="inputNombreUsuario" name="inputNombreUsuario" class="form-control" placeholder="JuanPerez" required autofocus>
+  <label for="inputPassword" class="sr-only">Password</label>
+  <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
+  {{#if authenticationFailed}}
+		<div class="alert alert-danger" role="alert">
+  			Nombre de usuario o contraseña incorrecto/s
+		</div>
+	{{/if}}
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+  <p class="mt-5 mb-3 text-muted">&copy; Grupo 9 - DDS Miercoles TN - UTN</p>
+</form>
+
+{{/partial}}
+
+{{>layout.hbs}}

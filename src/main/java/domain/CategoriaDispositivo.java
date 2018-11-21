@@ -1,0 +1,5 @@
+package domain;
+
+public enum CategoriaDispositivo {
+	AIRE_ACONDICIONADO, TELEVISOR, HELADERA, LAVARROPAS, VENTILADOR, LAMPARA, PC, MICROONDAS, PLANCHA
+}

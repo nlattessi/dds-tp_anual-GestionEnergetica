@@ -67,7 +67,7 @@ public class Entrega3Test {
 		Cliente clienteRecuperado = this.model.buscar(Cliente.class, new ImmutablePair<>("nombreUsuario", "UsuarioPrueba1"));
 		assertEquals(clienteRecuperado.getId(), idCliente);
 
-		Administrador administrador = new Administrador(1, "AdministradorPrueba1", contraseña, nombreYApellido, domicilio,
+		Administrador administrador = new Administrador("AdministradorPrueba1", contraseña, nombreYApellido, domicilio,
 				fechaAltaCliente);
 		this.model.agregar(administrador);
 		int idAdministrador = administrador.getId();
@@ -380,7 +380,7 @@ public class Entrega3Test {
 		Transformador transformadorRecuperado = this.model.buscar(Transformador.class, id);
 
 		DispositivoInteligente dispositivoTransformador = (DispositivoInteligente) transformador.getClientesConectados()
-				.get(0).getDispositivos().get(0);
+				.get(0).getDispositivos().toArray()[0];
 
 		System.out.println("Consumo antes de incrementacion: "
 				+ dispositivoTransformador.consumoTotalComprendidoEntre(periodo.getInicio(), periodo.getFin()));

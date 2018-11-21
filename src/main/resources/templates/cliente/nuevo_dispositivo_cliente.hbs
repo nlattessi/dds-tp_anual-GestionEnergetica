@@ -1,0 +1,47 @@
+{{#partial "contenido_cliente"}}
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+  <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+    <div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+      <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
+    </div>
+    <div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+      <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Alta dispositivo</h1>
+  </div>
+
+  <form action="/cliente/dispositivos" method="POST">
+
+    <div class="form-group">
+      <label for="categoria">Dispositivo Maestro</label>
+      <select class="form-control" name="maestro" required>
+        <option value>Elige...</option>
+        {{#each dispositivoMaestros}}
+        <option value={{id}}>{{categoria}} - {{nombre}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="usoMensualMinimoHoras">Minimo de horas de uso mensual</label>
+      <input type="text" class="form-control" name="usoMensualMinimoHoras" placeholder="3" required>
+    </div>
+
+    <div class="form-group">
+      <label for="usoMensualMaximoHoras">Maximo de horas de uso mensual</label>
+      <input type="text" class="form-control" name="usoMensualMaximoHoras" placeholder="30" required>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+
+
+</main>
+
+{{/partial}}
+
+{{>cliente/layout_cliente.hbs}}

@@ -46,7 +46,7 @@ public class Entrega0Test {
 		this.cliente.agregarDispositivo(radio);
 		this.cliente.agregarDispositivo(aireAcondicionado);
 
-		this.administrador = new Administrador(1, nombreUsuario, contraseña, nombreYApellido, domicilio,
+		this.administrador = new Administrador(nombreUsuario, contraseña, nombreYApellido, domicilio,
 				fechaAltaCliente);
 	}
 

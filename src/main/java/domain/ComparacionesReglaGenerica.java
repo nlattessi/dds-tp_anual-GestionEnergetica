@@ -1,5 +1,5 @@
 package domain;
 
 public enum ComparacionesReglaGenerica {
-	MAYORIGUAL
+	MAYORIGUAL, MENORIGUAL, IGUAL, DISTINTODE
 }

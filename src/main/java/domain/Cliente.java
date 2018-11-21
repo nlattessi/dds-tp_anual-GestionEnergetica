@@ -5,6 +5,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -17,55 +19,68 @@ import javax.persistence.Transient;
 
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
 
-@Entity
+@Entity(name = "Cliente")
 @Table(name = "cliente")
+@DiscriminatorValue("1")
 public class Cliente extends Usuario {
 
+	// Variables
+	@Column
 	private TipoDocumento tipoDocumento;
+
+	@Column
 	private int numeroDocumento;
+
+	@Column
 	private String telefonoContacto;
+
+	@Column
 	private Date fechaAltaServicio;
+
+	@Column
 	private Categoria categoria;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Dispositivo> dispositivos;
-
+	@Column
 	private int puntosAcumulados = 0;
-	
-	@Transient
-	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
-	
+
+	@Column(columnDefinition = "BOOLEAN")
 	private boolean ahorroInteligente;
+
+	@Column
+	private int geolocalizacionX = 0;
+
+	@Column
+	private int geolocalizacionY = 0;
+
+	@Column
 	private int periodicidadAhorroInt;
-	private int contadorId;
+//	private int contadorId;
 //	private int transformadorId;
-	
+//	public int segundosDeEspera = 5;
+
+//	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cliente_id")
+	private Set<Dispositivo> dispositivos = new HashSet<Dispositivo>();
+
 	@ManyToOne
 	@JoinColumn(name = "transformador_id", referencedColumnName = "id")
 	private Transformador transformador;
 
 	@Transient
+	private SimplexFacade simplex = new SimplexFacade(GoalType.MAXIMIZE, true);
+
+	@Transient
 	private Locacion coordenadasDomicilio;
-
-	private int geolocalizacionX = 0;
-	private int geolocalizacionY = 0;
-	
-	public boolean getAhorroInteligente() {
-		return ahorroInteligente;
-	}
-
-	public void setAhorroInteligente(boolean ahorroInteligente) {
-		this.ahorroInteligente = ahorroInteligente;
-	}
 
 	@Transient
 	public Thread hiloVerificadorConsumo;
 
-	public int segundosDeEspera = 5;
+	// Constructores
+	public Cliente() {
+		super();
+	}
 
-//	public Cliente(int id, String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
-//			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
-//			Categoria categoria) {
 	public Cliente(String nombreUsuario, String contraseña, String nombreYApellido, String domicilio,
 			TipoDocumento tipoDocumento, int numeroDocumento, String telefonoContacto, Date fechaAltaServicio,
 			Categoria categoria) {
@@ -77,10 +92,17 @@ public class Cliente extends Usuario {
 		this.categoria = categoria;
 		this.ahorroInteligente = false;
 		this.periodicidadAhorroInt = 10;
-		this.contadorId = 0;
-
-		this.dispositivos = new ArrayList<>();
+//		this.contadorId = 0;
+//		this.dispositivos = new ArrayList<>();
 		this.coordenadasDomicilio = new Locacion(geolocalizacionX, geolocalizacionY);
+	}
+
+	public boolean isAhorroInteligente() {
+		return ahorroInteligente;
+	}
+
+	public void setAhorroInteligente(boolean ahorroInteligente) {
+		this.ahorroInteligente = ahorroInteligente;
 	}
 
 	public TipoDocumento getTipoDocumento() {
@@ -94,11 +116,11 @@ public class Cliente extends Usuario {
 //	public int getTransformadorId() {
 //		return transformadorId;
 //	}
-	
+
 	public void setTransformador(Transformador transformador) {
 		this.transformador = transformador;
 	}
-	
+
 	public Transformador getTransformador() {
 		return transformador;
 	}
@@ -143,12 +165,20 @@ public class Cliente extends Usuario {
 		this.categoria = categoria;
 	}
 
-	public List<Dispositivo> getDispositivos() {
+	public Set<Dispositivo> getDispositivos() {
 		return dispositivos;
 	}
 
-	public void setDispositivos(List<Dispositivo> dispositivos) {
+	public void setDispositivos(Set<Dispositivo> dispositivos) {
 		this.dispositivos = dispositivos;
+	}
+
+	public void agregarDispositivo(Dispositivo dispositivo) {
+		if (dispositivo instanceof DispositivoEstandar) {
+			this.agregarDispositivo((DispositivoEstandar) dispositivo);
+		} else {
+			this.agregarDispositivo((DispositivoInteligente) dispositivo);
+		}
 	}
 
 	public void agregarDispositivo(DispositivoEstandar dispositivo) {
@@ -167,7 +197,7 @@ public class Cliente extends Usuario {
 				dispositivo.getConsumoXHora(), Estados.APAGADO);
 		this.dispositivos.add(dispInteligente);
 		this.sumarPuntos(10);
-		
+
 		HistorialConversionEstandarInteligente.guardarHistorial(this, dispositivo, dispInteligente);
 	}
 
@@ -190,7 +220,7 @@ public class Cliente extends Usuario {
 		}
 		return consumoTotal;
 	}
-	
+
 	public double calcularConsumoEntrePeriodos(LocalDateTime inicio, LocalDateTime fin) {
 		double consumoTotal = 0;
 		for (Dispositivo dispositivo : this.dispositivos) {
@@ -277,8 +307,7 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarTelevisorTubo21P() {
-		Dispositivo dispositivo = new DispositivoEstandar("Color de tubo fluorescente de 21 pulgadas",
-				0.075);
+		Dispositivo dispositivo = new DispositivoEstandar("Color de tubo fluorescente de 21 pulgadas", 0.075);
 		dispositivo.setUsoMensualMinimoHoras(90);
 		dispositivo.setUsoMensualMaximoHoras(360);
 		dispositivo.setBajoConsumo(false);
@@ -286,8 +315,7 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarTelevisorTubo29A34P() {
-		Dispositivo dispositivo = new DispositivoEstandar("Color de tubo fluorescente de 29 a 34 pulgadas",
-				0.175);
+		Dispositivo dispositivo = new DispositivoEstandar("Color de tubo fluorescente de 29 a 34 pulgadas", 0.175);
 		dispositivo.setUsoMensualMinimoHoras(90);
 		dispositivo.setUsoMensualMaximoHoras(360);
 		dispositivo.setBajoConsumo(false);
@@ -337,8 +365,7 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarHeladeraSinFreezer() {
-		Dispositivo dispositivo = new DispositivoInteligente("Heladera sin freezer", 0.075,
-				Estados.APAGADO);
+		Dispositivo dispositivo = new DispositivoInteligente("Heladera sin freezer", 0.075, Estados.APAGADO);
 		dispositivo.setUsoMensualMinimoHoras(0);
 		dispositivo.setUsoMensualMaximoHoras(0);
 		dispositivo.setBajoConsumo(true);
@@ -347,8 +374,8 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarLavarropasAuto5KgCA() {
-		Dispositivo dispositivo = new DispositivoEstandar(
-				"Lavarropas automatico de 5kg con calentamiento de agua ", 0.875);
+		Dispositivo dispositivo = new DispositivoEstandar("Lavarropas automatico de 5kg con calentamiento de agua ",
+				0.875);
 		dispositivo.setUsoMensualMinimoHoras(6);
 		dispositivo.setUsoMensualMaximoHoras(30);
 		dispositivo.setBajoConsumo(false);
@@ -356,8 +383,7 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarLavarropasAuto5kg() {
-		Dispositivo dispositivo = new DispositivoInteligente("Lavarropas automatico de 5kg", 0.175,
-				Estados.APAGADO);
+		Dispositivo dispositivo = new DispositivoInteligente("Lavarropas automatico de 5kg", 0.175, Estados.APAGADO);
 		dispositivo.setUsoMensualMinimoHoras(6);
 		dispositivo.setUsoMensualMaximoHoras(30);
 		dispositivo.setBajoConsumo(true);
@@ -389,8 +415,7 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarLamparaHalogena40W() {
-		Dispositivo dispositivo = new DispositivoInteligente("Lampara Halogena de 40 W", 0.04,
-				Estados.APAGADO);
+		Dispositivo dispositivo = new DispositivoInteligente("Lampara Halogena de 40 W", 0.04, Estados.APAGADO);
 		dispositivo.setUsoMensualMinimoHoras(90);
 		dispositivo.setUsoMensualMaximoHoras(360);
 		dispositivo.setBajoConsumo(false);
@@ -398,8 +423,7 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarLamparaHalogena60W() {
-		Dispositivo dispositivo = new DispositivoInteligente("Lampara Halogena de 60 W", 0.06,
-				Estados.APAGADO);
+		Dispositivo dispositivo = new DispositivoInteligente("Lampara Halogena de 60 W", 0.06, Estados.APAGADO);
 		dispositivo.setUsoMensualMinimoHoras(90);
 		dispositivo.setUsoMensualMaximoHoras(360);
 		dispositivo.setBajoConsumo(false);
@@ -407,8 +431,7 @@ public class Cliente extends Usuario {
 	}
 
 	public Dispositivo generarLamparaHalogena100W() {
-		Dispositivo dispositivo = new DispositivoInteligente("Lampara Halogena de 100 W", 0.015,
-				Estados.APAGADO);
+		Dispositivo dispositivo = new DispositivoInteligente("Lampara Halogena de 100 W", 0.015, Estados.APAGADO);
 		dispositivo.setUsoMensualMinimoHoras(90);
 		dispositivo.setUsoMensualMaximoHoras(360);
 		dispositivo.setBajoConsumo(false);

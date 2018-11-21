@@ -6,8 +6,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -54,11 +56,11 @@ public class ImportadorJson {
 
 		return importador;
 	}
-	
+
 	public JSONArray getEntidades() {
 		return entidades;
 	}
-	
+
 	public void setEntidades(JSONArray entidades) {
 		this.entidades = entidades;
 	}
@@ -88,7 +90,8 @@ public class ImportadorJson {
 					e.printStackTrace();
 				}
 				Categoria categoria = Categoria.valueOf((String) clienteJson.get("categoria"));
-				//Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
+				// Cliente cliente = new Cliente(id, nombreDeUsuario, contraseña,
+				// nombreYApellido, domicilioDelServicio,
 				Cliente cliente = new Cliente(nombreDeUsuario, contraseña, nombreYApellido, domicilioDelServicio,
 						tipoDeDocumento, numeroDeDocumento, telefonoDeContacto, fechaDeAltaDelServicio, categoria);
 
@@ -112,7 +115,7 @@ public class ImportadorJson {
 			while (iterator.hasNext()) {
 				JSONObject administradorJson = iterator.next();
 
-				int id = (int) (long) administradorJson.get("id");
+//				int id = (int) (long) administradorJson.get("id");
 				String nombreYApellido = administradorJson.get("nombre_y_apellido").toString();
 				String nombreDeUsuario = administradorJson.get("nombre_de_usuario").toString();
 				String contraseña = administradorJson.get("contraseña").toString();
@@ -126,8 +129,8 @@ public class ImportadorJson {
 					System.exit(1);
 				}
 
-				Administrador administrador = new Administrador(id, nombreDeUsuario, contraseña, nombreYApellido,
-						domicilio, fechaDeAlta);
+				Administrador administrador = new Administrador(nombreDeUsuario, contraseña, nombreYApellido, domicilio,
+						fechaDeAlta);
 
 				administradores.add(administrador);
 			}
@@ -158,10 +161,10 @@ public class ImportadorJson {
 				Boolean inteligente = (Boolean) dispositivoJson.get("inteligente");
 				if (inteligente) {
 					Estados estado = Estados.valueOf(dispositivoJson.get("estado").toString().toUpperCase());
-					//dispositivo = new DispositivoInteligente(id, nombre, consumoPorHora, estado);
+					// dispositivo = new DispositivoInteligente(id, nombre, consumoPorHora, estado);
 					dispositivo = new DispositivoInteligente(nombre, consumoPorHora, estado);
 				} else {
-					//dispositivo = new DispositivoEstandar(id, nombre, consumoPorHora);
+					// dispositivo = new DispositivoEstandar(id, nombre, consumoPorHora);
 					dispositivo = new DispositivoEstandar(nombre, consumoPorHora);
 				}
 
@@ -204,10 +207,10 @@ public class ImportadorJson {
 
 		return zonas;
 	}
-	
+
 	public ImportadorJson limpiarTablaTransformadores() {
 		this.model.eliminarTodos(Transformador.class);
-		
+
 		return this;
 	}
 
@@ -241,6 +244,31 @@ public class ImportadorJson {
 		}
 
 		return transformadores;
+	}
+
+	public List<Map<String, Integer>> obtenerDatosDispositivos() {
+		List<Map<String, Integer>> datos = new ArrayList<>();
+
+		try {
+			Iterator<JSONObject> iterator = this.entidades.iterator();
+			while (iterator.hasNext()) {
+				JSONObject dispositivoJson = iterator.next();
+
+				Map<String, Integer> item = new HashMap();
+
+				item.put("dispositivoMaestroId", (int) (long) dispositivoJson.get("dispositivo_maestro_id"));
+				item.put("usoMensualMinimoHoras", (int) (long) dispositivoJson.get("uso_mensual_minimo_horas"));
+				item.put("usoMensualMaximoHoras", (int) (long) dispositivoJson.get("uso_mensual_maximo_horas"));
+
+				datos.add(item);
+			}
+		} catch (Exception e) {
+			System.out.println("Error parseando lista dispositivos en json");
+			e.printStackTrace();
+			System.exit(1);
+		}
+
+		return datos;
 	}
 
 }
