@@ -12,6 +12,7 @@ import controllers.ToolsController;
 import db.RepositorioDispositivos;
 import db.RepositorioMediciones;
 import db.RepositorioReglas;
+import db.RepositorioReportes;
 import db.RepositorioTransformadores;
 import db.RepositorioUsuarios;
 import spark.Spark;
@@ -26,6 +27,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+
+import com.mongodb.MongoClient;
+
 public class Router {
 
 	public static void configure() {
@@ -39,11 +45,21 @@ public class Router {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 		EntityManager manager = factory.createEntityManager();
 
+		final String MONGO_SERVER = "localhost";
+		final int MONGO_PORT = 27017;
+		final String MONGO_DB = "utndds";
+		MongoClient mongoClient = new MongoClient(MONGO_SERVER, MONGO_PORT);
+		Morphia morphia = new Morphia();
+		Datastore datastore = morphia.createDatastore(mongoClient, MONGO_DB);
+		datastore.ensureIndexes();
+
 		RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios(manager);
 		RepositorioDispositivos repositorioDispositivos = new RepositorioDispositivos(manager);
 		RepositorioTransformadores repositorioTransformadores = new RepositorioTransformadores(manager);
 		RepositorioReglas repositorioReglas = new RepositorioReglas(manager);
 		RepositorioMediciones repositorioMediciones = new RepositorioMediciones(manager);
+		RepositorioReportes repositorioReportes = new RepositorioReportes(datastore, repositorioUsuarios,
+				repositorioDispositivos, repositorioTransformadores);
 
 		HomeController homeController = new HomeController(repositorioTransformadores);
 		LoginController loginController = new LoginController(repositorioUsuarios);
@@ -52,7 +68,7 @@ public class Router {
 		AdministradorController administradorController = new AdministradorController(repositorioUsuarios,
 				repositorioDispositivos);
 		ReportesController reportesController = new ReportesController(repositorioUsuarios, repositorioDispositivos,
-				repositorioTransformadores);
+				repositorioTransformadores, repositorioReportes);
 		ClienteController clienteController = new ClienteController(repositorioUsuarios, repositorioDispositivos,
 				repositorioMediciones, repositorioReglas);
 		ReglaController reglaController = new ReglaController(repositorioUsuarios, repositorioReglas,

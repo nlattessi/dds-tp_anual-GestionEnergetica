@@ -6,11 +6,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+
+import com.mongodb.MongoClient;
+
 import db.RepositorioDispositivos;
+import db.RepositorioReportes;
 import db.RepositorioTransformadores;
 import db.RepositorioUsuarios;
 import domain.CategoriaDispositivo;
 import domain.Cliente;
+import domain.Employee;
+import domain.ReporteConsumoHogarPeriodo;
+import domain.ReporteConsumoTipoDispositivoPeriodo;
+import domain.ReporteConsumoTransformadorPeriodo;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -21,12 +31,14 @@ public class ReportesController {
 	private RepositorioUsuarios repositorioUsuarios;
 	private RepositorioDispositivos repositorioDispositivos;
 	private RepositorioTransformadores repositorioTransformadores;
+	private RepositorioReportes repositorioReportes;
 
 	public ReportesController(RepositorioUsuarios repositorioUsuarios, RepositorioDispositivos repositorioDispositivos,
-			RepositorioTransformadores repositorioTransformadores) {
+			RepositorioTransformadores repositorioTransformadores, RepositorioReportes repositorioReportes) {
 		this.repositorioUsuarios = repositorioUsuarios;
 		this.repositorioDispositivos = repositorioDispositivos;
 		this.repositorioTransformadores = repositorioTransformadores;
+		this.repositorioReportes = repositorioReportes;
 	}
 
 	public ModelAndView formConsumoHogarPeriodo(Request request, Response response) {
@@ -47,19 +59,14 @@ public class ReportesController {
 		String inicioParam = request.queryParams("inicio");
 		String finParam = request.queryParams("fin");
 
-		Cliente cliente = repositorioUsuarios.buscarClientePorId(Integer.parseInt(clienteIdParam));
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		LocalDateTime inicio = LocalDateTime.parse(inicioParam, formatter);
-		LocalDateTime fin = LocalDateTime.parse(finParam, formatter);
-
-		double consumo = cliente.calcularConsumoEntrePeriodos(inicio, fin);
+		ReporteConsumoHogarPeriodo reporte = repositorioReportes.obtenerReporteConsumoHogarPeriodo(clienteIdParam,
+				inicioParam, finParam);
 
 		Map<String, String> model = new HashMap<>();
-		model.put("cliente_nombre_apellido", cliente.getNombreYApellido());
-		model.put("periodo_inicio", inicioParam);
-		model.put("periodo_fin", finParam);
-		model.put("consumo", String.valueOf(consumo));
+		model.put("cliente_nombre_apellido", reporte.getNombreYApellido());
+		model.put("periodo_inicio", reporte.getInicio());
+		model.put("periodo_fin", reporte.getFin());
+		model.put("consumo", String.valueOf(reporte.getConsumo()));
 
 		return new ModelAndView(model, "administrador/reportes/consumo-hogar-periodo-resultado.hbs");
 	}
@@ -77,19 +84,17 @@ public class ReportesController {
 		String inicioParam = request.queryParams("inicio");
 		String finParam = request.queryParams("fin");
 
-		boolean esInteligente = tipoDispositivoParam.equals("1");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		LocalDateTime inicio = LocalDateTime.parse(inicioParam, formatter);
-		LocalDateTime fin = LocalDateTime.parse(finParam, formatter);
+		ReporteConsumoTipoDispositivoPeriodo reporte = repositorioReportes
+				.obtenerReporteConsumoTipoDispositivoPeriodo(tipoDispositivoParam, inicioParam, finParam);
 
-		Map<String, String> reporte = repositorioDispositivos.consumoPromedioPorTipoPorPeriodo(esInteligente, inicio,
-				fin);
-		String tipoDispositivo = (esInteligente) ? "Inteligente" : "Estandar";
-		reporte.put("tipo_dispositivo", tipoDispositivo);
-		reporte.put("periodo_inicio", inicioParam);
-		reporte.put("periodo_fin", finParam);
+		Map<String, String> model = new HashMap<>();
+		model.put("tipo_dispositivo", reporte.getTipoDispositivo());
+		model.put("cantidad_dispositivos", String.valueOf(reporte.getCantidadDispositivos()));
+		model.put("periodo_inicio", reporte.getInicio());
+		model.put("periodo_fin", reporte.getFin());
+		model.put("consumo_promedio", String.valueOf(reporte.getConsumoPromedio()));
 
-		return new ModelAndView(reporte, "administrador/reportes/consumo-tipo-dispositivo-periodo-resultado.hbs");
+		return new ModelAndView(model, "administrador/reportes/consumo-tipo-dispositivo-periodo-resultado.hbs");
 	}
 
 	public ModelAndView formConsumoTransformadorPeriodo(Request request, Response response) {
@@ -104,18 +109,15 @@ public class ReportesController {
 		String inicioParam = request.queryParams("inicio");
 		String finParam = request.queryParams("fin");
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		LocalDateTime inicio = LocalDateTime.parse(inicioParam, formatter);
-		LocalDateTime fin = LocalDateTime.parse(finParam, formatter);
-		
-		Map<String, Object> reporte = new HashMap<>();
+		ReporteConsumoTransformadorPeriodo reporte = repositorioReportes
+				.obtenerReporteConsumoTransformadorPeriodo(inicioParam, finParam);
 
-		List<Map<String, String>> transformadores = repositorioTransformadores.consumoPromedioPorPeriodo(inicio, fin);
-		reporte.put("transformadores", transformadores);
-		reporte.put("periodo_inicio", inicioParam);
-		reporte.put("periodo_fin", finParam);
+		Map<String, Object> model = new HashMap<>();
+		model.put("transformadores", reporte.getTransformadores());
+		model.put("periodo_inicio", reporte.getInicio());
+		model.put("periodo_fin", reporte.getFin());
 
-		return new ModelAndView(reporte, "administrador/reportes/consumo-transformador-periodo-resultado.hbs");
+		return new ModelAndView(model, "administrador/reportes/consumo-transformador-periodo-resultado.hbs");
 	}
 
 }
