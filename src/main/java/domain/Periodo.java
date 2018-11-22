@@ -36,9 +36,11 @@ public class Periodo {
 //	@Column(name = "inicio", columnDefinition = "TIMESTAMP")
 //	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	@Basic
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime inicio;
 
 	@Basic
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime fin;
 
 	@Column

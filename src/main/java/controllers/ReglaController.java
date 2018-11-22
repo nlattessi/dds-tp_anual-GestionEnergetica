@@ -1,27 +1,16 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import db.RepositorioDispositivos;
 import db.RepositorioReglas;
 import db.RepositorioUsuarios;
 import domain.Acciones;
-import domain.Actuador;
-import domain.CategoriaDispositivo;
 import domain.Cliente;
 import domain.ComparacionesReglaGenerica;
-import domain.Dispositivo;
-import domain.DispositivoEstandar;
 import domain.DispositivoInteligente;
-import domain.DispositivoMaestro;
-import domain.Estados;
 import domain.ReglaGenerica;
-import domain.Reglamentador;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -41,7 +30,7 @@ public class ReglaController {
 	}
 
 	public ModelAndView listarReglas(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		Map<String, List<ReglaGenerica>> model = new HashMap<>();
 
@@ -56,7 +45,7 @@ public class ReglaController {
 	}
 
 	public ModelAndView nuevaRegla(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		Map<String, Object> model = new HashMap<>();
 		model.put("comparaciones", ComparacionesReglaGenerica.values());
@@ -90,52 +79,10 @@ public class ReglaController {
 
 		response.redirect("/cliente/reglas");
 		return null;
-
-//		String maestroParam = request.queryParams("maestro");
-//		int maestroId = Integer.parseInt(maestroParam);
-////		DispositivoMaestro maestro = repositorioDispositivos.buscarDispositivoMaestro(maestroId);
-//
-////		String estadoParam = request.queryParams("estado");
-////		Estados estado = Estados.valueOf(estadoParam);
-//
-//		String usoMensualMinimoHorasParam = request.queryParams("usoMensualMinimoHoras");
-//		int usoMensualMinimoHoras = Integer.parseInt(usoMensualMinimoHorasParam);
-//
-//		String usoMensualMaximoHorasParam = request.queryParams("usoMensualMaximoHoras");
-//		int usoMensualMaximoHoras = Integer.parseInt(usoMensualMaximoHorasParam);
-//
-////		Dispositivo dispositivo;
-
-//		if (maestro.isEsInteligente()) {
-//			dispositivo = new DispositivoInteligente(maestro, Estados.APAGADO);
-//		} else {
-//			dispositivo = new DispositivoEstandar(maestro);
-//		}
-
-//		dispositivo.setUsoMensualMinimoHoras(usoMensualMinimoHoras);
-//		dispositivo.setUsoMensualMaximoHoras(usoMensualMaximoHoras);
-//		dispositivo.setCategoria(maestro.getCategoria());
-//		dispositivo.setBajoConsumo(maestro.isEsBajoConsumo());
-
-//		Cliente cliente = repositorioUsuarios.buscarClientePorNombreUsuario(request.session().attribute("currentUser"));
-//
-////		dispositivo.setCliente(cliente);
-//
-////		withTransaction(() -> {
-////		repositorioDispositivos.agregar(dispositivo);
-////		cliente.agregarDispositivo(dispositivo);
-////		});
-//
-//		response.redirect("/cliente/dispositivos");
-//		return null;
 	}
 
 	public Void borrarRegla(Request request, Response response) {
 		String id = request.params("id");
-
-//		withTransaction(() -> {
-//		repositorioDispositivos.borrarDispositivoCliente(Integer.parseInt(id));
-//		});
 
 		repositorioReglas.borrarPorId(Integer.parseInt(id));
 

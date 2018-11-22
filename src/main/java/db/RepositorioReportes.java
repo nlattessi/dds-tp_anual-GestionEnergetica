@@ -7,13 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
-
-import com.mongodb.MongoClient;
 
 import domain.Cliente;
 import domain.Dispositivo;
@@ -156,7 +151,7 @@ public class RepositorioReportes {
 		reporte.setFin(finParam);
 		reporte.setTransformadores(transformadores);
 		reporte.setReporteId(reporteConsumoTransformadorPeriodoId);
-		
+
 		ds.save(reporte);
 
 		return reporte;

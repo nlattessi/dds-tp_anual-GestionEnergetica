@@ -1,23 +1,13 @@
 package controllers;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
-
-import com.mongodb.MongoClient;
 
 import db.RepositorioDispositivos;
 import db.RepositorioReportes;
 import db.RepositorioTransformadores;
 import db.RepositorioUsuarios;
-import domain.CategoriaDispositivo;
-import domain.Cliente;
-import domain.Employee;
 import domain.ReporteConsumoHogarPeriodo;
 import domain.ReporteConsumoTipoDispositivoPeriodo;
 import domain.ReporteConsumoTransformadorPeriodo;
@@ -42,7 +32,7 @@ public class ReportesController {
 	}
 
 	public ModelAndView formConsumoHogarPeriodo(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		List clientes = repositorioUsuarios.listarClientes();
 
@@ -53,7 +43,7 @@ public class ReportesController {
 	}
 
 	public ModelAndView procesarConsumoHogarPeriodo(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		String clienteIdParam = request.queryParams("cliente");
 		String inicioParam = request.queryParams("inicio");
@@ -72,13 +62,13 @@ public class ReportesController {
 	}
 
 	public ModelAndView formConsumoTipoDispositivoPeriodo(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		return new ModelAndView(null, "administrador/reportes/consumo-tipo-dispositivo-periodo.hbs");
 	}
 
 	public ModelAndView procesarConsumoTipoDispositivoPeriodo(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		String tipoDispositivoParam = request.queryParams("tipo_dispositivo");
 		String inicioParam = request.queryParams("inicio");
@@ -98,13 +88,13 @@ public class ReportesController {
 	}
 
 	public ModelAndView formConsumoTransformadorPeriodo(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		return new ModelAndView(null, "administrador/reportes/consumo-transformador-periodo.hbs");
 	}
 
 	public ModelAndView procesarConsumoTransformadorPeriodo(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		String inicioParam = request.queryParams("inicio");
 		String finParam = request.queryParams("fin");

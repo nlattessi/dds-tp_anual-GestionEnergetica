@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity(name = "DispositivoEstandar")
 @Table(name = "dispositivo_estandar")

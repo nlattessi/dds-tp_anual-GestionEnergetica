@@ -18,7 +18,7 @@
 			<property name="hibernate.connection.driver_class"
 				value="com.mysql.jdbc.Driver" />
 			<property name="hibernate.connection.url"
-				value="jdbc:mysql://172.17.0.3:3306/utndds" />
+				value="jdbc:mysql://localhost:3306/utndds" />
 			<property name="hibernate.connection.username" value="root" />
 			<property name="hibernate.connection.password" value="root" />
 

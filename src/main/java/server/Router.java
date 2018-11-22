@@ -21,8 +21,6 @@ import spark.utils.BooleanHelper;
 import spark.utils.HandlebarsTemplateEngineBuilder;
 import spark.utils.StringHelper;
 
-import static spark.Spark.*;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -31,6 +29,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 public class Router {
 
@@ -41,14 +40,20 @@ public class Router {
 
 		Spark.staticFiles.location("/public");
 
+		// MySQL
 		final String PERSISTENCE_UNIT_NAME = "db";
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 		EntityManager manager = factory.createEntityManager();
 
+		// MongoDB
 		final String MONGO_SERVER = "localhost";
 		final int MONGO_PORT = 27017;
 		final String MONGO_DB = "utndds";
-		MongoClient mongoClient = new MongoClient(MONGO_SERVER, MONGO_PORT);
+		final String MONGO_USER = "root";
+		final String MONGO_PASSWORD = "root";
+		MongoClientURI uri = new MongoClientURI(
+				"mongodb://" + MONGO_USER + ":" + MONGO_PASSWORD + "@" + MONGO_SERVER + ":" + MONGO_PORT);
+		MongoClient mongoClient = new MongoClient(uri);
 		Morphia morphia = new Morphia();
 		Datastore datastore = morphia.createDatastore(mongoClient, MONGO_DB);
 		datastore.ensureIndexes();

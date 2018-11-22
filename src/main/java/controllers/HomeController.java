@@ -7,7 +7,6 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 import db.RepositorioTransformadores;
-import domain.Cliente;
 import domain.Transformador;
 import spark.ModelAndView;
 import spark.Request;
@@ -28,27 +27,23 @@ public class HomeController {
 	public ModelAndView mostrarMapa(Request request, Response response) {
 		Map<String, List<Transformador>> model = new HashMap<>();
 		List<Transformador> transformadores = repositorioTransformadores.listar();
-		
+
 		model.put("transformadores", transformadores);
-		
+
 		return new ModelAndView(model, "home/mapa.hbs");
 	}
-	
+
 	public Object verConsumoTransformador(Request request, Response response) {
 		String id = request.params("id");
-		
+
 		Transformador transformador = repositorioTransformadores.buscar(Integer.parseInt(id));
-		
+
 		JSONObject obj = new JSONObject();
 		obj.put("consumo", transformador.cantidadDeEnergiaSuministrada());
-		
+
 		response.type("application/json");
 		response.status(200);
 
 		return obj;
-		
-		
-//		response.type("application/json");
-//	    return "{\"message\":\"Custom 404\"}";
 	}
 }

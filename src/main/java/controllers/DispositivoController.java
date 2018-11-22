@@ -4,13 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager;
-import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps;
-
 import db.RepositorioDispositivos;
 import db.RepositorioUsuarios;
 import domain.CategoriaDispositivo;
@@ -107,9 +100,6 @@ public class DispositivoController {
 		int maestroId = Integer.parseInt(maestroParam);
 		DispositivoMaestro maestro = repositorioDispositivos.buscarDispositivoMaestro(maestroId);
 
-//		String estadoParam = request.queryParams("estado");
-//		Estados estado = Estados.valueOf(estadoParam);
-
 		String usoMensualMinimoHorasParam = request.queryParams("usoMensualMinimoHoras");
 		int usoMensualMinimoHoras = Integer.parseInt(usoMensualMinimoHorasParam);
 
@@ -126,17 +116,13 @@ public class DispositivoController {
 
 		dispositivo.setUsoMensualMinimoHoras(usoMensualMinimoHoras);
 		dispositivo.setUsoMensualMaximoHoras(usoMensualMaximoHoras);
-//		dispositivo.setCategoria(maestro.getCategoria());
-//		dispositivo.setBajoConsumo(maestro.isEsBajoConsumo());
 
 		Cliente cliente = repositorioUsuarios.buscarClientePorNombreUsuario(request.session().attribute("currentUser"));
 
 		dispositivo.setCliente(cliente);
 
-//		withTransaction(() -> {
 		repositorioDispositivos.agregar(dispositivo);
 		cliente.agregarDispositivo(dispositivo);
-//		});
 
 		response.redirect("/cliente/dispositivos");
 		return null;
@@ -145,9 +131,7 @@ public class DispositivoController {
 	public Void borrarDispositivoCliente(Request request, Response response) {
 		String id = request.params("id");
 
-//		withTransaction(() -> {
 		repositorioDispositivos.borrarDispositivoCliente(Integer.parseInt(id));
-//		});
 
 		response.redirect("/cliente/dispositivos");
 		return null;

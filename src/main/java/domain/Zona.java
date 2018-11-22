@@ -1,6 +1,5 @@
 package domain;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,22 +13,22 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "zona")
-public class Zona extends EntidadPersistente{
+public class Zona extends EntidadPersistente {
 //	private int id;
-	
+
 	@OneToMany(mappedBy = "zona", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Transformador> transformadores = new ArrayList<>();
-	
+
 	private int radio;
 	private int geolocalizacionX = 0;
 	private int geolocalizacionY = 0;
-	
+
 	@Transient
 	private Locacion coordenadas;
-	
+
 	@Column
 	private float latitud;
-	
+
 	@Column
 	private float longitud;
 
@@ -41,9 +40,9 @@ public class Zona extends EntidadPersistente{
 		this.geolocalizacionY = y;
 		this.coordenadas = new Locacion(this.geolocalizacionX, this.geolocalizacionY);
 	}
-	
+
 	public Zona() {
-		
+
 	}
 
 //	public int getId() {
@@ -63,15 +62,15 @@ public class Zona extends EntidadPersistente{
 	}
 
 	public double consumoTotalEnergia() {
-		double consumoTotal=0;
-		for(Transformador transformador : this.transformadores) {
+		double consumoTotal = 0;
+		for (Transformador transformador : this.transformadores) {
 			consumoTotal = consumoTotal + transformador.cantidadDeEnergiaSuministrada();
 		}
 		return consumoTotal;
 	}
 
 	public void setearTransformador() {
-		for(Transformador transformador: this.transformadores ) {
+		for (Transformador transformador : this.transformadores) {
 			transformador.setZona(this);
 		}
 	}
@@ -84,14 +83,16 @@ public class Zona extends EntidadPersistente{
 
 	public void obtenerMasCercano(Cliente cliente) {
 		double minimoDistancia = 100000;
-		Transformador minimoTransf =  null;
+		Transformador minimoTransf = null;
 		for (Transformador transformador : this.transformadores) {
-			double distancia = coordenadas.obtenerDistancia(transformador.coordenadas.x, transformador.coordenadas.y, cliente.getCoordenadasDomicilio().x, cliente.getCoordenadasDomicilio().y);
-			if( distancia<minimoDistancia) {
-				minimoDistancia= distancia;
+			double distancia = coordenadas.obtenerDistancia(transformador.coordenadas.x, transformador.coordenadas.y,
+					cliente.getCoordenadasDomicilio().x, cliente.getCoordenadasDomicilio().y);
+			if (distancia < minimoDistancia) {
+				minimoDistancia = distancia;
 				minimoTransf = transformador;
 			}
-		}this.conectarCercano(cliente, minimoTransf);
-	
+		}
+		this.conectarCercano(cliente, minimoTransf);
+
 	}
 }
