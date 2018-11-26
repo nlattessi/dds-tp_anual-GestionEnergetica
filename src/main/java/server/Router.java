@@ -120,6 +120,8 @@ public class Router {
 
 		Spark.get("/cliente/consulta-consumo-periodo", clienteController::formConsumoPeriodo, engine);
 		Spark.post("/cliente/consulta-consumo-periodo", clienteController::procesarConsumoPeriodo, engine);
+		
+		Spark.get("/cliente/consulta-consumo-ultimo-mes", clienteController::consumoUltimoMes, engine);
 
 		Spark.get("/cliente/carga-archivo-dispositivos", clienteController::formCargaArchivoDispositivos, engine);
 		Spark.post("/cliente/carga-archivo-dispositivos", clienteController::procesarCargaArchivoDispositivos);

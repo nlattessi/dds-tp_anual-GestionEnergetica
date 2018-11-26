@@ -16,6 +16,16 @@
     <form action="/cliente/consulta-consumo-periodo" method="POST">
 
         <div class="form-group">
+            <label for="dispositivo">Dispositivo (opcional)</label>
+            <select class="form-control" name="dispositivo" id="dispositivo">
+                <option value>Elige...</option>
+                {{#each dispositivos}}
+                <option value={{id}}>{{categoria}} - {{nombre}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="inicio">Periodo: inicio</label>
             <input type="text" class="form-control" id="inicio" name="inicio" required>
         </div>
@@ -41,7 +51,7 @@
             "dateFormat": "d/m/Y H:i",
             "allowInput": false
         }
-        
+
         $("#inicio").flatpickr(config);
         $("#fin").flatpickr(config);
     });

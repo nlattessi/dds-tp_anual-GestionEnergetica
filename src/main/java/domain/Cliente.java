@@ -57,7 +57,7 @@ public class Cliente extends Usuario {
 
 //	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cliente_id")
+	@JoinColumn(name = "cliente_id")
 	private Set<Dispositivo> dispositivos = new HashSet<Dispositivo>();
 
 	@ManyToOne

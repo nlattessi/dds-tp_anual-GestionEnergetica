@@ -1,8 +1,11 @@
 package domain;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -221,6 +224,19 @@ public abstract class Dispositivo {
 		maestro.setEsBajoConsumo(bajoConsumo);
 	}
 
+	public double getConsumoUltimoMes() {
+		Calendar c = Calendar.getInstance();
+
+		LocalDateTime fin = toLocalDateTime(c);
+
+		c.add(Calendar.MONTH, -1);
+
+		LocalDateTime inicio = toLocalDateTime(c);
+
+		return consumoTotalComprendidoEntre(inicio, fin);
+
+	}
+
 	public String getUrlBorrar() {
 		return "/cliente/dispositivos/" + id + "/borrar";
 	}
@@ -231,5 +247,14 @@ public abstract class Dispositivo {
 
 	public String getUrlVerConsumo() {
 		return "/administrador/hogares-consumos/" + id;
+	}
+
+	public static LocalDateTime toLocalDateTime(Calendar calendar) {
+		if (calendar == null) {
+			return null;
+		}
+		TimeZone tz = calendar.getTimeZone();
+		ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
+		return LocalDateTime.ofInstant(calendar.toInstant(), zid);
 	}
 }

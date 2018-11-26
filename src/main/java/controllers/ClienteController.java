@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,14 @@ public class ClienteController {
 	public ModelAndView formConsumoPeriodo(Request request, Response response) {
 		SessionHelper.ensureUserIsLoggedIn(request, response);
 
-		return new ModelAndView(null, "cliente/consulta-consumo-periodo.hbs");
+		Map<String, Object> model = new HashMap<>();
+
+		int userId = request.session().attribute("userId");
+		Cliente cliente = repositorioUsuarios.buscarClientePorId(userId);
+
+		model.put("dispositivos", cliente.getDispositivos());
+
+		return new ModelAndView(model, "cliente/consulta-consumo-periodo.hbs");
 	}
 
 	public ModelAndView procesarConsumoPeriodo(Request request, Response response) {
@@ -72,9 +80,18 @@ public class ClienteController {
 		LocalDateTime inicio = LocalDateTime.parse(inicioParam, formatter);
 		LocalDateTime fin = LocalDateTime.parse(finParam, formatter);
 
-		double consumo = cliente.calcularConsumoEntrePeriodos(inicio, fin);
+		Map<String, Object> model = new HashMap<>();
+		double consumo = 0f;
 
-		Map<String, String> model = new HashMap<>();
+		String dispositivoId = request.queryParams("dispositivo");
+		if (dispositivoId.isEmpty()) {
+			consumo = cliente.calcularConsumoEntrePeriodos(inicio, fin);
+		} else {
+			Dispositivo dispositivo = repositorioDispositivos.buscarDispositivoCliente(Integer.parseInt(dispositivoId));
+			consumo = dispositivo.consumoTotalComprendidoEntre(inicio, fin);
+			model.put("dispositivo", dispositivo);
+		}
+
 		model.put("periodo_inicio", inicioParam);
 		model.put("periodo_fin", finParam);
 		model.put("consumo", String.valueOf(consumo));
@@ -172,7 +189,8 @@ public class ClienteController {
 		List med = repositorioMediciones.listarPorCliente(cliente);
 		model.put("med", med);
 
-		List<DispositivoInteligente> dispositivos = repositorioDispositivos.listarClienteInteligentes("JuanPerez");
+		List<DispositivoInteligente> dispositivos = repositorioDispositivos
+				.listarClienteInteligentes(cliente.getNombreUsuario());
 		model.put("dispositivos", dispositivos);
 
 		Periodo periodo = repositorioDispositivos.obtenerUltimoPeriodo(cliente);
@@ -182,5 +200,25 @@ public class ClienteController {
 		model.put("reglas", reglas);
 
 		return new ModelAndView(model, "cliente/estado-hogar.hbs");
+	}
+
+	public ModelAndView consumoUltimoMes(Request request, Response response) {
+//		SessionHelper.ensureUserIsLoggedIn(request, response);
+
+		Map<String, Object> model = new HashMap<>();
+
+		Calendar c = Calendar.getInstance();
+		LocalDateTime fin = Dispositivo.toLocalDateTime(c);
+		c.add(Calendar.MONTH, -1);
+		LocalDateTime inicio = Dispositivo.toLocalDateTime(c);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		model.put("inicio", inicio.format(formatter));
+		model.put("fin", fin.format(formatter));
+
+		int userId = request.session().attribute("userId");
+		Cliente cliente = repositorioUsuarios.buscarClientePorId(userId);
+		model.put("dispositivos", cliente.getDispositivos());
+
+		return new ModelAndView(model, "cliente/consulta-consumo-ultimo-mes.hbs");
 	}
 }
