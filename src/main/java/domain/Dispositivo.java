@@ -136,7 +136,7 @@ public abstract class Dispositivo {
 		maestro.setCategoria(categoria);
 	}
 
-	public abstract double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
+	public abstract int horasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 
 	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 
@@ -167,6 +167,11 @@ public abstract class Dispositivo {
 	public double getConsumoXHora() {
 //		return consumoXHora;
 		return maestro.getConsumo();
+	}
+	
+	public String getConsumoXHoraString() {
+//		return consumoXHora;
+		return String.valueOf(maestro.getConsumo());
 	}
 
 	public void setConsumoXHora(double consumoXHora) {
@@ -247,6 +252,18 @@ public abstract class Dispositivo {
 
 	public String getUrlVerConsumo() {
 		return "/administrador/hogares-consumos/" + id;
+	}
+
+	public String getUrlVerConsumoCliente() {
+		return "/cliente/dispositivos/" + id + "/consumos";
+	}
+	
+	public String getUrlEncender() {
+		return "/cliente/dispositivos/" + id + "/encender";
+	}
+	
+	public String getUrlApagar() {
+		return "/cliente/dispositivos/" + id + "/apagar";
 	}
 
 	public static LocalDateTime toLocalDateTime(Calendar calendar) {

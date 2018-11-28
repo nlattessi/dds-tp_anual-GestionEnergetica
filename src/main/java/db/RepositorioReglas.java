@@ -44,6 +44,9 @@ public class RepositorioReglas {
 
 	public void crear(DispositivoInteligente dispositivo, String nombreMagnitud, ComparacionesReglaGenerica comparacion,
 			int valor, Acciones accion) {
+		manager.refresh(dispositivo);
+		manager.refresh(dispositivo.getActuador());
+
 		ReglaGenerica regla = new ReglaGenerica();
 		regla.setNombreMagnitud(nombreMagnitud);
 		regla.setComparacion(comparacion);

@@ -28,6 +28,7 @@
           <th>¿Es inteligente?</th>
           <th>¿Es equipo de bajo consumo?</th>
           <th>Consumo (kWh)</th>
+          <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -40,10 +41,19 @@
           <td>{{isTrue esInteligente}}</td>
           <td>{{isTrue bajoConsumo}}</td>
           <td>{{consumoXHora}}</td>
+          <td>{{estado}}</td>
           <td>
             <form action={{urlBorrar}} method="POST" onsubmit="return confirm('Estas seguro de borrar el dispositivo?')">
               <button class="btn btn-sm btn-outline-secondary" type="submit">Borrar</button>
+            </form> 
+            <a class="btn btn-sm btn-outline-secondary" href="{{urlVerConsumoCliente}}">Ver consumos</a>
+            {{#if esInteligente}}
+            <form action={{#if estaEncendido}}{{urlApagar}}{{else}}{{urlEncender}}{{/if}} method="POST">
+              <button class="btn btn-sm btn-outline-secondary" type="submit">
+                {{#if estaEncendido}}APAGAR{{else}}ENCENDER{{/if}}
+              </button>
             </form>
+            {{/if}}
           </td>
         </tr>
         {{/each}}

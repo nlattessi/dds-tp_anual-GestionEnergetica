@@ -276,7 +276,7 @@ public class Cliente extends Usuario {
 					LocalDateTime fecha = LocalDateTime.now();
 
 					LocalDateTime fechaInicioMes = LocalDateTime.of(fecha.getYear(), fecha.getMonth(), 1, 0, 0);
-					if ((dispositivo.HorasTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now())) > dispositivo
+					if ((dispositivo.horasTotalComprendidoEntre(fechaInicioMes, LocalDateTime.now())) > dispositivo
 							.getConsumoRecomendadoHoras()) {
 						dispositivo.apagarse();
 					}

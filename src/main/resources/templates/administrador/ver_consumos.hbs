@@ -22,6 +22,7 @@
                     <th>Inicio</th>
                     <th>Fin</th>
                     <th>Horas</th>
+                    <th>Consumo (kW)</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,6 +32,7 @@
                     <td>{{inicioFormateado}}</td>
                     <td>{{finFormateado}}</td>
                     <td>{{horas}}</td>
+                    <td>{{math dispositivo.consumoXHoraString "*" horasString}}</td>
                 </tr>
                 {{/each}}
             </tbody>

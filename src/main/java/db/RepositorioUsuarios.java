@@ -15,8 +15,9 @@ public class RepositorioUsuarios {
 	}
 
 	public Usuario buscarPorNombreUsuario(String nombreUsuario) {
+
 		return (Usuario) em.createQuery("select u from Usuario u where nombreUsuario = :nombreUsuario")
-				.setParameter("nombreUsuario", nombreUsuario).getSingleResult();
+				.setParameter("nombreUsuario", nombreUsuario).getResultList().stream().findFirst().orElse(null);
 	}
 
 	public Cliente buscarClientePorNombreUsuario(String nombreUsuario) {

@@ -105,10 +105,10 @@ public class DispositivoInteligente extends Dispositivo {
 	public void apagarse() {
 		if (this.estado != Estados.APAGADO) {
 			setEstado(Estados.APAGADO);
-			
+
 			Periodo p = new Periodo(this.ultimaFechaHoraEncendido, LocalDateTime.now());
 			p.setDispositivo(this);
-			
+
 			this.periodos.add(p);
 
 			if (this.fabricante != null) {
@@ -160,20 +160,13 @@ public class DispositivoInteligente extends Dispositivo {
 
 	@Override
 	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
-		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
-				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
-
-		if (this.estaEncendido()) {
-			if (inicio.isEqual(this.ultimaFechaHoraEncendido) || inicio.isAfter(this.ultimaFechaHoraEncendido)) {
-				totalHoras += Duration.between(inicio, fin).toHours();
-			}
-		}
+		int totalHoras = horasTotalComprendidoEntre(inicio, fin);
 
 		return totalHoras * this.getConsumoXHora();
 	}
 
 	@Override
-	public double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
+	public int horasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
 		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
 				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
 
@@ -214,6 +207,10 @@ public class DispositivoInteligente extends Dispositivo {
 
 	public String getStatusFabricante() {
 		return this.fabricante.recibirMensajeStatus();
+	}
+
+	public boolean getEstaEncendido() {
+		return estado.equals(Estados.ENCENDIDO);
 	}
 
 }

@@ -68,12 +68,17 @@ public class RepositorioDispositivos {
 			em.persist(reglamentador);
 			em.persist(actuador);
 			em.persist(dispositivo);
+			em.flush();
 			em.getTransaction().commit();
 		} else {
 			em.getTransaction().begin();
 			em.persist(dispositivo);
+			em.flush();
 			em.getTransaction().commit();
 		}
+
+		Dispositivo managedDispositivo = em.find(Dispositivo.class, dispositivo.getId());
+		em.refresh(managedDispositivo);
 	}
 
 	public void borrarDispositivoCliente(int id) {
@@ -126,6 +131,32 @@ public class RepositorioDispositivos {
 		em.getTransaction().begin();
 		em.persist(d);
 		em.getTransaction().commit();
+	}
+
+	public void flush() {
+		em.getTransaction().begin();
+		em.flush();
+		em.getTransaction().commit();
+	}
+
+	public void encender(int id) {
+		Dispositivo d = em.find(Dispositivo.class, id);
+		if (d != null) {
+			em.getTransaction().begin();
+			d.encenderse();
+			em.persist(d);
+			em.getTransaction().commit();
+		}
+	}
+
+	public void apagar(int id) {
+		Dispositivo d = em.find(Dispositivo.class, id);
+		if (d != null) {
+			em.getTransaction().begin();
+			d.apagarse();
+			em.persist(d);
+			em.getTransaction().commit();
+		}
 	}
 
 }

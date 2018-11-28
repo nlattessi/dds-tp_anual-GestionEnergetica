@@ -97,6 +97,10 @@ public class Periodo {
 		return (int) this.horas;
 	}
 
+	public String getHorasString() {
+		return String.valueOf((int) this.horas);
+	}
+
 	public void setHoras(long horas) {
 		this.horas = horas;
 	}

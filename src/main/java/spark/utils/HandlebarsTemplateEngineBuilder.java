@@ -1,6 +1,9 @@
 package spark.utils;
 
 import spark.template.handlebars.HandlebarsTemplateEngine;
+
+import java.io.File;
+
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.HumanizeHelper;
@@ -22,6 +25,16 @@ public class HandlebarsTemplateEngineBuilder {
 
 	public HandlebarsTemplateEngineBuilder withHelper(String name, Helper<?> helper) {
 		getHandlerbars().registerHelper(name, helper);
+		return this;
+	}
+
+	public HandlebarsTemplateEngineBuilder withFile(File file) {
+		try {
+			getHandlerbars().registerHelpers(file);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return this;
 	}
 

@@ -136,4 +136,35 @@ public class DispositivoController {
 		response.redirect("/cliente/dispositivos");
 		return null;
 	}
+
+	public ModelAndView verConsumosDispositivoCliente(Request request, Response response) {
+		SessionHelper.ensureUserIsLoggedIn(request, response);
+
+		String id = request.params("id");
+
+		Map<String, Dispositivo> model = new HashMap<>();
+
+		Dispositivo dispositivo = repositorioDispositivos.buscarDispositivoCliente(Integer.parseInt(id));
+		model.put("dispositivo", dispositivo);
+
+		return new ModelAndView(model, "cliente/ver_consumos.hbs");
+	}
+	
+	public Void encender(Request request, Response response) {
+		String id = request.params("id");
+
+		repositorioDispositivos.encender(Integer.parseInt(id));
+
+		response.redirect("/cliente/dispositivos");
+		return null;
+	}
+	
+	public Void apagar(Request request, Response response) {
+		String id = request.params("id");
+
+		repositorioDispositivos.apagar(Integer.parseInt(id));
+
+		response.redirect("/cliente/dispositivos");
+		return null;
+	}
 }
