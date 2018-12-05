@@ -3,11 +3,17 @@ package domain;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import db.LocalDateTimeAttributeConverter;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 
 @Entity(name = "Administrador")
@@ -52,7 +58,7 @@ public class Administrador extends Usuario {
 
 	private int calcularCantidadMeseesComoAdministrador(Calendar fechaActual) {
 		Calendar fechaAlta = new GregorianCalendar();
-		fechaAlta.setTime(this.fechaAltaSistema);
+		fechaAlta.setTime(fechaAltaSistema);
 
 		int anioActual = fechaActual.get(Calendar.YEAR);
 		int anioAlta = fechaAlta.get(Calendar.YEAR);

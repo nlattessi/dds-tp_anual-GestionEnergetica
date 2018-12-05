@@ -7,18 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import domain.Dispositivo;
 import domain.Transformador;
 
 public class RepositorioTransformadores {
-//	private EntityManagerFactory emf;
-//
-//	public RepositorioTransformadores() {
-//		emf = Persistence.createEntityManagerFactory("db");
-//	}
 
 	private EntityManager em;
 
@@ -27,24 +18,11 @@ public class RepositorioTransformadores {
 	}
 
 	public List<Transformador> listar() {
-//		EntityManager em = emf.createEntityManager();
-
-		List<Transformador> lista = em.createQuery("SELECT t FROM Transformador t", Transformador.class)
-				.getResultList();
-
-//		em.close();
-
-		return lista;
+		return em.createQuery("SELECT t FROM Transformador t", Transformador.class).getResultList();
 	}
 
 	public Transformador buscar(int id) {
-//		EntityManager em = emf.createEntityManager();
-
-		Transformador t = em.find(Transformador.class, id);
-
-//		em.close();
-
-		return t;
+		return em.find(Transformador.class, id);
 	}
 
 	public List<Map<String, String>> consumoPromedioPorPeriodo(LocalDateTime inicio, LocalDateTime fin) {

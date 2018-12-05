@@ -36,9 +36,11 @@ public class Periodo {
 //	@Column(name = "inicio", columnDefinition = "TIMESTAMP")
 //	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	@Basic
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime inicio;
 
 	@Basic
+	@Convert(converter = LocalDateTimeAttributeConverter.class)
 	private LocalDateTime fin;
 
 	@Column
@@ -93,6 +95,10 @@ public class Periodo {
 
 	public int getHoras() {
 		return (int) this.horas;
+	}
+
+	public String getHorasString() {
+		return String.valueOf((int) this.horas);
 	}
 
 	public void setHoras(long horas) {

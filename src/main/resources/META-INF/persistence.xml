@@ -17,8 +17,10 @@
 
 			<property name="hibernate.connection.driver_class"
 				value="com.mysql.jdbc.Driver" />
+			<!-- <property name="hibernate.connection.url" value="jdbc:mysql://172.17.0.2:3306/utndds" 
+				/> -->
 			<property name="hibernate.connection.url"
-				value="jdbc:mysql://172.17.0.2:3306/utndds" />
+				value="jdbc:mysql://localhost:3306/utndds" />
 			<property name="hibernate.connection.username" value="root" />
 			<property name="hibernate.connection.password" value="root" />
 
@@ -32,7 +34,7 @@
 				/> -->
 
 
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.format_sql" value="true" />
 			<property name="use_sql_comments" value="true" />
 			<property name="hibernate.hbm2ddl.auto" value="update" />

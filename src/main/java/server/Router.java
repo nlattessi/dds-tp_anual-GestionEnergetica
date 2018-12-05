@@ -12,38 +12,65 @@ import controllers.ToolsController;
 import db.RepositorioDispositivos;
 import db.RepositorioMediciones;
 import db.RepositorioReglas;
+import db.RepositorioReportes;
 import db.RepositorioTransformadores;
 import db.RepositorioUsuarios;
+import db.SimplexRepositorio;
 import spark.Spark;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 import spark.utils.BooleanHelper;
 import spark.utils.HandlebarsTemplateEngineBuilder;
 import spark.utils.StringHelper;
 
-import static spark.Spark.*;
+import java.io.File;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
+
+import com.github.jknack.handlebars.Handlebars;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 public class Router {
 
 	public static void configure() {
 		HandlebarsTemplateEngine engine = HandlebarsTemplateEngineBuilder.create().withDefaultHelpers()
 				.withHelper("isTrue", BooleanHelper.isTrue)
-				.withHelper("isDispositivoInteligente", StringHelper.isDispositivoInteligente).build();
+				.withHelper("isDispositivoInteligente", StringHelper.isDispositivoInteligente)
+				.withFile(new File("helpers.js")).build();
 
 		Spark.staticFiles.location("/public");
 
+		// MySQL
 		final String PERSISTENCE_UNIT_NAME = "db";
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
 		EntityManager manager = factory.createEntityManager();
+
+		// MongoDB
+		final String MONGO_SERVER = "localhost";
+		final int MONGO_PORT = 27017;
+		final String MONGO_DB = "utndds";
+		final String MONGO_USER = "root";
+		final String MONGO_PASSWORD = "root";
+		MongoClientURI uri = new MongoClientURI(
+				"mongodb://" + MONGO_USER + ":" + MONGO_PASSWORD + "@" + MONGO_SERVER + ":" + MONGO_PORT);
+		MongoClient mongoClient = new MongoClient(uri);
+		Morphia morphia = new Morphia();
+		Datastore datastore = morphia.createDatastore(mongoClient, MONGO_DB);
+		datastore.ensureIndexes();
 
 		RepositorioUsuarios repositorioUsuarios = new RepositorioUsuarios(manager);
 		RepositorioDispositivos repositorioDispositivos = new RepositorioDispositivos(manager);
 		RepositorioTransformadores repositorioTransformadores = new RepositorioTransformadores(manager);
 		RepositorioReglas repositorioReglas = new RepositorioReglas(manager);
 		RepositorioMediciones repositorioMediciones = new RepositorioMediciones(manager);
+		RepositorioReportes repositorioReportes = new RepositorioReportes(datastore, repositorioUsuarios,
+				repositorioDispositivos, repositorioTransformadores);
+		SimplexRepositorio repositorioSimplex = new SimplexRepositorio(datastore);
 
 		HomeController homeController = new HomeController(repositorioTransformadores);
 		LoginController loginController = new LoginController(repositorioUsuarios);
@@ -52,9 +79,9 @@ public class Router {
 		AdministradorController administradorController = new AdministradorController(repositorioUsuarios,
 				repositorioDispositivos);
 		ReportesController reportesController = new ReportesController(repositorioUsuarios, repositorioDispositivos,
-				repositorioTransformadores);
+				repositorioTransformadores, repositorioReportes);
 		ClienteController clienteController = new ClienteController(repositorioUsuarios, repositorioDispositivos,
-				repositorioMediciones, repositorioReglas);
+				repositorioMediciones, repositorioReglas, repositorioSimplex);
 		ReglaController reglaController = new ReglaController(repositorioUsuarios, repositorioReglas,
 				repositorioDispositivos);
 		ToolsController toolsController = new ToolsController(repositorioUsuarios, repositorioDispositivos,
@@ -96,9 +123,14 @@ public class Router {
 		Spark.get("/cliente/dispositivos/nuevo", dispositivoController::nuevoDispositivoCliente, engine);
 		Spark.post("/cliente/dispositivos", dispositivoController::crearDispositivoCliente);
 		Spark.post("/cliente/dispositivos/:id/borrar", dispositivoController::borrarDispositivoCliente);
+		Spark.get("/cliente/dispositivos/:id/consumos", dispositivoController::verConsumosDispositivoCliente, engine);
+		Spark.post("/cliente/dispositivos/:id/encender", dispositivoController::encender);
+		Spark.post("/cliente/dispositivos/:id/apagar", dispositivoController::apagar);
 
 		Spark.get("/cliente/consulta-consumo-periodo", clienteController::formConsumoPeriodo, engine);
 		Spark.post("/cliente/consulta-consumo-periodo", clienteController::procesarConsumoPeriodo, engine);
+
+		Spark.get("/cliente/consulta-consumo-ultimo-mes", clienteController::consumoUltimoMes, engine);
 
 		Spark.get("/cliente/carga-archivo-dispositivos", clienteController::formCargaArchivoDispositivos, engine);
 		Spark.post("/cliente/carga-archivo-dispositivos", clienteController::procesarCargaArchivoDispositivos);

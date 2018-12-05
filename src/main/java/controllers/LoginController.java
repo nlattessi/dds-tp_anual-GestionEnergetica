@@ -3,10 +3,6 @@ package controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 import db.RepositorioUsuarios;
 import domain.Administrador;
 import domain.Usuario;
@@ -38,8 +34,6 @@ public class LoginController {
 		}
 
 		Usuario usuario = repositorioUsuarios.buscarPorNombreUsuario(nombreUsuario);
-
-//		Usuario usuario = RepositorioUsuarios.instancia.buscarPorNombreUsuario(nombreUsuario);
 
 		if (usuario == null) {
 			model.put("authenticationFailed", true);

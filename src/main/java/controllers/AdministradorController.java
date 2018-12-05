@@ -8,7 +8,6 @@ import db.RepositorioDispositivos;
 import db.RepositorioUsuarios;
 import domain.Cliente;
 import domain.Dispositivo;
-import domain.DispositivoMaestro;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -32,7 +31,7 @@ public class AdministradorController {
 	}
 
 	public ModelAndView listarHogaresYConsumos(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		Map<String, List<Cliente>> model = new HashMap<>();
 		List<Cliente> clientes = repositorioUsuarios.listarClientes();
@@ -43,13 +42,11 @@ public class AdministradorController {
 	}
 
 	public ModelAndView verConsumos(Request request, Response response) {
-//		SessionHelper.ensureUserIsLoggedIn(request, response);
+		SessionHelper.ensureUserIsLoggedIn(request, response);
 
 		String id = request.params("id");
 
 		Map<String, Dispositivo> model = new HashMap<>();
-//		List<Cliente> clientes = repositorioUsuarios.listarClientes();
-
 
 		Dispositivo dispositivo = repositorioDispositivos.buscarDispositivoCliente(Integer.parseInt(id));
 		model.put("dispositivo", dispositivo);

@@ -6,16 +6,12 @@ import db.RepositorioReglas;
 import db.RepositorioTransformadores;
 import db.RepositorioUsuarios;
 import domain.Dispositivo;
-import domain.DispositivoInteligente;
 import domain.Medicion;
 import domain.Periodo;
 import domain.Reglamentador;
 import domain.Sensor;
-import models.ModelHelper;
-
 import java.time.LocalDateTime;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -25,20 +21,12 @@ import spark.Response;
 
 public class ToolsController {
 
-	private RepositorioUsuarios repositorioUsuarios;
 	private RepositorioDispositivos repositorioDispositivos;
-	private RepositorioTransformadores repositorioTransformadores;
-	private RepositorioReglas repositorioReglas;
-	private RepositorioMediciones repositorioMediciones;
 
 	public ToolsController(RepositorioUsuarios repositorioUsuarios, RepositorioDispositivos repositorioDispositivos,
 			RepositorioTransformadores repositorioTransformadores, RepositorioReglas repositorioReglas,
 			RepositorioMediciones repositorioMediciones) {
-		this.repositorioUsuarios = repositorioUsuarios;
 		this.repositorioDispositivos = repositorioDispositivos;
-		this.repositorioTransformadores = repositorioTransformadores;
-		this.repositorioReglas = repositorioReglas;
-		this.repositorioMediciones = repositorioMediciones;
 	}
 
 	public Object cargarPeriodo(Request request, Response response) {
@@ -104,13 +92,12 @@ public class ToolsController {
 
 			Sensor sensor = repositorioDispositivos.buscarSensorPorId(sensorId);
 			Medicion medicion = new Medicion();
-//			medicion.setSensor(sensor);
 			medicion.setMagnitud(magnitud);
 			medicion.setValor(valor);
 			medicion.setSensor(sensor);
 			repositorioDispositivos.guardarMedicion(medicion);
 			sensor.agregarMedicion(medicion);
-			
+
 			for (Reglamentador r : sensor.getReglamentadores()) {
 				repositorioDispositivos.actualizar(r.getActuador().getDispositivo());
 			}

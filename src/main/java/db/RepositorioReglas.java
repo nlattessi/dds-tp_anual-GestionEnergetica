@@ -36,12 +36,7 @@ public class RepositorioReglas {
 		ReglaGenerica regla = manager.find(ReglaGenerica.class, id);
 		if (regla != null) {
 			manager.getTransaction().begin();
-//			Query query = manager.createQuery("DELETE FROM Regla rg WHERE rg = :regla");
-//			query.setParameter("regla", regla);
-//			query.executeUpdate();
-			
 			regla.getReglamentador().removeRegla(regla);
-			
 			manager.remove(regla);
 			manager.getTransaction().commit();
 		}
@@ -49,6 +44,9 @@ public class RepositorioReglas {
 
 	public void crear(DispositivoInteligente dispositivo, String nombreMagnitud, ComparacionesReglaGenerica comparacion,
 			int valor, Acciones accion) {
+		manager.refresh(dispositivo);
+		manager.refresh(dispositivo.getActuador());
+
 		ReglaGenerica regla = new ReglaGenerica();
 		regla.setNombreMagnitud(nombreMagnitud);
 		regla.setComparacion(comparacion);

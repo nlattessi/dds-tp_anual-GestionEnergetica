@@ -1,6 +1,5 @@
 package controllers;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,8 +16,6 @@ public class MedicionController {
 		try {
 			jsonBody = parser.parse(request.body());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
 			response.type("application/json");
 			response.status(500);
 
@@ -27,8 +24,6 @@ public class MedicionController {
 
 			return obj;
 		}
-		
-		
 
 		response.type("application/json");
 		response.status(200);
@@ -38,5 +33,4 @@ public class MedicionController {
 
 		return obj;
 	}
-
 }

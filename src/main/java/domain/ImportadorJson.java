@@ -73,7 +73,7 @@ public class ImportadorJson {
 			while (iterator.hasNext()) {
 				JSONObject clienteJson = iterator.next();
 
-				int id = (int) (long) clienteJson.get("id");
+				clienteJson.get("id");
 				String nombreYApellido = clienteJson.get("nombre_y_apellido").toString();
 				String nombreDeUsuario = clienteJson.get("nombre_de_usuario").toString();
 				String contraseña = clienteJson.get("contraseña").toString();
@@ -154,7 +154,7 @@ public class ImportadorJson {
 
 				Dispositivo dispositivo;
 
-				int id = (int) (long) dispositivoJson.get("id");
+				dispositivoJson.get("id");
 				String nombre = dispositivoJson.get("nombre").toString();
 				int consumoPorHora = (int) (long) dispositivoJson.get("consumo_por_hora");
 

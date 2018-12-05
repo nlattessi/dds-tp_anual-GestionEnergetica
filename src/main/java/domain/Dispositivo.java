@@ -1,8 +1,11 @@
 package domain;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +21,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -134,7 +136,7 @@ public abstract class Dispositivo {
 		maestro.setCategoria(categoria);
 	}
 
-	public abstract double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
+	public abstract int horasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 
 	public abstract double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin);
 
@@ -165,6 +167,11 @@ public abstract class Dispositivo {
 	public double getConsumoXHora() {
 //		return consumoXHora;
 		return maestro.getConsumo();
+	}
+	
+	public String getConsumoXHoraString() {
+//		return consumoXHora;
+		return String.valueOf(maestro.getConsumo());
 	}
 
 	public void setConsumoXHora(double consumoXHora) {
@@ -222,6 +229,19 @@ public abstract class Dispositivo {
 		maestro.setEsBajoConsumo(bajoConsumo);
 	}
 
+	public double getConsumoUltimoMes() {
+		Calendar c = Calendar.getInstance();
+
+		LocalDateTime fin = toLocalDateTime(c);
+
+		c.add(Calendar.MONTH, -1);
+
+		LocalDateTime inicio = toLocalDateTime(c);
+
+		return consumoTotalComprendidoEntre(inicio, fin);
+
+	}
+
 	public String getUrlBorrar() {
 		return "/cliente/dispositivos/" + id + "/borrar";
 	}
@@ -232,5 +252,26 @@ public abstract class Dispositivo {
 
 	public String getUrlVerConsumo() {
 		return "/administrador/hogares-consumos/" + id;
+	}
+
+	public String getUrlVerConsumoCliente() {
+		return "/cliente/dispositivos/" + id + "/consumos";
+	}
+	
+	public String getUrlEncender() {
+		return "/cliente/dispositivos/" + id + "/encender";
+	}
+	
+	public String getUrlApagar() {
+		return "/cliente/dispositivos/" + id + "/apagar";
+	}
+
+	public static LocalDateTime toLocalDateTime(Calendar calendar) {
+		if (calendar == null) {
+			return null;
+		}
+		TimeZone tz = calendar.getTimeZone();
+		ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
+		return LocalDateTime.ofInstant(calendar.toInstant(), zid);
 	}
 }

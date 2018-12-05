@@ -7,7 +7,6 @@ import javax.persistence.Query;
 
 import domain.Cliente;
 import domain.Medicion;
-import domain.Periodo;
 
 public class RepositorioMediciones {
 	private EntityManager manager;
@@ -30,18 +29,3 @@ public class RepositorioMediciones {
 
 	}
 }
-
-//public Periodo obtenerUltimoPeriodo(Cliente cliente) {
-////	EntityManager em = emf.createEntityManager();
-//	Query query = em.createQuery(
-//			"SELECT p FROM Periodo p INNER JOIN p.dispositivo d WHERE d.cliente = :cliente ORDER BY p.id DESC",
-//			Periodo.class);
-//	query.setParameter("cliente", cliente);
-//	query.setMaxResults(1);
-//
-//	List res = query.getResultList();
-//
-//	return (res.size() == 1) ? (Periodo) res.get(0) : null;
-//
-////	return (Periodo) query.getResultList().get(0);
-//}

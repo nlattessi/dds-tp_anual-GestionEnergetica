@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity(name = "DispositivoEstandar")
 @Table(name = "dispositivo_estandar")
@@ -45,16 +44,15 @@ public class DispositivoEstandar extends Dispositivo {
 	}
 
 	@Override
-	public double HorasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
-		return 0;
+	public int horasTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
+		return this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
+				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
 	}
 
 	@Override
 	public double consumoTotalComprendidoEntre(LocalDateTime inicio, LocalDateTime fin) {
-//		return 0;
-		int totalHoras = this.periodos.stream().filter(p -> p.inicioEsDespuesDe(inicio) && p.finEsAntesDe(fin))
-				.map(p -> p.getHoras()).reduce(0, (x, y) -> x + y);
-		
+		int totalHoras = horasTotalComprendidoEntre(inicio, fin);
+
 		return totalHoras * this.getConsumoXHora();
 	}
 
